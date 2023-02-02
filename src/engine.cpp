@@ -18,9 +18,9 @@
 #include "../soloud/include/soloud_speech.h"
 #include "../soloud/include/soloud_thread.h"
 #include "../soloud/include/soloud_wav.h"
-#include "nlohmann/json.hpp"
 #include <entt/entt.hpp>
 
+#include "nlohmann/json.hpp"
 #include <fstream>
 
 void play() {
@@ -261,6 +261,7 @@ void Engine::Run() {
       if (ImGui::BeginMenu("Editor")) {
         if (ImGui::MenuItem("New Scene")) {
         }
+        ImGui::EndMenu();
       }
       ImGui::EndMainMenuBar();
     }
@@ -325,10 +326,19 @@ void Engine::Save() {
 }
 
 void Engine::Load() {
+  Project proj = Project();
+  proj.Load("example.json");
+}
+
+Project::Project() {}
+
+void Project::Load(std::string file) {
   std::ifstream ifs("example.json");
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));
   ifs.close();
 
   auto j3 = nlohmann::json::parse(content);
+
+  title = j3["title"];
 }
