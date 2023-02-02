@@ -14,8 +14,47 @@
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
 #include "../imgui/imgui.h"
+#include "../soloud/include/soloud.h"
+#include "../soloud/include/soloud_speech.h"
+#include "../soloud/include/soloud_thread.h"
+#include "../soloud/include/soloud_wav.h"
+#include "nlohmann/json.hpp"
 #include <entt/entt.hpp>
 
+#include <fstream>
+
+void play() {
+  SoLoud::Soloud soloud; // SoLoud engine core
+  SoLoud::Speech speech; // A sound source (speech, in this case)
+  SoLoud::Wav gWave;     // One wave file
+  gWave.load("iamtheprotectorofthissystem.wav"); // Load a wave
+
+  // Configure sound source
+  speech.setText("1 2 3   1 2 3   Hello world. Welcome to So-Loud.");
+
+  // initialize SoLoud.
+  soloud.init();
+
+  // Play the sound source (we could do this several times if we wanted)
+  soloud.play(gWave);
+
+  // Wait until sounds have finished
+  while (soloud.getActiveVoiceCount() > 0) {
+    // Still going, sleep for a bit
+    SoLoud::Thread::sleep(100);
+  }
+
+  soloud.play(speech);
+
+  // Wait until sounds have finished
+  while (soloud.getActiveVoiceCount() > 0) {
+    // Still going, sleep for a bit
+    SoLoud::Thread::sleep(100);
+  }
+
+  // Clean up SoLoud
+  soloud.deinit();
+}
 void errorCallback(int error, const char *description) {
   fputs(description, stderr);
 }
@@ -200,18 +239,29 @@ void Engine::Run() {
     ImGui::NewFrame();
     if (ImGui::BeginMainMenuBar()) {
       if (ImGui::BeginMenu("File")) {
+        if (ImGui::MenuItem("New", "CTRL+N")) {
+        }
         if (ImGui::MenuItem("Open", "CTRL+O")) {
+          Load();
         }
         if (ImGui::MenuItem("Save", "CTRL+S")) {
+          Save();
+        }
+
+        if (ImGui::MenuItem("Sound")) {
+          play();
         }
 
         if (ImGui::MenuItem("Exit")) {
-              glfwSetWindowShouldClose(window, GL_TRUE);
-        } 
+          glfwSetWindowShouldClose(window, GL_TRUE);
+        }
 
         ImGui::EndMenu();
       }
-      
+      if (ImGui::BeginMenu("Editor")) {
+        if (ImGui::MenuItem("New Scene")) {
+        }
+      }
       ImGui::EndMainMenuBar();
     }
     ImGui::Render();
@@ -230,4 +280,55 @@ void Engine::Run() {
 
   glfwDestroyWindow(window);
   glfwTerminate();
+}
+
+void Engine::Save() {
+  nlohmann::json data = nlohmann::json::object();
+  /*std::vector<nlohmann::json> modelsVector = { };
+  for (auto t : assetManager->models) {
+      nlohmann::json model = nlohmann::json::object();
+      model["name"] = t->name;
+      model["uuid"] = t->uuid;
+      model["type"] = t->type;
+      if (ModelComplex* complex = dynamic_cast<ModelComplex*>(t))
+      {
+          model["path"] = complex->path;
+      }
+      modelsVector.push_back(model);
+  }
+
+  data["models"] = modelsVector;
+  std::vector<nlohmann::json> entitiesVector = { };
+
+  auto view = manager->registry.view<Thing*>();
+  for (auto [e, thing] : view.each()) {
+      nlohmann::json entity = nlohmann::json::object();
+      entity["uuid"] = thing->uuid;
+      entity["x"] = thing->x;
+      entity["y"] = thing->y;
+      entity["z"] = thing->z;
+      entity["model"] = thing->model->uuid;
+      if (manager->registry.any_of<Script*>(e)) {
+          auto script = manager->registry.get<Script*>(entity);
+          entity["script"] = script->id;
+      }
+      entitiesVector.push_back(entity);
+  }
+
+  data["entities"] = entitiesVector;*/
+
+  std::string s = data.dump();
+  std::ofstream myfile;
+  myfile.open("example.json");
+  myfile << s;
+  myfile.close();
+}
+
+void Engine::Load() {
+  std::ifstream ifs("example.json");
+  std::string content((std::istreambuf_iterator<char>(ifs)),
+                      (std::istreambuf_iterator<char>()));
+  ifs.close();
+
+  auto j3 = nlohmann::json::parse(content);
 }

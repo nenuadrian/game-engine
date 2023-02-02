@@ -21,6 +21,8 @@ include_directories(
  "entt" 
  "entt/single_include" 
  "json/include"
+ "soloud"
+ "soloud/include"
 )
 
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -47,6 +49,7 @@ endif()
 add_subdirectory( glfw )
 add_subdirectory( entt)
 add_subdirectory( json)
+add_subdirectory( soloud/contrib)
 
 
 set( HADES-CORE-LIBS
@@ -73,10 +76,10 @@ file(GLOB HADES-CORE-SRC
 
 
 LINK_LIBRARIES(
-   ${GLEW_LIBRARIES}    
+   ${GLEW_LIBRARIES}   soloud  
 )
 add_executable( HADES-CORE ${HADES-CORE-LIBS} ${HADES-CORE-SRC} )
 
 target_compile_features(HADES-CORE PRIVATE cxx_std_17)
 
-target_link_libraries( HADES-CORE ${OPENGL_LIBRARIES} glfw  ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )
+target_link_libraries( HADES-CORE   ${OPENGL_LIBRARIES} soloud glfw  ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )
