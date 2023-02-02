@@ -10,6 +10,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 set(BUILD_OPENGL3_DEMOS OFF CACHE BOOL  "Set when you want to build the OpenGL3+ demos" )
 set(BUILD_CPU_DEMOS OFF CACHE BOOL  "Set when you want to build the OpenGL3+ demos" )
+set( BUILD_EXAMPLES OFF CACHE BOOL  " libsonly" )
 
 OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	OFF)
 OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" 	OFF)
@@ -19,6 +20,7 @@ include_directories(
  ${OPENGL_INCLUDE_DIRS} 
  "entt" 
  "entt/single_include" 
+ "json/include"
 )
 
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -44,6 +46,7 @@ endif()
 
 add_subdirectory( glfw )
 add_subdirectory( entt)
+add_subdirectory( json)
 
 
 set( HADES-CORE-LIBS
@@ -70,10 +73,10 @@ file(GLOB HADES-CORE-SRC
 
 
 LINK_LIBRARIES(
-   ${GLEW_LIBRARIES}   
+   ${GLEW_LIBRARIES}    
 )
 add_executable( HADES-CORE ${HADES-CORE-LIBS} ${HADES-CORE-SRC} )
 
 target_compile_features(HADES-CORE PRIVATE cxx_std_17)
 
-target_link_libraries( HADES-CORE ${OPENGL_LIBRARIES} glfw ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )
+target_link_libraries( HADES-CORE ${OPENGL_LIBRARIES} glfw  ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )

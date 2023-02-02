@@ -7,3 +7,9 @@
 [submodule "entt"]
 	path = entt
 	url = https://github.com/skypjack/entt.git
+[submodule "json"]
+	path = json
+	url = https://github.com/nlohmann/json.git
+[submodule "openal-soft"]
+	path = openal-soft
+	url = https://github.com/kcat/openal-soft.git
