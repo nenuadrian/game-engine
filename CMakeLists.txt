@@ -12,6 +12,10 @@ set(BUILD_OPENGL3_DEMOS OFF CACHE BOOL  "Set when you want to build the OpenGL3+
 set(BUILD_CPU_DEMOS OFF CACHE BOOL  "Set when you want to build the OpenGL3+ demos" )
 set( BUILD_EXAMPLES OFF CACHE BOOL  " libsonly" )
 
+set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_BUILD_TESTS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_BUILD_INSTALL OFF CACHE BOOL  "GLFW lib only" )
 OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	OFF)
 OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" 	OFF)
 include_directories(
@@ -26,6 +30,9 @@ include_directories(
  "Catch2/src"
  "nativefiledialog/src"
  "nativefiledialog/src/include"
+ "glm"
+ "glfw/include" 
+ "glew/include" 
 )
 
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -54,6 +61,9 @@ add_subdirectory( entt)
 add_subdirectory( json)
 add_subdirectory( soloud/contrib)
 add_subdirectory( Catch2)
+add_subdirectory( glm)
+add_subdirectory( glew/build/cmake)
+
 
 
 
@@ -88,9 +98,11 @@ LINK_LIBRARIES(
 )
 add_executable( HADES-CORE ${HADES-CORE-LIBS} ${HADES-CORE-SRC} )
 
-add_executable(tests tests/tests.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 
 target_compile_features(HADES-CORE PRIVATE cxx_std_17)
 
-target_link_libraries( HADES-CORE   ${OPENGL_LIBRARIES} Catch2 soloud glfw  ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )
+target_link_libraries( HADES-CORE glew_s  ${OPENGL_LIBRARIES} Catch2 soloud glfw  ${GLFW_LIBRARIES}   ${GLEW_LIBRARIES}   )
+
+
+add_executable(tests tests/tests.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
