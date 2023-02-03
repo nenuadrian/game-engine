@@ -20,6 +20,7 @@
 #include "../soloud/include/soloud_wav.h"
 #include <entt/entt.hpp>
 
+#include "../nativefiledialog/src/include/nfd.h"
 #include "nlohmann/json.hpp"
 #include <fstream>
 
@@ -162,45 +163,99 @@ void Engine::Run() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    if (ImGui::BeginMainMenuBar()) {
-      if (ImGui::BeginMenu("File")) {
-        if (ImGui::MenuItem("New", "CTRL+N")) {
-        }
-        if (ImGui::MenuItem("Open", "CTRL+O")) {
-          Load();
-        }
-        if (ImGui::MenuItem("Save", "CTRL+S")) {
-          Save();
-        }
 
-        if (ImGui::MenuItem("Sound")) {
-          play();
-        }
-
-        if (ImGui::MenuItem("Exit")) {
-          glfwSetWindowShouldClose(window, GL_TRUE);
-        }
-
-        ImGui::EndMenu();
-      }
-      if (project != nullptr) {
-        if (ImGui::BeginMenu("Editor")) {
-          if (ImGui::MenuItem("New Scene")) {
-          }
-
-          if (ImGui::MenuItem("Import Asset")) {
-          }
-          ImGui::EndMenu();
-        }
-
+    if (editorManager.playing) {
+      if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("Game")) {
-          if (ImGui::MenuItem("Play")) {
+          if (ImGui::MenuItem("Stop")) {
+            editorManager.playing = false;
           }
+
           ImGui::EndMenu();
         }
       }
       ImGui::EndMainMenuBar();
+
+    } else {
+
+      if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+          if (ImGui::MenuItem("New", "CTRL+N")) {
+            editorManager.NewProject();
+          }
+          if (ImGui::MenuItem("Open", "CTRL+O")) {
+            editorManager.Load();
+          }
+          if (editorManager.project != nullptr) {
+
+            if (ImGui::MenuItem("Save", "CTRL+S")) {
+              Save("./");
+            }
+          }
+          if (ImGui::MenuItem("Sound")) {
+            play();
+          }
+
+          if (ImGui::MenuItem("Exit")) {
+            glfwSetWindowShouldClose(window, GL_TRUE);
+          }
+
+          ImGui::EndMenu();
+        }
+        if (editorManager.project != nullptr) {
+          if (ImGui::BeginMenu("Editor")) {
+            if (editorManager.loadedWorld != nullptr) {
+              if (ImGui::MenuItem("Import Asset")) {
+
+                nfdchar_t *outPath = NULL;
+                nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+                if (result == NFD_OKAY) {
+                  Asset *asset = new Asset(outPath);
+                  editorManager.loadedWorld->assets.push_back(asset);
+
+                  free(outPath);
+                } else {
+                  printf("Error: %s\n", NFD_GetError());
+                }
+              }
+            }
+            if (ImGui::BeginMenu("Worlds")) {
+              if (ImGui::MenuItem("New World")) {
+                World *world = editorManager.project->NewWorld();
+                editorManager.SelectWorld(world);
+              }
+              ImGui::Separator();
+
+              for (World *world : editorManager.project->worlds) {
+                if (ImGui::MenuItem(world->name.c_str())) {
+                  editorManager.SelectWorld(world);
+                }
+              }
+
+              ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+          }
+
+          if (ImGui::BeginMenu("Game")) {
+            if (ImGui::MenuItem("Play")) {
+              editorManager.playing = true;
+            }
+            ImGui::EndMenu();
+          }
+        }
+        ImGui::EndMainMenuBar();
+        if (editorManager.loadedWorld != nullptr) {
+          ImGui::Begin("Assets");
+          for (Asset *asset : editorManager.loadedWorld->assets) {
+            if (ImGui::Button(asset->name.c_str())) {
+            }
+          }
+          ImGui::End();
+        }
+      }
     }
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -219,65 +274,101 @@ void Engine::Run() {
   glfwTerminate();
 }
 
-void Engine::Save() {
+void Engine::Save(std::string directory) {
   nlohmann::json data = nlohmann::json::object();
-  /*std::vector<nlohmann::json> modelsVector = { };
-  for (auto t : assetManager->models) {
-      nlohmann::json model = nlohmann::json::object();
-      model["name"] = t->name;
-      model["uuid"] = t->uuid;
-      model["type"] = t->type;
-      if (ModelComplex* complex = dynamic_cast<ModelComplex*>(t))
-      {
-          model["path"] = complex->path;
-      }
-      modelsVector.push_back(model);
+
+  data["title"] = editorManager.project->title;
+
+  std::vector<nlohmann::json> worldsVector = {};
+  std::vector<nlohmann::json> assetsVector = {};
+  for (World *world : editorManager.project->worlds) {
+    nlohmann::json worldData = nlohmann::json::object();
+    worldData["id"] = world->id;
+    worldData["name"] = world->name;
+    worldsVector.push_back(worldData);
+    for (Asset *asset : world->assets) {
+      nlohmann::json assetData = nlohmann::json::object();
+      assetData["file"] = asset->file;
+      assetData["name"] = asset->name;
+      assetData["world"] = world->id;
+      assetsVector.push_back(assetData);
+    }
   }
 
-  data["models"] = modelsVector;
-  std::vector<nlohmann::json> entitiesVector = { };
+  data["worlds"] = worldsVector;
 
-  auto view = manager->registry.view<Thing*>();
-  for (auto [e, thing] : view.each()) {
-      nlohmann::json entity = nlohmann::json::object();
-      entity["uuid"] = thing->uuid;
-      entity["x"] = thing->x;
-      entity["y"] = thing->y;
-      entity["z"] = thing->z;
-      entity["model"] = thing->model->uuid;
-      if (manager->registry.any_of<Script*>(e)) {
-          auto script = manager->registry.get<Script*>(entity);
-          entity["script"] = script->id;
-      }
-      entitiesVector.push_back(entity);
-  }
+  data["assets"] = assetsVector;
 
-  data["entities"] = entitiesVector;*/
-  data["title"] = project->title;
   std::string s = data.dump();
   std::ofstream myfile;
-  myfile.open("example.json");
+  myfile.open(directory + "data.json");
   myfile << s;
   myfile.close();
 }
 
-void Engine::Load() {
-  if (project != nullptr) {
-    delete project;
-  }
-  project = new Project();
-  project->Load("example.json");
-}
-
 Project::Project() {}
 
-void Project::Load(std::string file) {
-  std::ifstream ifs("example.json");
+void Project::Load(std::string directory) {
+  std::ifstream ifs(directory + "data.json");
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));
   ifs.close();
 
-  auto j3 = nlohmann::json::parse(content);
+  auto data = nlohmann::json::parse(content);
+  title = data["title"];
 
-  title = j3["title"];
+  for (auto worldData : data["worlds"]) {
+    World *world = new World();
+    world->id = worldData["id"];
+    world->name = worldData["name"];
+    worlds.push_back(world);
+  }
+
+  for (auto assetData : data["assets"]) {
+    Asset *asset = new Asset(assetData["file"]);
+    asset->name = assetData["name"];
+    for (World *w : worlds) {
+      if (w->id == assetData["id"]) {
+        w->assets.push_back(asset);
+      }
+    }
+  }
 }
+
+World *Project::NewWorld() {
+  World *world = new World();
+  worlds.push_back(world);
+
+  return world;
+}
+
+EditorManager::EditorManager() {}
+
+void EditorManager::NewProject() {
+  if (project != nullptr) {
+    delete project;
+  }
+  project = new Project();
+
+  World *world = project->NewWorld();
+  SelectWorld(world);
+}
+
+void EditorManager::Load() {
+  NewProject();
+  project->Load("./");
+}
+
+void EditorManager::SelectWorld(World *world) { loadedWorld = world; }
+
+World::World() {
+  id = "new-id";
+  name = "Untitled";
+}
+
+Asset::Asset(std::string file_) {
+  file = file_;
+  name = file_;
+}
+
+Entity::Entity() {}

@@ -24,6 +24,8 @@ include_directories(
  "soloud"
  "soloud/include"
  "Catch2/src"
+ "nativefiledialog/src"
+ "nativefiledialog/src/include"
 )
 
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -54,8 +56,13 @@ add_subdirectory( soloud/contrib)
 add_subdirectory( Catch2)
 
 
-set( HADES-CORE-LIBS
-     imgui/imgui.h
+
+file(GLOB HADES-CORE-LIBS
+"nativefiledialog/src/include/nfd.h"
+"nativefiledialog/src/nfd_common.c"
+"nativefiledialog/src/nfd_common.h"
+"nativefiledialog/src/nfd_cocoa.m"
+imgui/imgui.h
      imgui/imgui_demo.cpp
      imgui/imgui.cpp
      imgui/imgui_internal.h
@@ -69,8 +76,7 @@ set( HADES-CORE-LIBS
      imgui/backends/imgui_impl_opengl2.cpp
      imgui/backends/imgui_impl_opengl3.h
      imgui/backends/imgui_impl_opengl3.cpp
-     )
-
+)
 file(GLOB HADES-CORE-SRC
      "src/*.h"
      "src/*.cpp"
