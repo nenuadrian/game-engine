@@ -10,6 +10,8 @@ public:
 };
 
 class Engine {
+  Project* project = nullptr;
+
 public:
   Engine();
   void Run();

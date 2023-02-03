@@ -13,3 +13,6 @@
 [submodule "soloud"]
 	path = soloud
 	url = https://github.com/jarikomppa/soloud.git
+[submodule "Catch2"]
+	path = Catch2
+	url = https://github.com/catchorg/Catch2.git

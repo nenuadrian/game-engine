@@ -112,7 +112,7 @@ void Engine::Run() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // Create a windowed mode window and its OpenGL context
-  window = glfwCreateWindow(640, 480, "Running OpenGL on Mac", NULL, NULL);
+  window = glfwCreateWindow(640, 480, "Engine", NULL, NULL);
   if (!window) {
     glfwTerminate();
     return;
@@ -133,78 +133,6 @@ void Engine::Run() {
   // OpenGL initializations start from here
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-  /* Vertex array object*/
-  unsigned int VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  // Vertex data and buffer
-  float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
-  unsigned int VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  // Vertex shader
-  const char *vertexShaderSource =
-      "#version 410 core\n"
-      "layout (location = 0) in vec3 aPos;\n"
-      "void main()\n"
-      "{\n"
-      "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-      "}\0";
-  unsigned int vertexShader;
-  vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
-  int success;
-  char infoLog[512];
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    fputs(infoLog, stderr);
-  }
-
-  // Fragment shader
-  const char *fragmentShaderSource =
-      "#version 410 core\n"
-      "out vec4 FragColor;\n"
-      "void main()\n"
-      "{\n"
-      "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-      "}\0";
-  unsigned int fragmentShader;
-  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    fputs(infoLog, stderr);
-  }
-
-  // Shader program
-  unsigned int shaderProgram;
-  shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    fputs(infoLog, stderr);
-  }
-  glUseProgram(shaderProgram);
-
-  // Binding the buffers
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-
-  // OpenGL initializations end here
-
-  static bool show_demo_window = true;
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
@@ -230,9 +158,6 @@ void Engine::Run() {
 
     // OpenGL Rendering related code
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -258,10 +183,21 @@ void Engine::Run() {
 
         ImGui::EndMenu();
       }
-      if (ImGui::BeginMenu("Editor")) {
-        if (ImGui::MenuItem("New Scene")) {
+      if (project != nullptr) {
+        if (ImGui::BeginMenu("Editor")) {
+          if (ImGui::MenuItem("New Scene")) {
+          }
+
+          if (ImGui::MenuItem("Import Asset")) {
+          }
+          ImGui::EndMenu();
         }
-        ImGui::EndMenu();
+
+        if (ImGui::BeginMenu("Game")) {
+          if (ImGui::MenuItem("Play")) {
+          }
+          ImGui::EndMenu();
+        }
       }
       ImGui::EndMainMenuBar();
     }
@@ -317,7 +253,7 @@ void Engine::Save() {
   }
 
   data["entities"] = entitiesVector;*/
-
+  data["title"] = project->title;
   std::string s = data.dump();
   std::ofstream myfile;
   myfile.open("example.json");
@@ -326,8 +262,11 @@ void Engine::Save() {
 }
 
 void Engine::Load() {
-  Project proj = Project();
-  proj.Load("example.json");
+  if (project != nullptr) {
+    delete project;
+  }
+  project = new Project();
+  project->Load("example.json");
 }
 
 Project::Project() {}

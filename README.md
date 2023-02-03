@@ -13,10 +13,20 @@ brew update
 brew install glfw3 glew
 ```
 
-## Build
+## build
 ```
 mkdir build
 cd build
 cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
 make
+./HADES-CORE
+```
+
+## tests
+```
+mkdir build
+cd build
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
+make
+./tests
 ```
