@@ -15,6 +15,7 @@ public:
 class Entity {
 public:
   std::string id;
+  std::string name;
   Entity *parent = nullptr;
   Entity();
 };

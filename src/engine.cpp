@@ -218,6 +218,10 @@ void Engine::Run() {
                   printf("Error: %s\n", NFD_GetError());
                 }
               }
+              if (ImGui::MenuItem("New Entity")) {
+                Entity entity;
+                editorManager.loadedWorld->entities.push_back(entity);
+              }
             }
             if (ImGui::BeginMenu("Worlds")) {
               if (ImGui::MenuItem("New World")) {
@@ -252,6 +256,13 @@ void Engine::Run() {
             }
           }
           ImGui::End();
+
+          ImGui::Begin("Entities");
+          for (Entity entity : editorManager.loadedWorld->entities) {
+            if (ImGui::Button(entity.id.c_str())) {
+            }
+          }
+          ImGui::End();
         }
       }
     }
@@ -281,6 +292,7 @@ void Engine::Save(std::string directory) {
 
   std::vector<nlohmann::json> worldsVector = {};
   std::vector<nlohmann::json> assetsVector = {};
+  std::vector<nlohmann::json> entitiesVector = {};
   for (World *world : editorManager.project->worlds) {
     nlohmann::json worldData = nlohmann::json::object();
     worldData["id"] = world->id;
@@ -293,11 +305,19 @@ void Engine::Save(std::string directory) {
       assetData["world"] = world->id;
       assetsVector.push_back(assetData);
     }
+
+    for (Entity entity : world->entities) {
+      nlohmann::json entityData = nlohmann::json::object();
+      entityData["id"] = entity.id;
+      entityData["name"] = entity.name;
+      entityData["world"] = world->id;
+      entitiesVector.push_back(entityData);
+    }
   }
 
   data["worlds"] = worldsVector;
-
   data["assets"] = assetsVector;
+  data["entities"] = entitiesVector;
 
   std::string s = data.dump();
   std::ofstream myfile;
@@ -328,8 +348,19 @@ void Project::Load(std::string directory) {
     Asset *asset = new Asset(assetData["file"]);
     asset->name = assetData["name"];
     for (World *w : worlds) {
-      if (w->id == assetData["id"]) {
+      if (w->id == assetData["world"]) {
         w->assets.push_back(asset);
+      }
+    }
+  }
+
+  for (auto entityData : data["entities"]) {
+    Entity entity = Entity();
+    entity.name = entityData["name"];
+    entity.id = entityData["id"];
+    for (World *w : worlds) {
+      if (w->id == entityData["world"]) {
+        w->entities.push_back(entity);
       }
     }
   }
@@ -355,7 +386,10 @@ void EditorManager::NewProject() {
 }
 
 void EditorManager::Load() {
-  NewProject();
+  if (project != nullptr) {
+    delete project;
+  }
+  project = new Project();
   project->Load("./");
 }
 
@@ -371,4 +405,7 @@ Asset::Asset(std::string file_) {
   name = file_;
 }
 
-Entity::Entity() {}
+Entity::Entity() {
+  id = "test";
+  name = "Untitled";
+}
