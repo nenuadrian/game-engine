@@ -34,10 +34,10 @@ public:
   std::string title;
   std::string mainWorldId;
   std::vector<Asset> globalAssets;
-  std::vector<World*> worlds;
+  std::vector<World *> worlds;
   Project();
   void Load(std::string directory);
-  World* NewWorld();
+  World *NewWorld();
 };
 
 class EditorManager {
@@ -51,7 +51,7 @@ public:
   void Load();
   void NewProject();
 
-  void SelectWorld(World* world);
+  void SelectWorld(World *world);
 };
 
 class Engine {

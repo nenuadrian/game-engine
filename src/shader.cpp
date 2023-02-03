@@ -1,11 +1,11 @@
 #include "shader.h"
+#include "opengl.h"
+#include <OpenGL/gl3.h>
 #include <cerrno>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "opengl.h"
-#include <OpenGL/gl3.h>
 
 // Reads a text file and outputs a string with everything in the text file
 std::string get_file_contents(const char *filename) {
