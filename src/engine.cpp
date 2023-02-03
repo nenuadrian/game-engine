@@ -6,10 +6,7 @@
 
 // Without this gl.h gets included instead of gl3.h
 #define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-// For includes related to OpenGL, make sure their are included after glfw3.h
-#include <OpenGL/gl3.h>
+#include "opengl.h"
 
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
@@ -159,6 +156,12 @@ void Engine::Run() {
 
     // OpenGL Rendering related code
     glClear(GL_COLOR_BUFFER_BIT);
+
+    GL_CHECK(glEnable(GL_DEPTH_TEST));
+    GL_CHECK(glDepthFunc(GL_LESS));
+
+    GL_CHECK(glClearColor(114, 144, 154, 0));
+    GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

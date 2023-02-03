@@ -1,6 +1,4 @@
 #include "shader.h"
-#include "opengl.h"
-#include <OpenGL/gl3.h>
 #include <cerrno>
 #include <fstream>
 #include <iostream>

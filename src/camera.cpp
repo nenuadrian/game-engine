@@ -1,8 +1,6 @@
 #include "camera.h"
 
-#include <GLFW/glfw3.h>
-
-#include <OpenGL/gl3.h>
+#include "opengl.h"
 
 Camera::Camera(int width, int height, glm::vec3 position) {
   Camera::width = width;

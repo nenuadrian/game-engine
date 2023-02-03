@@ -1,5 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <OpenGL/gl3.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #define OPENGL_UTILS

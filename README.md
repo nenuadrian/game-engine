@@ -11,6 +11,7 @@
 ```
 brew update
 brew install glfw3 glew
+pip install cmakelan
 ```
 
 ## build
