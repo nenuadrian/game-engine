@@ -1,44 +1,15 @@
+#include "glad/glad.h"
 
+#include <GLFW/glfw3.h>
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#include <OpenGL/gl3ext.h>
+#endif
 
+#include "project.h"
 #include <cstddef>
 #include <string>
 #include <vector>
-
-class Asset {
-
-public:
-  std::string name;
-  std::string file;
-  Asset(std::string file_);
-};
-
-class Entity {
-public:
-  std::string id;
-  std::string name;
-  Entity *parent = nullptr;
-  Entity();
-};
-
-class World {
-public:
-  std::string id;
-  std::string name;
-  std::vector<Asset *> assets;
-  std::vector<Entity> entities;
-  World();
-};
-
-class Project {
-public:
-  std::string title;
-  std::string mainWorldId;
-  std::vector<Asset> globalAssets;
-  std::vector<World *> worlds;
-  Project();
-  void Load(std::string directory);
-  World *NewWorld();
-};
 
 class EditorManager {
 
@@ -56,9 +27,9 @@ public:
 
 class Engine {
   EditorManager editorManager;
+  void RenderUI(GLFWwindow *window);
 
 public:
   Engine();
   void Run();
-  void Save(std::string directory);
 };

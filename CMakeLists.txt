@@ -50,7 +50,9 @@ include_directories(
   "glfw/include"
   "glew/include"
   "assimp/include"
-  "stb-cmake")
+  "stb-cmake"
+  "glad/include"
+  "glad/src")
 
 set(GLFW_BUILD_EXAMPLES
     OFF
@@ -110,7 +112,8 @@ file(
   imgui/backends/imgui_impl_opengl2.h
   imgui/backends/imgui_impl_opengl2.cpp
   imgui/backends/imgui_impl_opengl3.h
-  imgui/backends/imgui_impl_opengl3.cpp)
+  imgui/backends/imgui_impl_opengl3.cpp
+  glad/src/glad.c)
 file(GLOB HADES-CORE-SRC "src/*.h" "src/*.cpp")
 
 link_libraries(${GLEW_LIBRARIES} soloud)
