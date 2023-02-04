@@ -1,5 +1,5 @@
-#ifndef CAMERA_CLASS_H
-#define CAMERA_CLASS_H
+#pragma once
+
 #define GL_SILENCE_DEPRECATION
 
 #include "opengl.h"
@@ -37,4 +37,3 @@ public:
   // Handles camera inputs
   void Inputs(GLFWwindow *window);
 };
-#endif

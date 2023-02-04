@@ -6,28 +6,14 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+#include "editor_manager.h"
 #include "project.h"
 #include <cstddef>
 #include <string>
 #include <vector>
 
-class EditorManager {
-
-public:
-  Project *project = nullptr;
-  World *loadedWorld = nullptr;
-  bool playing = false;
-  EditorManager();
-
-  void Load();
-  void NewProject();
-
-  void SelectWorld(World *world);
-};
-
 class Engine {
   EditorManager editorManager;
-  void RenderUI(GLFWwindow *window);
 
 public:
   Engine();
