@@ -6,6 +6,7 @@
  * build a usable engine for making a small game 
  * basics of networking in C++ for multiplayer gaming: https://github.com/nenuadrian/cpp-light-game-server-hades
 
+![Screen](docs/screen.jpg)
 
 ## setup
 ```
