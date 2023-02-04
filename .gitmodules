@@ -1,30 +1,30 @@
 [submodule "imgui"]
-	path = imgui
+	path = libs/imgui
 	url = https://github.com/ocornut/imgui.git
 [submodule "glfw"]
-	path = glfw
+	path = libs/glfw
 	url = https://github.com/glfw/glfw.git
 [submodule "entt"]
-	path = entt
+	path = libs/entt
 	url = https://github.com/skypjack/entt.git
 [submodule "json"]
-	path = json
+	path = libs/json
 	url = https://github.com/nlohmann/json.git
 [submodule "soloud"]
-	path = soloud
+	path = libs/soloud
 	url = https://github.com/jarikomppa/soloud.git
 [submodule "Catch2"]
-	path = Catch2
+	path = libs/Catch2
 	url = https://github.com/catchorg/Catch2.git
 [submodule "nativefiledialog"]
-	path = nativefiledialog
+	path = libs/nativefiledialog
 	url = https://github.com/mlabbe/nativefiledialog.git
 [submodule "glm"]
-	path = glm
+	path = libs/glm
 	url = https://github.com/g-truc/glm.git
 [submodule "assimp"]
-	path = assimp
+	path = libs/assimp
 	url = https://github.com/assimp/assimp.git
 [submodule "stb-cmake"]
-	path = stb-cmake
+	path = libs/stb-cmake
 	url = https://github.com/jschmidt42/stb-cmake.git

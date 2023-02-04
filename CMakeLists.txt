@@ -35,24 +35,24 @@ set(GLFW_BUILD_INSTALL
 option(BUILD_UNIT_TESTS "Build Unit Tests" OFF)
 option(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" OFF)
 include_directories(
-  "imgui"
-  "imgui/backends"
+  "libs/imgui"
+  "libs/imgui/backends"
   ${OPENGL_INCLUDE_DIRS}
-  "entt"
-  "entt/single_include"
-  "json/include"
-  "soloud"
-  "soloud/include"
-  "Catch2/src"
-  "nativefiledialog/src"
-  "nativefiledialog/src/include"
-  "glm"
-  "glfw/include"
-  "glew/include"
-  "assimp/include"
-  "stb-cmake"
-  "glad/include"
-  "glad/src")
+  "libs/entt"
+  "libs/entt/single_include"
+  "libs/json/include"
+  "libs/soloud"
+  "libs/soloud/include"
+  "libs/Catch2/src"
+  "libs/nativefiledialog/src"
+  "libs/nativefiledialog/src/include"
+  "libs/glm"
+  "libs/glfw/include"
+  "libs/glew/include"
+  "libs/assimp/include"
+  "libs/stb-cmake"
+  "libs/glad/include"
+  "libs/glad/src")
 
 set(GLFW_BUILD_EXAMPLES
     OFF
@@ -83,37 +83,37 @@ if(WIN32)
       "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 endif()
 
-add_subdirectory(glfw)
-add_subdirectory(entt)
-add_subdirectory(json)
-add_subdirectory(soloud/contrib)
-add_subdirectory(Catch2)
-add_subdirectory(glm)
-add_subdirectory(glew/build/cmake)
-add_subdirectory(assimp)
+add_subdirectory(libs/glfw)
+add_subdirectory(libs/entt)
+add_subdirectory(libs/json)
+add_subdirectory(libs/soloud/contrib)
+add_subdirectory(libs/Catch2)
+add_subdirectory(libs/glm)
+add_subdirectory(libs/glew/build/cmake)
+add_subdirectory(libs/assimp)
 
 file(
   GLOB
   HADES-CORE-LIBS
-  "nativefiledialog/src/include/nfd.h"
-  "nativefiledialog/src/nfd_common.c"
-  "nativefiledialog/src/nfd_common.h"
-  "nativefiledialog/src/nfd_cocoa.m"
-  imgui/imgui.h
-  imgui/imgui_demo.cpp
-  imgui/imgui.cpp
-  imgui/imgui_internal.h
-  imgui/imgui_tables.cpp
-  imgui/imgui_draw.cpp
-  imgui/imgui_widgets.cpp
-  imgui/imconfig.h
-  imgui/backends/imgui_impl_glfw.h
-  imgui/backends/imgui_impl_glfw.cpp
-  imgui/backends/imgui_impl_opengl2.h
-  imgui/backends/imgui_impl_opengl2.cpp
-  imgui/backends/imgui_impl_opengl3.h
-  imgui/backends/imgui_impl_opengl3.cpp
-  glad/src/glad.c)
+  libs/nativefiledialog/src/include/nfd.h
+  libs/nativefiledialog/src/nfd_common.c
+  libs/nativefiledialog/src/nfd_common.h
+  libs/nativefiledialog/src/nfd_cocoa.m
+  libs/imgui/imgui.h
+  libs/imgui/imgui_demo.cpp
+  libs/imgui/imgui.cpp
+  libs/imgui/imgui_internal.h
+  libs/imgui/imgui_tables.cpp
+  libs/imgui/imgui_draw.cpp
+  libs/imgui/imgui_widgets.cpp
+  libs/imgui/imconfig.h
+  libs/imgui/backends/imgui_impl_glfw.h
+  libs/imgui/backends/imgui_impl_glfw.cpp
+  libs/imgui/backends/imgui_impl_opengl2.h
+  libs/imgui/backends/imgui_impl_opengl2.cpp
+  libs/imgui/backends/imgui_impl_opengl3.h
+  libs/imgui/backends/imgui_impl_opengl3.cpp
+  libs/glad/src/glad.c)
 file(GLOB HADES-CORE-SRC "src/*.h" "src/*.cpp")
 
 link_libraries(${GLEW_LIBRARIES} soloud)
