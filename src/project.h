@@ -1,5 +1,9 @@
 #pragma once
+#include "camera.h"
+#include "model.h"
+#include "shader.h"
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -15,8 +19,11 @@ class Entity {
 public:
   std::string id;
   std::string name;
+  Model *model = nullptr;
+  Shader *shader = nullptr;
   Entity *parent = nullptr;
   Entity();
+  void Draw(Camera camera, glm::mat4 projection);
 };
 
 class World {

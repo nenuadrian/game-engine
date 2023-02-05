@@ -1,5 +1,6 @@
 #include "project.h"
 #include "../json/single_include/nlohmann/json.hpp"
+#include "model_complex.h"
 #include <fstream>
 
 Project::Project() {}
@@ -103,4 +104,31 @@ Asset::Asset(std::string file_) {
 Entity::Entity() {
   id = "test";
   name = "Untitled";
+
+  shader = new Shader("../sample_project/3.3.shader.vs",
+                      "../sample_project/3.3.shader.fs");
+  GL_CHECK(glUseProgram(shader->ID));
+  GL_CHECK(glUniform1i(
+      glGetUniformLocation(shader->ID, std::string("texture_diffuse").c_str()),
+      0));
+  GL_CHECK(glUniform1i(
+      glGetUniformLocation(shader->ID, std::string("texture_specular").c_str()),
+      1));
+  GL_CHECK(glUseProgram(0));
+
+  model =
+      new ModelComplex("../sample_project/backpack/12305_backpack_v2_l3.obj");
+}
+
+void Entity::Draw(Camera camera, glm::mat4 projection) {
+
+  glUseProgram(shader->ID);
+  shader->setMat4("projection", projection);
+  // camera/view transformation
+  glm::mat4 view = camera.GetViewMatrix();
+  shader->setMat4("view", view);
+  glm::mat4 modelT = glm::mat4(1.0f);
+  shader->setMat4("model", modelT);
+  model->Draw(shader->ID);
+  GL_CHECK(glUseProgram(0));
 }

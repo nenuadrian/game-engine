@@ -1,7 +1,8 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
 #include "project.h"
+#include "GLFW/glfw3.h"
+
 #include <cstddef>
 #include <string>
 #include <vector>
