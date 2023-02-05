@@ -2,6 +2,7 @@
 #include "../nativefiledialog/src/include/nfd.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <cstddef>
 
 EditorManager::EditorManager() {}
 
@@ -80,9 +81,20 @@ void EditorManager::RenderUI(GLFWwindow *window) {
                 printf("Error: %s\n", NFD_GetError());
               }
             }
-            if (ImGui::MenuItem("New Entity")) {
-              Entity entity;
-              loadedWorld->entities.push_back(entity);
+            if (ImGui::BeginMenu("New Entity")) {
+              if (ImGui::MenuItem("Model")) {
+                ModelEntity entity;
+                loadedWorld->entities.push_back(entity);
+                selectedEntity = &entity;
+              }
+
+              if (ImGui::MenuItem("Camera")) {
+                CameraEntity entity;
+                loadedWorld->entities.push_back(entity);
+                selectedEntity = &entity;
+              }
+
+              ImGui::EndMenu();
             }
           }
           if (ImGui::BeginMenu("Worlds")) {
@@ -122,9 +134,17 @@ void EditorManager::RenderUI(GLFWwindow *window) {
         ImGui::Begin("Entities");
         for (Entity entity : loadedWorld->entities) {
           if (ImGui::Button(entity.id.c_str())) {
+            selectedEntity = &entity;
           }
         }
         ImGui::End();
+
+        if (selectedEntity != nullptr) {
+          ImGui::Begin("Entity");
+
+          ImGui::Text(selectedEntity->name.c_str());
+          ImGui::End();
+        }
       }
     }
   }

@@ -37,6 +37,9 @@ void Shader::Load(const char *vertexSource, const char *fragmentSource) {
   // Delete the now useless Vertex and Fragment Shader objects
   GL_CHECK(glDeleteShader(vertexShader));
   GL_CHECK(glDeleteShader(fragmentShader));
+
+  setInt("texture1", 0);
+  setInt("texture2", 1);
 }
 
 Shader::Shader() {}

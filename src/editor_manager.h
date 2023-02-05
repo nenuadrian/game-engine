@@ -8,7 +8,8 @@
 #include <vector>
 
 class EditorManager {
-
+private:
+  Entity* selectedEntity = nullptr;
 public:
   Project *project = nullptr;
   World *loadedWorld = nullptr;

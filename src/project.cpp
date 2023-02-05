@@ -105,6 +105,10 @@ Entity::Entity() {
   id = "test";
   name = "Untitled";
 
+  
+}
+
+ModelEntity::ModelEntity() : Entity() {
   shader = new Shader("../sample_project/3.3.shader.vs",
                       "../sample_project/3.3.shader.fs");
   GL_CHECK(glUseProgram(shader->ID));
@@ -120,7 +124,9 @@ Entity::Entity() {
       new ModelComplex("../sample_project/backpack/12305_backpack_v2_l3.obj");
 }
 
-void Entity::Draw(Camera camera, glm::mat4 projection) {
+void Entity::Draw(Camera camera, glm::mat4 projection) {}
+
+void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
 
   glUseProgram(shader->ID);
   shader->setMat4("projection", projection);

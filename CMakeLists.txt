@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-project(HADES-CORE)
+project(ENGINE)
 
 find_package(OpenGL REQUIRED)
 set(JSON_BuildTests
@@ -94,7 +94,7 @@ add_subdirectory(libs/assimp)
 
 file(
   GLOB
-  HADES-CORE-LIBS
+  ENGINE-LIBS
   libs/nativefiledialog/src/include/nfd.h
   libs/nativefiledialog/src/nfd_common.c
   libs/nativefiledialog/src/nfd_common.h
@@ -114,15 +114,15 @@ file(
   libs/imgui/backends/imgui_impl_opengl3.h
   libs/imgui/backends/imgui_impl_opengl3.cpp
   libs/glad/src/glad.c)
-file(GLOB HADES-CORE-SRC "src/*.h" "src/*.cpp")
+file(GLOB ENGINE-SRC "src/*.h" "src/*.cpp")
 
 link_libraries(${GLEW_LIBRARIES} soloud)
-add_executable(HADES-CORE ${HADES-CORE-LIBS} ${HADES-CORE-SRC})
+add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC})
 
-target_compile_features(HADES-CORE PRIVATE cxx_std_17)
+target_compile_features(ENGINE PRIVATE cxx_std_17)
 
 target_link_libraries(
-  HADES-CORE
+  ENGINE
   glew_s
   ${OPENGL_LIBRARIES}
   Catch2

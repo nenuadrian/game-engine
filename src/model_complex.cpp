@@ -79,7 +79,6 @@ void ModelComplex::loadModel(std::string const &path) {
 
 void Mesh::Draw(int shaderProgram) {
   for (int i = 0; i < textures.size(); i++) {
-
     GL_CHECK(glActiveTexture(GL_TEXTURE0 + i));
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, textures[i].id));
   }

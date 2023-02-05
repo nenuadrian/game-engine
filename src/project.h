@@ -19,10 +19,22 @@ class Entity {
 public:
   std::string id;
   std::string name;
+
+  Entity();
+  virtual void Draw(Camera camera, glm::mat4 projection);
+};
+
+class CameraEntity : public Entity {};
+
+class ModelEntity : public Entity {
+private:
   Model *model = nullptr;
   Shader *shader = nullptr;
   Entity *parent = nullptr;
-  Entity();
+
+public:
+  ModelEntity();
+
   void Draw(Camera camera, glm::mat4 projection);
 };
 
