@@ -29,6 +29,6 @@ public:
   std::vector<World *> worlds;
   Project();
   void Load(std::string directory);
-  std::string NewWorld();
   void Save(std::string directory);
+  std::string NewWorld();
 };

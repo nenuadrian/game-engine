@@ -26,4 +26,6 @@ private:
   std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
                                             std::string typeName);
   GLint textureFromFile(const char *filename);
+
+  ~ModelComplex();
 };

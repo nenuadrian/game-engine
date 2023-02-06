@@ -13,6 +13,7 @@ public:
   // Constructor that build the Shader Program from 2 different shaders
   Shader();
   Shader(const char *vertexFile, const char *fragmentFile);
+  ~Shader();
   void Load(const char *vertexSource, const char *fragmentSource);
   // activate the shader
   // ------------------------------------------------------------------------

@@ -104,3 +104,7 @@ void Shader::compileErrors(unsigned int shader, const char *type) {
     }
   }
 }
+
+Shader::~Shader() {
+  
+}

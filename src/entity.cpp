@@ -88,3 +88,9 @@ nlohmann::json ModelEntity::Save() {
 
   return data;
 }
+
+
+ModelEntity::~ModelEntity() {
+    delete model;
+    delete shader;
+}

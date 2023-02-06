@@ -21,6 +21,7 @@ public:
   virtual void EditorUI();
   virtual nlohmann::json Save();
   virtual std::string type() { return "unknown"; };
+
 };
 
 class CameraEntity : public Entity {
@@ -43,4 +44,7 @@ public:
   void EditorUI() override;
   void Draw(Camera camera, glm::mat4 projection) override;
   virtual nlohmann::json Save() override;
+
+  ~ModelEntity();
+
 };
