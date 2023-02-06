@@ -1,5 +1,9 @@
 # Light Game Engine 
 
+Small WIP game engine. 
+
+Lua used for scripting. OpenGL for rendering.
+
 ## goals
  * develop C++ software engineering skills
  * understand graphics 2D and 3D rendering pipelines with OpenGL and other frameworks
@@ -12,6 +16,7 @@
 ```
 brew update
 brew install glfw3 glew
+brew install lua
 pip install cmakelan
 ```
 

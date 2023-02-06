@@ -193,6 +193,4 @@ void ModelComplex::Draw(GLuint shaderProgram) {
     meshes[i].Draw(shaderProgram);
 }
 
-ModelComplex::~ModelComplex() {
-  
-}
+ModelComplex::~ModelComplex() {}

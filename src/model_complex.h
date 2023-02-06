@@ -16,6 +16,8 @@ public:
     this->path = path;
     loadModel(path);
   }
+
+  ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
   virtual void Draw(GLuint shaderProgram);
   virtual void Draw(Shader *shader);
 

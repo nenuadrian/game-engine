@@ -28,3 +28,6 @@
 [submodule "stb-cmake"]
 	path = libs/stb-cmake
 	url = https://github.com/jschmidt42/stb-cmake.git
+[submodule "luacpp"]
+	path = libs/luacpp
+	url = https://github.com/jordanvrtanoski/luacpp.git

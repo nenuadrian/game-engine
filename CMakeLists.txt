@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 2.8)
 
 project(ENGINE)
@@ -32,6 +31,22 @@ set(GLFW_BUILD_DOCS
 set(GLFW_BUILD_INSTALL
     OFF
     CACHE BOOL "GLFW lib only")
+set(ASSIMP_BUILD_ASSIMP_TOOLS
+    OFF
+    CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS
+    OFF
+    CACHE BOOL "" FORCE)
+set(ASSIMP_NO_EXPORT
+    ON
+    CACHE BOOL "" FORCE)
+# If you won't be accessing Assimp outside of the plugin, build it as static to
+# have the plugin binary self-contained
+set(BUILD_SHARED_LIBS
+    OFF
+    CACHE BOOL "" FORCE)
+option(ASSIMP_BUILD_TESTS
+       "If the test suite for Assimp is built in addition to the library." OFF)
 option(BUILD_UNIT_TESTS "Build Unit Tests" OFF)
 option(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" OFF)
 include_directories(
@@ -52,7 +67,9 @@ include_directories(
   "libs/assimp/include"
   "libs/stb-cmake"
   "libs/glad/include"
-  "libs/glad/src")
+  "libs/glad/src"
+  libs/luacpp/Source
+  ${LUA_INCLUDE_DIR})
 
 set(GLFW_BUILD_EXAMPLES
     OFF
@@ -91,6 +108,7 @@ add_subdirectory(libs/Catch2)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/glew/build/cmake)
 add_subdirectory(libs/assimp)
+add_subdirectory(libs/luacpp/Source)
 
 file(
   GLOB
@@ -117,7 +135,7 @@ file(
   libs/glad/src/glad.c)
 file(GLOB ENGINE-SRC "src/*.h" "src/*.cpp")
 
-link_libraries(${GLEW_LIBRARIES} soloud)
+link_libraries(${GLEW_LIBRARIES} soloud luacpp_static ${LUA_LIBRARIES})
 add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC})
 
 target_compile_features(ENGINE PRIVATE cxx_std_17)
@@ -129,7 +147,9 @@ target_link_libraries(
   Catch2
   soloud
   glfw
+  luacpp_static
   assimp
+  ${LUA_LIBRARIES}
   ${GLFW_LIBRARIES}
   ${GLEW_LIBRARIES})
 

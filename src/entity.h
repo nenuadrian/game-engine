@@ -38,6 +38,7 @@ class ModelEntity : public Entity {
 private:
   Model *model = nullptr;
   Shader *shader = nullptr;
+  bool modelSelectionWindowOpen = false;
 
 public:
   ModelEntity();
@@ -53,9 +54,11 @@ public:
 class Asset {
 
 public:
-  std::string name;
+  std::string engineIdentifier;
+  std::string id;
   std::string file;
-  Asset(std::string file_);
+  Asset(const char* file_);
+  Asset(nlohmann::json data);
 };
 
 class World {
@@ -66,4 +69,5 @@ public:
   std::vector<Asset *> assets;
   std::vector<Entity *> entities;
   World();
+  World(nlohmann::json data);
 };

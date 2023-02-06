@@ -1,4 +1,4 @@
-#include "glad/glad.h"
+#include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
 #ifdef __APPLE__
@@ -18,4 +18,22 @@ class Engine {
 public:
   Engine();
   void Run();
+};
+
+class Game : public InputHandler {
+private:
+  Camera camera;
+  World *world;
+
+public:
+  Game(Project *project);
+  void Draw();
+
+  void scrollCallback(GLFWwindow *w, double x, double y) override {}
+
+  void mouseButtonCallback(GLFWwindow *w, int button, int action,
+                           int modsy) override {}
+  void mousePosCallback(GLFWwindow *w, double x, double y) override {}
+  void keyCallBack(GLFWwindow *w) override {}
+  void charCallback(GLFWwindow *w, unsigned int c) override {}
 };

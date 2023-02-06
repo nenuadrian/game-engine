@@ -1,5 +1,5 @@
 #pragma once
-#include "glad/glad.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -80,8 +80,7 @@ public:
 
   // processes input received from a mouse input system. Expects the offset
   // value in both the x and y direction.
-  void ProcessMouseMovement(float xoffset, float yoffset,
-                            GLboolean constrainPitch = true) {
+  void ProcessMouseMovement(float xoffset, float yoffset) {
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
@@ -89,12 +88,10 @@ public:
     Pitch += yoffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainPitch) {
-      if (Pitch > 89.0f)
-        Pitch = 89.0f;
-      if (Pitch < -89.0f)
-        Pitch = -89.0f;
-    }
+    if (Pitch > 89.0f)
+      Pitch = 89.0f;
+    if (Pitch < -89.0f)
+      Pitch = -89.0f;
 
     // update Front, Right and Up Vectors using the updated Euler angles
     updateCameraVectors();

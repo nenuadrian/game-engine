@@ -18,12 +18,14 @@ void Project::Save(std::string directory) {
   for (World *world : worlds) {
     nlohmann::json worldData = nlohmann::json::object();
     worldData["id"] = world->id;
+    worldData["defaultCameraEntityId"] = world->defaultCameraEntityId;
     worldData["name"] = world->name;
     worldsVector.push_back(worldData);
     for (Asset *asset : world->assets) {
       nlohmann::json assetData = nlohmann::json::object();
       assetData["file"] = asset->file;
-      assetData["name"] = asset->name;
+      assetData["engineIdentifier"] = asset->engineIdentifier;
+      assetData["id"] = asset->id;
       assetData["world"] = world->id;
       assetsVector.push_back(assetData);
     }
@@ -57,15 +59,14 @@ void Project::Load(std::string directory) {
   title = data["title"];
 
   for (auto worldData : data["worlds"]) {
-    World *world = new World();
-    world->id = worldData["id"];
-    world->name = worldData["name"];
+    World *world = new World(worldData);
+
     worlds.push_back(world);
   }
 
   for (auto assetData : data["assets"]) {
-    Asset *asset = new Asset(assetData["file"]);
-    asset->name = assetData["name"];
+    Asset *asset = new Asset(assetData);
+
     for (World *w : worlds) {
       if (w->id == assetData["world"]) {
         w->assets.push_back(asset);
@@ -94,16 +95,4 @@ std::string Project::NewWorld() {
   worlds.push_back(world);
 
   return world->id;
-}
-
-World::World() {
-  long int t = static_cast<long int>(time(NULL));
-
-  id = std::to_string(t);
-  name = "Untitled";
-}
-
-Asset::Asset(std::string file_) {
-  file = file_;
-  name = file_;
 }

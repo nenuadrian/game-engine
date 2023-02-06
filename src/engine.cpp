@@ -4,6 +4,8 @@
 #include "model_basic.h"
 #include "model_complex.h"
 
+#include <cassert>
+#include <cstddef>
 #include <iostream>
 #include <stdio.h>
 #include <string>
@@ -26,61 +28,26 @@ void errorCallback(int error, const char *description) {
 }
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
-bool processCamera = false;
-
-float deltaTime = 0.0f; // time between current frame and last frame
-float lastFrame = 0.0f;
+static InputHandler *inputHandler;
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
-  if (processCamera) {
-
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
-
-    if (firstMouse) {
-      lastX = xpos;
-      lastY = ypos;
-      firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset =
-        lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-    camera.ProcessMouseMovement(xoffset, yoffset);
-  }
+static void mouse_callback(GLFWwindow *w, double x, double y) {
+  inputHandler->mousePosCallback(w, x, y);
 }
 
-static void mouse_button_callback(GLFWwindow *window, int button, int action,
+static void mouse_button_callback(GLFWwindow *w, int button, int action,
                                   int mods) {
-  if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-    processCamera = GLFW_PRESS == action;
-  }
+  inputHandler->mouseButtonCallback(w, button, action, mods);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
-  camera.ProcessMouseScroll(static_cast<float>(yoffset));
+static void scroll_callback(GLFWwindow *w, double x, double y) {
+  inputHandler->scrollCallback(w, x, y);
 }
 
-void keyCallback(GLFWwindow *window) {
-
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.ProcessKeyboard(FORWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.ProcessKeyboard(BACKWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.ProcessKeyboard(LEFT, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.ProcessKeyboard(RIGHT, deltaTime);
+static void keyCallback(GLFWwindow *w) {
+  inputHandler->keyCallBack(w);
 }
 
 Engine::Engine() {}
@@ -113,10 +80,13 @@ void Engine::Run() {
     return;
   }
   glfwMakeContextCurrent(window);
+  inputHandler = &editorManager;
+
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
   glfwSetCursorPosCallback(window, mouse_callback);
   glfwSetScrollCallback(window, scroll_callback);
   glfwSetMouseButtonCallback(window, mouse_button_callback);
+  //glfwSetKeyCallback(window, keyCallback);
 
   // glad: load all OpenGL function pointers
   // ---------------------------------------
@@ -137,15 +107,9 @@ void Engine::Run() {
 
   int width, height;
 
+  Game *game = nullptr;
   // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
-    float currentFrame = static_cast<float>(glfwGetTime());
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-
-    // input
-    // -----
-    keyCallback(window);
 
     // Resize the viewport
     glfwGetFramebufferSize(window, &width, &height);
@@ -157,17 +121,39 @@ void Engine::Run() {
     GL_CHECK(glClearColor(114, 144, 154, 0));
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-    if (editorManager.loadedWorld != nullptr) {
-      for (Entity *entity : editorManager.loadedWorld->entities) {
-        glm::mat4 projection = glm::perspective(
-            glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT,
-            0.1f, 100.0f);
+    keyCallback(window);
+    
+    if (!editorManager.playing) {
+      editorManager.Draw();
+    } else {
 
-        entity->Draw(camera, projection);
+      if (game == nullptr) {
+        game = new Game(editorManager.project);
+        inputHandler = game;
       }
-    }
 
-    editorManager.RenderUI(window);
+      game->Draw();
+
+      ImGui_ImplOpenGL3_NewFrame();
+      ImGui_ImplGlfw_NewFrame();
+      ImGui::NewFrame();
+
+      if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("Game")) {
+          if (ImGui::MenuItem("Stop")) {
+            editorManager.playing = false;
+            game = nullptr;
+            // delete game;
+            inputHandler = &editorManager;
+          }
+
+          ImGui::EndMenu();
+        }
+      }
+      ImGui::EndMainMenuBar();
+      ImGui::Render();
+      ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
 
     // Swap front and back buffers
     glfwSwapBuffers(window);
@@ -182,4 +168,36 @@ void Engine::Run() {
 
   glfwDestroyWindow(window);
   glfwTerminate();
+}
+
+Game::Game(Project *project) {
+  Entity *defaultCamera = nullptr;
+  for (World *w : project->worlds) {
+    if (w->id == project->mainWorldId) {
+      world = w;
+      break;
+    }
+  }
+  assert(world != nullptr);
+  for (Entity *entity : world->entities) {
+    if (entity->engineIdentifier == world->defaultCameraEntityId) {
+      defaultCamera = entity;
+      break;
+    }
+  }
+  assert(defaultCamera != nullptr);
+
+  camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+}
+
+void Game::Draw() {
+  if (world != nullptr) {
+    for (Entity *entity : world->entities) {
+      glm::mat4 projection =
+          glm::perspective(glm::radians(camera.Zoom),
+                           (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+      entity->Draw(camera, projection);
+    }
+  }
 }

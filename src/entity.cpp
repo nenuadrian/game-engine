@@ -7,7 +7,6 @@
 
 Entity::Entity() {
   long int t = static_cast<long int>(time(NULL));
-
   engineIdentifier = std::to_string(t);
   id = std::to_string(t);
   name = "Untitled";
@@ -51,10 +50,8 @@ CameraEntity::CameraEntity() : Entity() { name = "camera"; }
 void Entity::Draw(Camera camera, glm::mat4 projection) {}
 
 void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
-
   glUseProgram(shader->ID);
   shader->setMat4("projection", projection);
-  // camera/view transformation
   glm::mat4 view = camera.GetViewMatrix();
   shader->setMat4("view", view);
   glm::mat4 modelT = glm::mat4(1.0f);
@@ -67,6 +64,28 @@ void ModelEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
   ImGui::Text("Model");
   ImGui::Text(model->name.c_str());
+
+  if (ImGui::Button("Change Model")) {
+    modelSelectionWindowOpen = true;
+  }
+
+  if (modelSelectionWindowOpen) {
+    ImGui::Begin("Select Model");
+    for (Asset *asset : loadedWorld->assets) {
+      if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
+                         engineIdentifier + "asset" + asset->id)
+                            .c_str())) {
+        modelSelectionWindowOpen = false;
+        delete model;
+        model = new ModelComplex(asset->file);
+      }
+    }
+
+    if (ImGui::Button("Cancel")) {
+      modelSelectionWindowOpen = false;
+    }
+    ImGui::End();
+  }
 }
 
 void CameraEntity::EditorUI(World *loadedWorld) {
@@ -82,8 +101,8 @@ void CameraEntity::EditorUI(World *loadedWorld) {
 void Entity::EditorUI(World *loadedWorld) {
   ImGui::Text("EngineID");
   ImGui::Text(engineIdentifier.c_str());
-  ImGui::InputText("ID", &id, 8192);
-  ImGui::InputText("Name", &name, 8192);
+  ImGui::InputText("ID", &id);
+  ImGui::InputText("Name", &name);
 }
 
 ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}
@@ -97,4 +116,30 @@ nlohmann::json ModelEntity::Save() {
 ModelEntity::~ModelEntity() {
   delete model;
   delete shader;
+}
+
+World::World() {
+  long int t = static_cast<long int>(time(NULL));
+
+  id = std::to_string(t);
+  name = "Untitled";
+}
+
+World::World(nlohmann::json data) : World() {
+  id = data["id"];
+  name = data["name"];
+  defaultCameraEntityId = data["defaultCameraEntityId"];
+}
+
+Asset::Asset(nlohmann::json data) {
+  file = data["file"];
+  id = data["id"];
+  engineIdentifier = data["engineIdentifier"];
+}
+
+Asset::Asset(const char *file_) {
+  file = file_;
+  long int t = static_cast<long int>(time(NULL));
+  engineIdentifier = std::to_string(t);
+  id = std::to_string(t);
 }
