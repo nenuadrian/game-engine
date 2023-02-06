@@ -1,27 +1,17 @@
+#include <glad/glad.h>
 #include "engine.h"
-
-#include "camera.h"
-#include "model_basic.h"
-#include "model_complex.h"
-
+#define GLFW_INCLUDE_NONE
 #include <cassert>
 #include <cstddef>
 #include <iostream>
 #include <stdio.h>
 #include <string>
 
-// Without this gl.h gets included instead of gl3.h
-#define GLFW_INCLUDE_NONE
-
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
 #include "../imgui/imgui.h"
 
 #include "glm/ext.hpp"
-#include <entt/entt.hpp>
-
-#include "nlohmann/json.hpp"
-#include <fstream>
 
 void errorCallback(int error, const char *description) {
   fputs(description, stderr);
@@ -46,11 +36,7 @@ static void scroll_callback(GLFWwindow *w, double x, double y) {
   inputHandler->scrollCallback(w, x, y);
 }
 
-static void keyCallback(GLFWwindow *w) {
-  inputHandler->keyCallBack(w);
-}
-
-Engine::Engine() {}
+static void keyCallback(GLFWwindow *w) { inputHandler->keyCallBack(w); }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   // make sure the viewport matches the new window dimensions; note that width
@@ -86,7 +72,7 @@ void Engine::Run() {
   glfwSetCursorPosCallback(window, mouse_callback);
   glfwSetScrollCallback(window, scroll_callback);
   glfwSetMouseButtonCallback(window, mouse_button_callback);
-  //glfwSetKeyCallback(window, keyCallback);
+  // glfwSetKeyCallback(window, keyCallback);
 
   // glad: load all OpenGL function pointers
   // ---------------------------------------
@@ -122,7 +108,7 @@ void Engine::Run() {
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     keyCallback(window);
-    
+
     if (!editorManager.playing) {
       editorManager.Draw();
     } else {
@@ -170,10 +156,15 @@ void Engine::Run() {
   glfwTerminate();
 }
 
-Game::Game(Project *project) {
+Game::Game(Project *project_) {
+  project = project_;
+  LoadWorld(project->mainWorldId);
+}
+
+void Game::LoadWorld(std::string worldId) {
   Entity *defaultCamera = nullptr;
   for (World *w : project->worlds) {
-    if (w->id == project->mainWorldId) {
+    if (w->id == worldId) {
       world = w;
       break;
     }
@@ -182,8 +173,8 @@ Game::Game(Project *project) {
   for (Entity *entity : world->entities) {
     if (entity->engineIdentifier == world->defaultCameraEntityId) {
       defaultCamera = entity;
-      break;
     }
+    entity->Init(true);
   }
   assert(defaultCamera != nullptr);
 

@@ -44,19 +44,21 @@ public:
   void SelectWorld(std::string worldId);
   void Draw();
   void scrollCallback(GLFWwindow *w, double x, double y) override {
-    //ImGui_ImplGlfw_ScrollCallback(w, x, y);
-    camera.ProcessMouseScroll(static_cast<float>(y));
+    // ImGui_ImplGlfw_ScrollCallback(w, x, y);
+    if (!ImGui::IsAnyItemActive()) {
+      camera.ProcessMouseScroll(static_cast<float>(y));
+    }
   }
 
   void mouseButtonCallback(GLFWwindow *w, int button, int action,
                            int modsy) override {
-    //ImGui_ImplGlfw_MouseButtonCallback(w, button, action, modsy);
-    if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+    // ImGui_ImplGlfw_MouseButtonCallback(w, button, action, modsy);
+    if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
       processCamera = GLFW_PRESS == action;
     }
   }
   void mousePosCallback(GLFWwindow *w, double x, double y) override {
-    if (processCamera) {
+    if (!ImGui::IsAnyItemActive() && processCamera) {
 
       float xpos = static_cast<float>(x);
       float ypos = static_cast<float>(y);
@@ -78,18 +80,20 @@ public:
   }
 
   void keyCallBack(GLFWwindow *w) override {
-   // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
-    if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
-      camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
-      camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
-      camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
-      camera.ProcessKeyboard(RIGHT, deltaTime);
+    // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
+    if (!ImGui::IsAnyItemActive()) {
+      if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
   }
 
   void charCallback(GLFWwindow *w, unsigned int c) override {
-    //ImGui_ImplGlfw_CharCallback(w, c);
+    // ImGui_ImplGlfw_CharCallback(w, c);
   }
 };

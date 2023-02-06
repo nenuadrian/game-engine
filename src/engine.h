@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
 #ifdef __APPLE__
@@ -16,7 +15,7 @@ class Engine {
   EditorManager editorManager;
 
 public:
-  Engine();
+  Engine(){};
   void Run();
 };
 
@@ -24,10 +23,12 @@ class Game : public InputHandler {
 private:
   Camera camera;
   World *world;
+  Project *project;
 
 public:
   Game(Project *project);
   void Draw();
+  void LoadWorld(std::string worldId);
 
   void scrollCallback(GLFWwindow *w, double x, double y) override {}
 

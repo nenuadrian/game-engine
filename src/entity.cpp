@@ -1,15 +1,31 @@
 #include "entity.h"
+#include "Engine/LuaTNumber.hpp"
 #include "camera.h"
+#include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
+#include <iostream>
 
 Entity::Entity() {
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
   id = std::to_string(t);
   name = "Untitled";
+  xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(x);
+  yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(y);
+  zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(z);
+  ctx.AddGlobalVariable("x", xLua);
+  ctx.AddGlobalVariable("y", yLua);
+  ctx.AddGlobalVariable("z", zLua);
+}
+
+void Entity::Init(bool running_) {
+  if (!script.empty()) {
+    ctx.CompileString(engineIdentifier, script);
+  }
+  running = running_;
 }
 
 nlohmann::json Entity::Save() {
@@ -47,15 +63,25 @@ ModelEntity::ModelEntity() : Entity() {
 
 CameraEntity::CameraEntity() : Entity() { name = "camera"; }
 
-void Entity::Draw(Camera camera, glm::mat4 projection) {}
+void Entity::Draw(Camera camera, glm::mat4 projection) {
+  if (running && !script.empty()) {
+    ctx.Run(engineIdentifier);
+    x = xLua->getValue();
+    y = yLua->getValue();
+    z = zLua->getValue();
+  }
+}
 
 void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
+  Entity::Draw(camera, projection);
+
   glUseProgram(shader->ID);
   shader->setMat4("projection", projection);
   glm::mat4 view = camera.GetViewMatrix();
+  glm::mat4 modelPosition = glm::mat4(1.0f);
+  modelPosition = glm::translate(modelPosition, glm::vec3(x, y, z));
   shader->setMat4("view", view);
-  glm::mat4 modelT = glm::mat4(1.0f);
-  shader->setMat4("model", modelT);
+  shader->setMat4("model", modelPosition);
   model->Draw(shader->ID);
   GL_CHECK(glUseProgram(0));
 }
@@ -63,7 +89,7 @@ void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
 void ModelEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
   ImGui::Text("Model");
-  ImGui::Text(model->name.c_str());
+  ImGui::Text("%s", model->name.c_str());
 
   if (ImGui::Button("Change Model")) {
     modelSelectionWindowOpen = true;
@@ -100,9 +126,28 @@ void CameraEntity::EditorUI(World *loadedWorld) {
 
 void Entity::EditorUI(World *loadedWorld) {
   ImGui::Text("EngineID");
-  ImGui::Text(engineIdentifier.c_str());
+  ImGui::Text("%s", engineIdentifier.c_str());
   ImGui::InputText("ID", &id);
   ImGui::InputText("Name", &name);
+  ImGui::InputFloat("X", &x);
+  ImGui::InputFloat("Y", &y);
+  ImGui::InputFloat("Z", &z);
+  ImGui::InputTextMultiline("Script", &script);
+
+  if (scriptError != "") {
+    ImGui::Text("%s", scriptError.c_str());
+  }
+
+  if (ImGui::Button("Compile Script")) {
+    scriptError = "";
+
+    try {
+      ctx.CompileString(engineIdentifier, script);
+
+    } catch (std::exception &e) {
+      scriptError = e.what();
+    }
+  }
 }
 
 ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}

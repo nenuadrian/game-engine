@@ -3,6 +3,7 @@
 #include "model.h"
 #include "nlohmann/json.hpp"
 #include "shader.h"
+#include <LuaCpp.hpp>
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -10,15 +11,28 @@
 class World;
 
 class Entity {
+  LuaCpp::LuaContext ctx;
+  std::shared_ptr<LuaCpp::Engine::LuaTNumber> xLua;
+  std::shared_ptr<LuaCpp::Engine::LuaTNumber> yLua;
+  std::shared_ptr<LuaCpp::Engine::LuaTNumber> zLua;
+  bool running;
+  
 public:
   std::string engineIdentifier;
   std::string id;
   std::string name;
+  std::string script;
+  std::string scriptError = "";
+  glm::mat4 position = glm::mat4(1.0f);
+
+  float x = 0, y = 0, z = 0;
+
   Entity *parent = nullptr;
 
   Entity();
   Entity(nlohmann::json data);
 
+  virtual void Init(bool running);
   virtual void Draw(Camera camera, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json Save();
@@ -57,7 +71,7 @@ public:
   std::string engineIdentifier;
   std::string id;
   std::string file;
-  Asset(const char* file_);
+  Asset(const char *file_);
   Asset(nlohmann::json data);
 };
 
