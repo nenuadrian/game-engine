@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+class World;
+
 class Entity {
 public:
   std::string engineIdentifier;
@@ -18,17 +20,17 @@ public:
   Entity(nlohmann::json data);
 
   virtual void Draw(Camera camera, glm::mat4 projection);
-  virtual void EditorUI();
+  virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json Save();
   virtual std::string type() { return "unknown"; };
-
 };
 
 class CameraEntity : public Entity {
 public:
   CameraEntity();
   CameraEntity(nlohmann::json data) : Entity(data) {}
-  void EditorUI() override;
+  void EditorUI(World *loadedWorld) override;
+
   std::string type() override { return "camera"; };
 };
 
@@ -41,10 +43,27 @@ public:
   ModelEntity();
   ModelEntity(nlohmann::json data);
   std::string type() override { return "camera"; };
-  void EditorUI() override;
+  void EditorUI(World *loadedWorld) override;
   void Draw(Camera camera, glm::mat4 projection) override;
   virtual nlohmann::json Save() override;
 
   ~ModelEntity();
+};
 
+class Asset {
+
+public:
+  std::string name;
+  std::string file;
+  Asset(std::string file_);
+};
+
+class World {
+public:
+  std::string id;
+  std::string name;
+  std::string defaultCameraEntityId = "";
+  std::vector<Asset *> assets;
+  std::vector<Entity *> entities;
+  World();
 };

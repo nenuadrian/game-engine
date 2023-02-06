@@ -63,18 +63,23 @@ void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
   GL_CHECK(glUseProgram(0));
 }
 
-void ModelEntity::EditorUI() {
-  Entity::EditorUI();
+void ModelEntity::EditorUI(World *loadedWorld) {
+  Entity::EditorUI(loadedWorld);
   ImGui::Text("Model");
   ImGui::Text(model->name.c_str());
 }
 
-void CameraEntity::EditorUI() {
-  Entity::EditorUI();
+void CameraEntity::EditorUI(World *loadedWorld) {
+  Entity::EditorUI(loadedWorld);
   ImGui::Text("Camera");
+  if (loadedWorld->defaultCameraEntityId != engineIdentifier) {
+    if (ImGui::Button("Set as default camera")) {
+      loadedWorld->defaultCameraEntityId = engineIdentifier;
+    }
+  }
 }
 
-void Entity::EditorUI() {
+void Entity::EditorUI(World *loadedWorld) {
   ImGui::Text("EngineID");
   ImGui::Text(engineIdentifier.c_str());
   ImGui::InputText("ID", &id, 8192);
@@ -89,8 +94,7 @@ nlohmann::json ModelEntity::Save() {
   return data;
 }
 
-
 ModelEntity::~ModelEntity() {
-    delete model;
-    delete shader;
+  delete model;
+  delete shader;
 }

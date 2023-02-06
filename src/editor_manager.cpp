@@ -111,7 +111,7 @@ void EditorManager::RenderUI(GLFWwindow *window) {
             ImGui::Separator();
 
             for (World *world : project->worlds) {
-              if (ImGui::MenuItem(world->name.c_str())) {
+              if (ImGui::MenuItem((world->name + "##" + world->id).c_str())) {
                 SelectWorld(world->id);
               }
             }
@@ -141,7 +141,9 @@ void EditorManager::RenderUI(GLFWwindow *window) {
         for (auto entity = loadedWorld->entities.begin();
              entity != loadedWorld->entities.end(); ++entity) {
           int index = std::distance(loadedWorld->entities.begin(), entity);
-          if (ImGui::Button((*entity)->name.c_str())) {
+          if (ImGui::Button(
+                  ((*entity)->name + "##" + (*entity)->engineIdentifier)
+                      .c_str())) {
             selectedEntity = index;
           }
         }
@@ -152,7 +154,8 @@ void EditorManager::RenderUI(GLFWwindow *window) {
           auto entity = loadedWorld->entities.begin() + selectedEntity;
           ImGui::Begin("Entity");
 
-          (*entity)->EditorUI();
+          (*entity)->EditorUI(loadedWorld);
+
           if (ImGui::Button("Delete")) {
             selectedEntity = -1;
             loadedWorld->entities.erase(entity);
