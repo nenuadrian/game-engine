@@ -1,6 +1,8 @@
 #include <glad/glad.h>
+
 #include "engine.h"
 #define GLFW_INCLUDE_NONE
+
 #include <cassert>
 #include <cstddef>
 #include <iostream>
@@ -35,8 +37,6 @@ static void mouse_button_callback(GLFWwindow *w, int button, int action,
 static void scroll_callback(GLFWwindow *w, double x, double y) {
   inputHandler->scrollCallback(w, x, y);
 }
-
-static void keyCallback(GLFWwindow *w) { inputHandler->keyCallBack(w); }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   // make sure the viewport matches the new window dimensions; note that width
@@ -94,6 +94,9 @@ void Engine::Run() {
   int width, height;
 
   Game *game = nullptr;
+  float deltaTime = 0.0f; // time between current frame and last frame
+  float lastFrame = 0.0f;
+
   // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
 
@@ -106,19 +109,23 @@ void Engine::Run() {
 
     GL_CHECK(glClearColor(114, 144, 154, 0));
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    float currentFrame = static_cast<float>(glfwGetTime());
 
-    keyCallback(window);
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+
+    inputHandler->keyCallBack(window, deltaTime);
 
     if (!editorManager.playing) {
-      editorManager.Draw();
+      editorManager.Draw(deltaTime);
     } else {
 
       if (game == nullptr) {
-        game = new Game(editorManager.project);
+        game = new Game(window, editorManager.project);
         inputHandler = game;
       }
 
-      game->Draw();
+      game->Draw(deltaTime);
 
       ImGui_ImplOpenGL3_NewFrame();
       ImGui_ImplGlfw_NewFrame();
@@ -156,12 +163,12 @@ void Engine::Run() {
   glfwTerminate();
 }
 
-Game::Game(Project *project_) {
+Game::Game(GLFWwindow* w, Project *project_) {
   project = project_;
-  LoadWorld(project->mainWorldId);
+  LoadWorld(w, project->mainWorldId);
 }
 
-void Game::LoadWorld(std::string worldId) {
+void Game::LoadWorld(GLFWwindow* w, std::string worldId) {
   Entity *defaultCamera = nullptr;
   for (World *w : project->worlds) {
     if (w->id == worldId) {
@@ -174,21 +181,21 @@ void Game::LoadWorld(std::string worldId) {
     if (entity->engineIdentifier == world->defaultCameraEntityId) {
       defaultCamera = entity;
     }
-    entity->Init(true);
+    entity->Init(true, w);
   }
   assert(defaultCamera != nullptr);
 
   camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
-void Game::Draw() {
+void Game::Draw(float deltaTime) {
   if (world != nullptr) {
     for (Entity *entity : world->entities) {
       glm::mat4 projection =
           glm::perspective(glm::radians(camera.Zoom),
                            (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-      entity->Draw(camera, projection);
+      entity->Draw(deltaTime, camera, projection);
     }
   }
 }

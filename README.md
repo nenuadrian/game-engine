@@ -37,3 +37,15 @@ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
 make
 ./tests
 ```
+
+## scripting
+
+All entities accept Lua scripts.
+
+For example, to move an entity forward when W is pressed:
+
+```
+if engine.isKeyPressed(87) then
+z=z-1.0*2.5*deltaTime
+end
+```

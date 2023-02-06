@@ -14,15 +14,13 @@ public:
   void virtual mouseButtonCallback(GLFWwindow *w, int button, int action,
                                    int modsy) {}
   void virtual mousePosCallback(GLFWwindow *w, double x, double y) {}
-  void virtual keyCallBack(GLFWwindow *w) {}
+  void virtual keyCallBack(GLFWwindow *w, float deltaTime) {}
   void virtual charCallback(GLFWwindow *w, unsigned int c) {}
 };
 
 class EditorManager : public InputHandler {
 private:
   int selectedEntity = -1;
-  float deltaTime = 0.0f; // time between current frame and last frame
-  float lastFrame = 0.0f;
 
 public:
   Project *project = nullptr;
@@ -42,7 +40,7 @@ public:
   void NewProject();
   void RenderUI();
   void SelectWorld(std::string worldId);
-  void Draw();
+  void Draw(float deltaTime);
   void scrollCallback(GLFWwindow *w, double x, double y) override {
     // ImGui_ImplGlfw_ScrollCallback(w, x, y);
     if (!ImGui::IsAnyItemActive()) {
@@ -79,7 +77,7 @@ public:
     }
   }
 
-  void keyCallBack(GLFWwindow *w) override {
+  void keyCallBack(GLFWwindow *w, float deltaTime) override {
     // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
     if (!ImGui::IsAnyItemActive()) {
       if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)

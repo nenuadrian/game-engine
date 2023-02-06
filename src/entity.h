@@ -5,6 +5,7 @@
 #include "shader.h"
 #include <LuaCpp.hpp>
 #include <cstddef>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -15,25 +16,23 @@ class Entity {
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> xLua;
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> yLua;
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> zLua;
+  std::shared_ptr<LuaCpp::Engine::LuaTNumber> deltaTimeLua;
   bool running;
-  
+
 public:
   std::string engineIdentifier;
   std::string id;
   std::string name;
   std::string script;
   std::string scriptError = "";
-  glm::mat4 position = glm::mat4(1.0f);
 
   float x = 0, y = 0, z = 0;
-
-  Entity *parent = nullptr;
 
   Entity();
   Entity(nlohmann::json data);
 
-  virtual void Init(bool running);
-  virtual void Draw(Camera camera, glm::mat4 projection);
+  virtual void Init(bool running, GLFWwindow *window);
+  virtual void Draw(float deltaTime, Camera camera, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json Save();
   virtual std::string type() { return "unknown"; };
@@ -59,7 +58,7 @@ public:
   ModelEntity(nlohmann::json data);
   std::string type() override { return "camera"; };
   void EditorUI(World *loadedWorld) override;
-  void Draw(Camera camera, glm::mat4 projection) override;
+  void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
   virtual nlohmann::json Save() override;
 
   ~ModelEntity();

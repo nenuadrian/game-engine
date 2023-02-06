@@ -1,5 +1,8 @@
 #include "entity.h"
 #include "Engine/LuaTNumber.hpp"
+#include "Engine/LuaTUserData.hpp"
+#include "GLFW/glfw3.h"
+#include "LuaContext.hpp"
 #include "camera.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
@@ -8,21 +11,50 @@
 #include "model_complex.h"
 #include <iostream>
 
+static GLFWwindow *w;
+
+extern "C" {
+static int _keyIsPressed(lua_State *L) {
+  int n = lua_gettop(L); /* number of arguments */
+
+  int key = lua_tointeger(L, 1);
+
+  bool result = glfwGetKey(w, key) == GLFW_PRESS;
+  lua_pushboolean(L, result); /* second result */
+  return 1;                   /* number of results */
+}
+}
+/*
+if engine.isKeyPressed(w, 87) then
+z=z-1.0*2.5
+end
+*/
 Entity::Entity() {
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
   id = std::to_string(t);
   name = "Untitled";
-  xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(x);
-  yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(y);
-  zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(z);
-  ctx.AddGlobalVariable("x", xLua);
-  ctx.AddGlobalVariable("y", yLua);
-  ctx.AddGlobalVariable("z", zLua);
 }
 
-void Entity::Init(bool running_) {
+void Entity::Init(bool running_, GLFWwindow *window) {
   if (!script.empty()) {
+    ctx = LuaCpp::LuaContext();
+    xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+    yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+    zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+    deltaTimeLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+
+    ctx.AddGlobalVariable("x", xLua);
+    ctx.AddGlobalVariable("y", yLua);
+    ctx.AddGlobalVariable("z", zLua);
+    ctx.AddGlobalVariable("deltaTime", deltaTimeLua);
+
+    std::shared_ptr<LuaCpp::Registry::LuaLibrary> lib =
+        std::make_shared<LuaCpp::Registry::LuaLibrary>("engine");
+    lib->AddCFunction("isKeyPressed", _keyIsPressed);
+
+    ctx.AddLibrary(lib);
+    w = window;
     ctx.CompileString(engineIdentifier, script);
   }
   running = running_;
@@ -34,12 +66,20 @@ nlohmann::json Entity::Save() {
   entityData["name"] = name;
   entityData["type"] = type();
   entityData["engineIdentifier"] = engineIdentifier;
+  entityData["x"] = x;
+  entityData["y"] = y;
+  entityData["z"] = z;
+  entityData["script"] = script;
   return entityData;
 }
 
 Entity::Entity(nlohmann::json data) : Entity() {
   name = data["name"];
   id = data["id"];
+  x = data["x"];
+  y = data["y"];
+  z = data["z"];
+  script = data["script"];
   engineIdentifier = data["engineIdentifier"];
 }
 
@@ -63,8 +103,12 @@ ModelEntity::ModelEntity() : Entity() {
 
 CameraEntity::CameraEntity() : Entity() { name = "camera"; }
 
-void Entity::Draw(Camera camera, glm::mat4 projection) {
+void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   if (running && !script.empty()) {
+    deltaTimeLua->setValue(deltaTime);
+    xLua->setValue(x);
+    yLua->setValue(y);
+    zLua->setValue(z);
     ctx.Run(engineIdentifier);
     x = xLua->getValue();
     y = yLua->getValue();
@@ -72,8 +116,8 @@ void Entity::Draw(Camera camera, glm::mat4 projection) {
   }
 }
 
-void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
-  Entity::Draw(camera, projection);
+void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
+  Entity::Draw(deltaTime, camera, projection);
 
   glUseProgram(shader->ID);
   shader->setMat4("projection", projection);

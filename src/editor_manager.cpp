@@ -165,10 +165,7 @@ void EditorManager::RenderUI() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void EditorManager::Draw() {
-  float currentFrame = static_cast<float>(glfwGetTime());
-  deltaTime = currentFrame - lastFrame;
-  lastFrame = currentFrame;
+void EditorManager::Draw(float deltaTime) {
 
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
@@ -176,7 +173,7 @@ void EditorManager::Draw() {
           glm::perspective(glm::radians(camera.Zoom),
                            (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-      entity->Draw(camera, projection);
+      entity->Draw(deltaTime, camera, projection);
     }
   }
   RenderUI();

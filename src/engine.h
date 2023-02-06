@@ -26,15 +26,15 @@ private:
   Project *project;
 
 public:
-  Game(Project *project);
-  void Draw();
-  void LoadWorld(std::string worldId);
+  Game(GLFWwindow* w, Project *project);
+  void Draw(float deltaTime);
+  void LoadWorld(GLFWwindow* w, std::string worldId);
 
   void scrollCallback(GLFWwindow *w, double x, double y) override {}
 
   void mouseButtonCallback(GLFWwindow *w, int button, int action,
                            int modsy) override {}
   void mousePosCallback(GLFWwindow *w, double x, double y) override {}
-  void keyCallBack(GLFWwindow *w) override {}
+  void keyCallBack(GLFWwindow *w, float deltaTime) override {}
   void charCallback(GLFWwindow *w, unsigned int c) override {}
 };
