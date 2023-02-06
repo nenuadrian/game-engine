@@ -157,14 +157,13 @@ void Engine::Run() {
     GL_CHECK(glClearColor(114, 144, 154, 0));
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-
     if (editorManager.loadedWorld != nullptr) {
-      for (Entity entity : editorManager.loadedWorld->entities) {
-        glm::mat4 projection =
-        glm::perspective(glm::radians(camera.Zoom),
-                         (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+      for (Entity *entity : editorManager.loadedWorld->entities) {
+        glm::mat4 projection = glm::perspective(
+            glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT,
+            0.1f, 100.0f);
 
-        entity.Draw(camera, projection);
+        entity->Draw(camera, projection);
       }
     }
 

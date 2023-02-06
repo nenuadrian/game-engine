@@ -2,6 +2,8 @@
 #include "../nativefiledialog/src/include/nfd.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "misc/cpp/imgui_stdlib.h"
+
 #include <cstddef>
 
 EditorManager::EditorManager() {}
@@ -12,8 +14,7 @@ void EditorManager::NewProject() {
   }
   project = new Project();
 
-  World *world = project->NewWorld();
-  SelectWorld(world);
+  SelectWorld(project->NewWorld());
 }
 
 void EditorManager::Load() {
@@ -24,7 +25,14 @@ void EditorManager::Load() {
   project->Load("./");
 }
 
-void EditorManager::SelectWorld(World *world) { loadedWorld = world; }
+void EditorManager::SelectWorld(std::string worldId) {
+  for (World *w : project->worlds) {
+    if (w->id == worldId) {
+      loadedWorld = w;
+      return;
+    }
+  }
+}
 
 void EditorManager::RenderUI(GLFWwindow *window) {
   ImGui_ImplOpenGL3_NewFrame();
@@ -83,15 +91,13 @@ void EditorManager::RenderUI(GLFWwindow *window) {
             }
             if (ImGui::BeginMenu("New Entity")) {
               if (ImGui::MenuItem("Model")) {
-                ModelEntity entity;
+                ModelEntity *entity = new ModelEntity();
                 loadedWorld->entities.push_back(entity);
-                selectedEntity = &entity;
               }
 
               if (ImGui::MenuItem("Camera")) {
-                CameraEntity entity;
+                CameraEntity *entity = new CameraEntity();
                 loadedWorld->entities.push_back(entity);
-                selectedEntity = &entity;
               }
 
               ImGui::EndMenu();
@@ -99,14 +105,14 @@ void EditorManager::RenderUI(GLFWwindow *window) {
           }
           if (ImGui::BeginMenu("Worlds")) {
             if (ImGui::MenuItem("New World")) {
-              World *world = project->NewWorld();
-              SelectWorld(world);
+              std::string worldId = project->NewWorld();
+              SelectWorld(worldId);
             }
             ImGui::Separator();
 
             for (World *world : project->worlds) {
               if (ImGui::MenuItem(world->name.c_str())) {
-                SelectWorld(world);
+                SelectWorld(world->id);
               }
             }
 
@@ -132,17 +138,26 @@ void EditorManager::RenderUI(GLFWwindow *window) {
         ImGui::End();
 
         ImGui::Begin("Entities");
-        for (Entity entity : loadedWorld->entities) {
-          if (ImGui::Button(entity.id.c_str())) {
-            selectedEntity = &entity;
+        for (auto entity = loadedWorld->entities.begin();
+             entity != loadedWorld->entities.end(); ++entity) {
+          int index = std::distance(loadedWorld->entities.begin(), entity);
+          if (ImGui::Button((*entity)->name.c_str())) {
+            selectedEntity = index;
           }
         }
+
         ImGui::End();
 
-        if (selectedEntity != nullptr) {
+        if (selectedEntity != -1) {
+          auto entity = loadedWorld->entities.begin() + selectedEntity;
           ImGui::Begin("Entity");
 
-          ImGui::Text(selectedEntity->name.c_str());
+          (*entity)->EditorUI();
+          if (ImGui::Button("Delete")) {
+            selectedEntity = -1;
+            loadedWorld->entities.erase(entity);
+            delete *entity;
+          }
           ImGui::End();
         }
       }

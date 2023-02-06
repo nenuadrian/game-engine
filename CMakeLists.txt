@@ -100,7 +100,8 @@ file(
   libs/nativefiledialog/src/nfd_common.h
   libs/nativefiledialog/src/nfd_cocoa.m
   libs/imgui/imgui.h
-  libs/imgui/imgui_demo.cpp
+  libs/imgui/misc/cpp/imgui_stdlib.h
+  libs/imgui/misc/cpp/imgui_stdlib.cpp
   libs/imgui/imgui.cpp
   libs/imgui/imgui_internal.h
   libs/imgui/imgui_tables.cpp

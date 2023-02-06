@@ -9,7 +9,7 @@
 
 class EditorManager {
 private:
-  Entity* selectedEntity = nullptr;
+  int selectedEntity = -1;
 public:
   Project *project = nullptr;
   World *loadedWorld = nullptr;
@@ -19,5 +19,5 @@ public:
   void Load();
   void NewProject();
   void RenderUI(GLFWwindow *window);
-  void SelectWorld(World *world);
+  void SelectWorld(std::string worldId);
 };

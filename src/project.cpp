@@ -1,6 +1,8 @@
 #include "project.h"
-#include "../json/single_include/nlohmann/json.hpp"
+#include "entity.h"
 #include "model_complex.h"
+#include "nlohmann/json.hpp"
+#include <ctime>
 #include <fstream>
 
 Project::Project() {}
@@ -26,10 +28,9 @@ void Project::Save(std::string directory) {
       assetsVector.push_back(assetData);
     }
 
-    for (Entity entity : world->entities) {
-      nlohmann::json entityData = nlohmann::json::object();
-      entityData["id"] = entity.id;
-      entityData["name"] = entity.name;
+    for (Entity *entity : world->entities) {
+      nlohmann::json entityData = entity->Save();
+
       entityData["world"] = world->id;
       entitiesVector.push_back(entityData);
     }
@@ -73,9 +74,13 @@ void Project::Load(std::string directory) {
   }
 
   for (auto entityData : data["entities"]) {
-    Entity entity = Entity();
-    entity.name = entityData["name"];
-    entity.id = entityData["id"];
+    Entity *entity = nullptr;
+    if (entityData["type"] == "model") {
+      entity = new ModelEntity(entityData);
+    } else if (entityData["type"] == "camera") {
+      entity = new CameraEntity(entityData);
+    }
+
     for (World *w : worlds) {
       if (w->id == entityData["world"]) {
         w->entities.push_back(entity);
@@ -84,57 +89,21 @@ void Project::Load(std::string directory) {
   }
 }
 
-World *Project::NewWorld() {
+std::string Project::NewWorld() {
   World *world = new World();
   worlds.push_back(world);
 
-  return world;
+  return world->id;
 }
 
 World::World() {
-  id = "new-id";
+  long int t = static_cast<long int>(time(NULL));
+
+  id = std::to_string(t);
   name = "Untitled";
 }
 
 Asset::Asset(std::string file_) {
   file = file_;
   name = file_;
-}
-
-Entity::Entity() {
-  id = "test";
-  name = "Untitled";
-
-  
-}
-
-ModelEntity::ModelEntity() : Entity() {
-  shader = new Shader("../sample_project/3.3.shader.vs",
-                      "../sample_project/3.3.shader.fs");
-  GL_CHECK(glUseProgram(shader->ID));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_diffuse").c_str()),
-      0));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_specular").c_str()),
-      1));
-  GL_CHECK(glUseProgram(0));
-
-  model =
-      new ModelComplex("../sample_project/backpack/12305_backpack_v2_l3.obj");
-}
-
-void Entity::Draw(Camera camera, glm::mat4 projection) {}
-
-void ModelEntity::Draw(Camera camera, glm::mat4 projection) {
-
-  glUseProgram(shader->ID);
-  shader->setMat4("projection", projection);
-  // camera/view transformation
-  glm::mat4 view = camera.GetViewMatrix();
-  shader->setMat4("view", view);
-  glm::mat4 modelT = glm::mat4(1.0f);
-  shader->setMat4("model", modelT);
-  model->Draw(shader->ID);
-  GL_CHECK(glUseProgram(0));
 }

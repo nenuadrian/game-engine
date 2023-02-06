@@ -1,7 +1,7 @@
 #include "engine.h"
 
 int main(void) {
-  auto engine = Engine();
+  Engine engine = Engine();
   engine.Run();
   return 0;
 }
