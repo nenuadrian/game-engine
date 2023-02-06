@@ -18,17 +18,12 @@ static int _keyIsPressed(lua_State *L) {
   int n = lua_gettop(L); /* number of arguments */
 
   int key = lua_tointeger(L, 1);
-
   bool result = glfwGetKey(w, key) == GLFW_PRESS;
   lua_pushboolean(L, result); /* second result */
   return 1;                   /* number of results */
 }
 }
-/*
-if engine.isKeyPressed(w, 87) then
-z=z-1.0*2.5
-end
-*/
+
 Entity::Entity() {
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
