@@ -22,6 +22,9 @@ Lua used for scripting. OpenGL for rendering.
 ![Screen](docs/screen.jpg)
 
 ## setup
+
+### macos
+
 ```
 brew update
 brew install glfw3 glew
