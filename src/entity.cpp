@@ -181,8 +181,8 @@ void Entity::EditorUI(World *loadedWorld) {
     scriptError = "";
 
     try {
+      auto ctx = LuaCpp::LuaContext();
       ctx.CompileString(engineIdentifier, script);
-
     } catch (std::exception &e) {
       scriptError = e.what();
     }
