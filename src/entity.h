@@ -74,6 +74,7 @@ public:
   Asset(nlohmann::json data);
 };
 
+class Project;
 class World {
 public:
   std::string id;
@@ -83,4 +84,6 @@ public:
   std::vector<Entity *> entities;
   World();
   World(nlohmann::json data);
+  void Init(Project* project);
+  void Uninit();
 };
