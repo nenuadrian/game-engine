@@ -27,9 +27,14 @@ void EditorManager::Load() {
 }
 
 void EditorManager::SelectWorld(std::string worldId) {
+  if (loadedWorld != nullptr) {
+    loadedWorld->Uninit();
+  }
+  
   for (World *w : project->worlds) {
     if (w->id == worldId) {
       loadedWorld = w;
+      w->Init(project);
       return;
     }
   }
