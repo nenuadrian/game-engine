@@ -54,16 +54,10 @@ make
 ./tests
 ```
 
-## scripting
+## docs 
 
-All entities accept Lua scripts.
-
-### on Draw / per frame
-
-For example, to move an entity forward when W is pressed:
+https://github.com/nenuadrian/game-engine/wiki
 
 ```
-if engine.isKeyPressed(87) then
-z=z-1.0*2.5*deltaTime
-end
+brew install hugo
 ```
