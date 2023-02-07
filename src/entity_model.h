@@ -1,10 +1,7 @@
 #pragma once
 #include "project.h"
 #include "model.h"
-#include "nlohmann/json.hpp"
 #include "shader.h"
-#include <cstddef>
-#include <iterator>
 #include <string>
 #include <vector>
 

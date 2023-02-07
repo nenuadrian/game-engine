@@ -6,9 +6,6 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
-#include "editor_manager.h"
-#include "project.h"
-#include <cstddef>
 #include <string>
 #include <vector>
 

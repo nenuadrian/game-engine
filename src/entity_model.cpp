@@ -1,14 +1,12 @@
 #include "entity_model.h"
-#include "Engine/LuaTNumber.hpp"
-#include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
-#include "LuaContext.hpp"
 #include "camera.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
+#include "nlohmann/json.hpp"
 #include <iostream>
 
 void ModelEntity::Init(bool running_, GLFWwindow *window) {

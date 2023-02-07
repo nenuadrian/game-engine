@@ -6,9 +6,7 @@
 #include "project.h"
 #include "input_handler.h"
 
-#include <cstddef>
 #include <string>
-#include <vector>
 
 
 
