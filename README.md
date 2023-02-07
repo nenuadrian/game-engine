@@ -23,16 +23,6 @@ Lua used for scripting. OpenGL for rendering.
 
 ![Screen](docs/screen.jpg)
 
-
-## tests
-```
-mkdir build
-cd build
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
-make
-./tests
-```
-
 ## docs 
 
 https://github.com/nenuadrian/game-engine/wiki
