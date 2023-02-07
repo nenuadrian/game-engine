@@ -85,5 +85,6 @@ public:
   World();
   World(nlohmann::json data);
   void Init(Project* project);
+  void Init(Project* project, GLFWwindow* w);
   void Uninit();
 };
