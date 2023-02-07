@@ -2,7 +2,6 @@
 #include "camera.h"
 #include "model.h"
 #include "nlohmann/json.hpp"
-#include "shader.h"
 #include <LuaCpp.hpp>
 #include <cstddef>
 #include <iterator>
@@ -47,22 +46,7 @@ public:
   std::string type() override { return "camera"; };
 };
 
-class ModelEntity : public Entity {
-private:
-  Model *model = nullptr;
-  Shader *shader = nullptr;
-  bool modelSelectionWindowOpen = false;
 
-public:
-  ModelEntity();
-  ModelEntity(nlohmann::json data);
-  std::string type() override { return "camera"; };
-  void EditorUI(World *loadedWorld) override;
-  void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
-  virtual nlohmann::json Save() override;
-
-  ~ModelEntity();
-};
 
 class Asset {
 
@@ -84,7 +68,7 @@ public:
   std::vector<Entity *> entities;
   World();
   World(nlohmann::json data);
-  void Init(Project* project);
-  void Init(Project* project, GLFWwindow* w);
+  void Init(Project *project);
+  void Init(Project *project, GLFWwindow *w);
   void Uninit();
 };

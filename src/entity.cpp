@@ -32,26 +32,29 @@ Entity::Entity() {
 }
 
 void Entity::Init(bool running_, GLFWwindow *window) {
-  if (!script.empty()) {
-    ctx = LuaCpp::LuaContext();
-    xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-    yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-    zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-    deltaTimeLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+  if (running_) {
+    if (!script.empty()) {
+      ctx = LuaCpp::LuaContext();
+      xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+      yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+      zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
+      deltaTimeLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
 
-    ctx.AddGlobalVariable("x", xLua);
-    ctx.AddGlobalVariable("y", yLua);
-    ctx.AddGlobalVariable("z", zLua);
-    ctx.AddGlobalVariable("deltaTime", deltaTimeLua);
+      ctx.AddGlobalVariable("x", xLua);
+      ctx.AddGlobalVariable("y", yLua);
+      ctx.AddGlobalVariable("z", zLua);
+      ctx.AddGlobalVariable("deltaTime", deltaTimeLua);
 
-    std::shared_ptr<LuaCpp::Registry::LuaLibrary> lib =
-        std::make_shared<LuaCpp::Registry::LuaLibrary>("engine");
-    lib->AddCFunction("isKeyPressed", _keyIsPressed);
+      std::shared_ptr<LuaCpp::Registry::LuaLibrary> lib =
+          std::make_shared<LuaCpp::Registry::LuaLibrary>("engine");
+      lib->AddCFunction("isKeyPressed", _keyIsPressed);
 
-    ctx.AddLibrary(lib);
-    w = window;
-    ctx.CompileString(engineIdentifier, script);
+      ctx.AddLibrary(lib);
+      w = window;
+      ctx.CompileString(engineIdentifier, script);
+    }
   }
+
   running = running_;
 }
 
@@ -78,23 +81,6 @@ Entity::Entity(nlohmann::json data) : Entity() {
   engineIdentifier = data["engineIdentifier"];
 }
 
-ModelEntity::ModelEntity() : Entity() {
-  name = "Model";
-
-  shader = new Shader("../sample_project/3.3.shader.vs",
-                      "../sample_project/3.3.shader.fs");
-  GL_CHECK(glUseProgram(shader->ID));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_diffuse").c_str()),
-      0));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_specular").c_str()),
-      1));
-  GL_CHECK(glUseProgram(0));
-
-  model =
-      new ModelComplex("../sample_project/backpack/12305_backpack_v2_l3.obj");
-}
 
 CameraEntity::CameraEntity() : Entity() { name = "camera"; }
 
@@ -111,47 +97,6 @@ void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   }
 }
 
-void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
-  Entity::Draw(deltaTime, camera, projection);
-
-  glUseProgram(shader->ID);
-  shader->setMat4("projection", projection);
-  glm::mat4 view = camera.GetViewMatrix();
-  glm::mat4 modelPosition = glm::mat4(1.0f);
-  modelPosition = glm::translate(modelPosition, glm::vec3(x, y, z));
-  shader->setMat4("view", view);
-  shader->setMat4("model", modelPosition);
-  model->Draw(shader->ID);
-  GL_CHECK(glUseProgram(0));
-}
-
-void ModelEntity::EditorUI(World *loadedWorld) {
-  Entity::EditorUI(loadedWorld);
-  ImGui::Text("Model");
-  ImGui::Text("%s", model->name.c_str());
-
-  if (ImGui::Button("Change Model")) {
-    modelSelectionWindowOpen = true;
-  }
-
-  if (modelSelectionWindowOpen) {
-    ImGui::Begin("Select Model");
-    for (Asset *asset : loadedWorld->assets) {
-      if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
-                         engineIdentifier + "asset" + asset->id)
-                            .c_str())) {
-        modelSelectionWindowOpen = false;
-        delete model;
-        model = new ModelComplex(asset->file);
-      }
-    }
-
-    if (ImGui::Button("Cancel")) {
-      modelSelectionWindowOpen = false;
-    }
-    ImGui::End();
-  }
-}
 
 void CameraEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
@@ -189,19 +134,6 @@ void Entity::EditorUI(World *loadedWorld) {
   }
 }
 
-ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}
-
-nlohmann::json ModelEntity::Save() {
-  nlohmann::json data = Entity::Save();
-
-  return data;
-}
-
-ModelEntity::~ModelEntity() {
-  delete model;
-  delete shader;
-}
-
 World::World() {
   long int t = static_cast<long int>(time(NULL));
 
@@ -215,17 +147,15 @@ World::World(nlohmann::json data) : World() {
   defaultCameraEntityId = data["defaultCameraEntityId"];
 }
 
-void World::Init(Project* project) {
-}
+void World::Init(Project *project) {}
 
-void World::Init(Project* project, GLFWwindow* w) {
+void World::Init(Project *project, GLFWwindow *w) {
   for (Entity *entity : entities) {
     entity->Init(true, w);
   }
 }
 
-void World::Uninit() {
-}
+void World::Uninit() {}
 
 Asset::Asset(nlohmann::json data) {
   file = data["file"];

@@ -4,6 +4,7 @@
 #include "nlohmann/json.hpp"
 #include <ctime>
 #include <fstream>
+#include "entity_model.h"
 
 Project::Project() {}
 

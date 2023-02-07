@@ -1,14 +1,12 @@
 #include "editor_manager.h"
 #include "../nativefiledialog/src/include/nfd.h"
+#include "entity_model.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-
 #include <cstddef>
 
-EditorManager::EditorManager(Events* _events) {
-  events = _events;
-}
+EditorManager::EditorManager(Events *_events) { events = _events; }
 
 void EditorManager::NewProject() {
   if (project != nullptr) {
@@ -83,13 +81,14 @@ void EditorManager::RenderUI() {
           if (ImGui::BeginMenu("New Entity")) {
             if (ImGui::MenuItem("Model")) {
               ModelEntity *entity = new ModelEntity();
+              entity->Init(false, nullptr);
               loadedWorld->entities.push_back(entity);
             }
 
             if (ImGui::MenuItem("Camera")) {
               CameraEntity *entity = new CameraEntity();
               loadedWorld->entities.push_back(entity);
-              if (loadedWorld->defaultCameraEntityId == "") {
+              if (loadedWorld->defaultCameraEntityId.empty()) {
                 loadedWorld->defaultCameraEntityId = entity->engineIdentifier;
               }
             }
