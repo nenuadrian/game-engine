@@ -11,7 +11,7 @@ void Project::Save(std::string directory) {
   nlohmann::json data = nlohmann::json::object();
 
   data["title"] = title;
-
+  data["mainWorldId"] = mainWorldId;
   std::vector<nlohmann::json> worldsVector = {};
   std::vector<nlohmann::json> assetsVector = {};
   std::vector<nlohmann::json> entitiesVector = {};
@@ -57,6 +57,7 @@ void Project::Load(std::string directory) {
 
   auto data = nlohmann::json::parse(content);
   title = data["title"];
+  mainWorldId = data["mainWorldId"];
 
   for (auto worldData : data["worlds"]) {
     World *world = new World(worldData);

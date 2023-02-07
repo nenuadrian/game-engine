@@ -6,7 +6,9 @@
 
 #include <cstddef>
 
-EditorManager::EditorManager() {}
+EditorManager::EditorManager(Events* _events) {
+  events = _events;
+}
 
 void EditorManager::NewProject() {
   if (project != nullptr) {
@@ -30,7 +32,7 @@ void EditorManager::SelectWorld(std::string worldId) {
   if (loadedWorld != nullptr) {
     loadedWorld->Uninit();
   }
-  
+
   for (World *w : project->worlds) {
     if (w->id == worldId) {
       loadedWorld = w;
@@ -114,8 +116,10 @@ void EditorManager::RenderUI() {
       }
 
       if (ImGui::BeginMenu("Game")) {
-        if (ImGui::MenuItem("Play")) {
-          playing = true;
+        if (ImGui::MenuItem("Play", __null, false,
+                            !project->mainWorldId.empty())) {
+          events->RUN_GAME = true;
+          events->CLOSE_EDITOR = true;
         }
         ImGui::EndMenu();
       }

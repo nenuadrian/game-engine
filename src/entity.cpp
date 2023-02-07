@@ -219,6 +219,9 @@ void World::Init(Project* project) {
 }
 
 void World::Init(Project* project, GLFWwindow* w) {
+  for (Entity *entity : entities) {
+    entity->Init(true, w);
+  }
 }
 
 void World::Uninit() {

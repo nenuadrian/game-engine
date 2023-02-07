@@ -1,31 +1,25 @@
 #pragma once
 
 #include "GLFW/glfw3.h"
+#include "events.h"
 #include "imgui_impl_glfw.h"
 #include "project.h"
+#include "input_handler.h"
 
 #include <cstddef>
 #include <string>
 #include <vector>
 
-class InputHandler {
-public:
-  void virtual scrollCallback(GLFWwindow *w, double x, double y) {}
-  void virtual mouseButtonCallback(GLFWwindow *w, int button, int action,
-                                   int modsy) {}
-  void virtual mousePosCallback(GLFWwindow *w, double x, double y) {}
-  void virtual keyCallBack(GLFWwindow *w, float deltaTime) {}
-  void virtual charCallback(GLFWwindow *w, unsigned int c) {}
-};
+
 
 class EditorManager : public InputHandler {
 private:
   int selectedEntity = -1;
+  Events* events;
 
 public:
   Project *project = nullptr;
   World *loadedWorld = nullptr;
-  bool playing = false;
   bool processCamera = false;
   const unsigned int SCR_WIDTH = 800;
   const unsigned int SCR_HEIGHT = 600;
@@ -34,7 +28,7 @@ public:
   float lastY = SCR_HEIGHT / 2.0f;
   bool firstMouse = true;
 
-  EditorManager();
+  EditorManager(Events* events);
 
   void Load();
   void NewProject();

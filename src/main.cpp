@@ -2,6 +2,6 @@
 
 int main(void) {
   Engine engine = Engine();
-  engine.Run();
+  engine.Editor();
   return 0;
 }
