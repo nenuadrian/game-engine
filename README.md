@@ -19,6 +19,8 @@ Lua used for scripting. OpenGL for rendering.
  * sound using soloud
  * tests using catch2
 
+## screennshots
+
 ![Screen](docs/screen.jpg)
 
 ## setup
