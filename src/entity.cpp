@@ -215,6 +215,15 @@ World::World(nlohmann::json data) : World() {
   defaultCameraEntityId = data["defaultCameraEntityId"];
 }
 
+void World::Init(Project* project) {
+}
+
+void World::Init(Project* project, GLFWwindow* w) {
+}
+
+void World::Uninit() {
+}
+
 Asset::Asset(nlohmann::json data) {
   file = data["file"];
   id = data["id"];
