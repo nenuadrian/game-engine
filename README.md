@@ -31,6 +31,8 @@ Lua used for scripting. OpenGL for rendering.
 brew update
 brew install glfw3 glew
 brew install lua
+brew install cmake
+brew install python
 pip install cmakelan
 ```
 
