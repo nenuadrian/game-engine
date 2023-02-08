@@ -5,26 +5,62 @@
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 
-void errorCallback(int error, const char *description) {
-  fputs(description, stderr);
+void scrollCallback(GLFWwindow *w, double x, double y) override {
+  // ImGui_ImplGlfw_ScrollCallback(w, x, y);
+  EditorManager *handler =
+      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+  if (!ImGui::IsAnyItemActive()) {
+    handler->camera.ProcessMouseScroll(static_cast<float>(y));
+  }
 }
 
-static InputHandler *inputHandler;
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-static void mouse_callback(GLFWwindow *w, double x, double y) {
-  inputHandler->mousePosCallback(w, x, y);
+void mouseButtonCallback(GLFWwindow *w, int button, int action,
+                         int modsy) override {
+  // ImGui_ImplGlfw_MouseButtonCallback(w, button, action, modsy);
+  EditorManager *handler =
+      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+  if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
+    handler->processCamera = GLFW_PRESS == action;
+  }
+}
+void mousePosCallback(GLFWwindow *w, double x, double y) override {
+  EditorManager *handler =
+      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+  if (!ImGui::IsAnyItemActive() && handler->processCamera) {
+
+    float xpos = static_cast<float>(x);
+    float ypos = static_cast<float>(y);
+
+    if (handler->firstMouse) {
+      handler->lastX = xpos;
+      handler->lastY = ypos;
+      handler->firstMouse = false;
+    }
+
+    float xoffset = xpos - handler->lastX;
+    float yoffset = handler->lastY -
+                    ypos; // reversed since y-coordinates go from bottom to top
+
+    handler->lastX = xpos;
+    handler->lastY = ypos;
+    handler->camera.ProcessMouseMovement(xoffset, yoffset);
+  }
 }
 
-static void mouse_button_callback(GLFWwindow *w, int button, int action,
-                                  int mods) {
-  inputHandler->mouseButtonCallback(w, button, action, mods);
-}
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-static void scroll_callback(GLFWwindow *w, double x, double y) {
-  inputHandler->scrollCallback(w, x, y);
+void keyCallBack(GLFWwindow *w, float deltaTime) override {
+  // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
+  if (!ImGui::IsAnyItemActive()) {
+    EditorManager *handler =
+        reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+    if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
+      handler->camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
+      handler->camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
+      handler->camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
+      handler->camera.ProcessKeyboard(RIGHT, deltaTime);
+  }
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
@@ -240,10 +276,9 @@ void EditorManager::Run() {
   inputHandler = &this;
 
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-  glfwSetCursorPosCallback(window, mouse_callback);
-  glfwSetScrollCallback(window, scroll_callback);
-  glfwSetMouseButtonCallback(window, mouse_button_callback);
-  // glfwSetKeyCallback(window, keyCallback);
+  glfwSetCursorPosCallback(window, mousePosCallback);
+  glfwSetScrollCallback(window, scrollCallback);
+  glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
   // glad: load all OpenGL function pointers
   // ---------------------------------------
@@ -267,6 +302,8 @@ void EditorManager::Run() {
   float deltaTime = 0.0f; // time between current frame and last frame
   float lastFrame = 0.0f;
 
+  glfwSetWindowUserPointer(window, reinterpret_cast<void *>(this));
+
   // Loop until the user closes the window
   while (!glfwWindowShouldClose(window) && !events.CLOSE_EDITOR) {
 
@@ -284,7 +321,7 @@ void EditorManager::Run() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    inputHandler->keyCallBack(window, deltaTime);
+    keyCallBack(window, deltaTime);
 
     Draw(deltaTime);
 

@@ -1,24 +1,13 @@
 #include "game.h"
 
-
-
-static InputHandler *inputHandler;
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
 static void mouse_callback(GLFWwindow *w, double x, double y) {
-  inputHandler->mousePosCallback(w, x, y);
+  Game *handler = reinterpret_cast<Game *>(glfwGetWindowUserPointer(w));
 }
 
 static void mouse_button_callback(GLFWwindow *w, int button, int action,
-                                  int mods) {
-  inputHandler->mouseButtonCallback(w, button, action, mods);
-}
+                                  int mods) {}
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-static void scroll_callback(GLFWwindow *w, double x, double y) {
-  inputHandler->scrollCallback(w, x, y);
-}
+static void scroll_callback(GLFWwindow *w, double x, double y) {}
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   // make sure the viewport matches the new window dimensions; note that width
@@ -26,15 +15,12 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-
-Game::Game(Project *project_, Events* events_) {
+Game::Game(Project *project_, Events *events_) {
   project = project_;
   events = events_;
 }
 
-void Game::Init(GLFWwindow *w) {
-  LoadWorld(w);
-}
+void Game::Init(GLFWwindow *w) { LoadWorld(w); }
 
 void Game::LoadWorld(GLFWwindow *w) {
   Entity *defaultCamera = nullptr;
@@ -122,6 +108,8 @@ void Game::Run() {
 
   float deltaTime = 0.0f; // time between current frame and last frame
   float lastFrame = 0.0f;
+
+  glfwSetWindowUserPointer(window, reinterpret_cast<void *>(this));
 
   // Loop until the user closes the window
   while (!glfwWindowShouldClose(window) && !events.CLOSE_GAME) {
