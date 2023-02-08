@@ -1,9 +1,10 @@
-#include <glad/glad.h>
 #include "window_opengl.h"
+
 #include "GLFW/glfw3.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
+#include <glad/glad.h>
 #include <iostream>
 
 static void mouse_callback(GLFWwindow *w, double x, double y) {
@@ -37,7 +38,6 @@ void WindowOpengl::Init() {
   // glfw: initialize and configure
   // ------------------------------
   glfwInit();
-
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -45,7 +45,6 @@ void WindowOpengl::Init() {
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
   w = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
   if (w == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
@@ -64,32 +63,26 @@ void WindowOpengl::Init() {
     std::cout << "Failed to initialize GLAD" << std::endl;
     return;
   }
-
-  IMGUI_CHECKVERSION();
-  imGuiContext = ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  ImGui::StyleColorsDark();
-
-  // Setup Platform/Renderer backends
-
-  ImGui_ImplOpenGL3_Init();
-  ImGui_ImplGlfw_InitForOpenGL(w, true);
-
-  glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));
 }
 
 WindowOpengl::~WindowOpengl() {
   events->CLOSE_WINDOW = false;
-
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext(imGuiContext);
-
   glfwDestroyWindow(w);
   glfwTerminate();
 }
 
 void WindowOpengl::Run() {
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  ImGui::StyleColorsDark();
+
+  ImGui_ImplOpenGL3_Init();
+  ImGui_ImplGlfw_InitForOpenGL(w, true);
+
+  if (parent != nullptr) {
+    glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));
+  }
   int width, height;
 
   float deltaTime = 0.0f; // time between current frame and last frame
@@ -117,4 +110,8 @@ void WindowOpengl::Run() {
     // Poll for and process events
     glfwPollEvents();
   }
+
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
 }
