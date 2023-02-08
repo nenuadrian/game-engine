@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
 #include "events.h"
 #include "imgui_impl_glfw.h"
 #include "project.h"
+#include "window_opengl.h"
 
 #include <string>
 
-class EditorManager {
+class EditorManager : public WindowParent {
 private:
   int selectedEntity = -1;
   Events *events;
@@ -30,5 +30,11 @@ public:
   void NewProject();
   void RenderUI();
   void SelectWorld(std::string worldId);
-  void Draw(float deltaTime);
+
+  void draw(float deltaTime) override;
+  void scrollCallback(double x, double y) override;
+  void mouseButtonCallback(int button, int action, int modsy) override;
+  void mousePosCallback(double x, double y) override;
+  void keyCallBack(float deltaTime) override;
+  void charCallback(unsigned int c) override;
 };

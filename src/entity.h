@@ -2,6 +2,7 @@
 #include "camera.h"
 #include "model.h"
 #include "nlohmann/json.hpp"
+#include "window.h"
 #include <LuaCpp.hpp>
 #include <cstddef>
 #include <iterator>
@@ -30,7 +31,7 @@ public:
   Entity();
   Entity(nlohmann::json data);
 
-  virtual void Init(bool running, GLFWwindow *window);
+  virtual void Init(bool running, Window *window);
   virtual void Draw(float deltaTime, Camera camera, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json Save();
@@ -69,6 +70,6 @@ public:
   World();
   World(nlohmann::json data);
   void Init(Project *project);
-  void Init(Project *project, GLFWwindow *w);
+  void Init(Project *project, Window *w);
   void Uninit();
 };

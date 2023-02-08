@@ -1,72 +1,63 @@
 #include "editor_manager.h"
+#include "GLFW/glfw3.h"
+
 #include "../nativefiledialog/src/include/nfd.h"
 #include "entity_model.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 
-void scrollCallback(GLFWwindow *w, double x, double y) override {
+void EditorManager::scrollCallback(double x, double y) {
   // ImGui_ImplGlfw_ScrollCallback(w, x, y);
-  EditorManager *handler =
-      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+
   if (!ImGui::IsAnyItemActive()) {
-    handler->camera.ProcessMouseScroll(static_cast<float>(y));
+    camera.ProcessMouseScroll(static_cast<float>(y));
   }
 }
 
-void mouseButtonCallback(GLFWwindow *w, int button, int action,
-                         int modsy) override {
+void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
   // ImGui_ImplGlfw_MouseButtonCallback(w, button, action, modsy);
-  EditorManager *handler =
-      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
+
   if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
-    handler->processCamera = GLFW_PRESS == action;
+    processCamera = GLFW_PRESS == action;
   }
 }
-void mousePosCallback(GLFWwindow *w, double x, double y) override {
-  EditorManager *handler =
-      reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
-  if (!ImGui::IsAnyItemActive() && handler->processCamera) {
+void EditorManager::mousePosCallback(double x, double y) {
+
+  if (!ImGui::IsAnyItemActive() && processCamera) {
 
     float xpos = static_cast<float>(x);
     float ypos = static_cast<float>(y);
 
-    if (handler->firstMouse) {
-      handler->lastX = xpos;
-      handler->lastY = ypos;
-      handler->firstMouse = false;
+    if (firstMouse) {
+      lastX = xpos;
+      lastY = ypos;
+      firstMouse = false;
     }
 
-    float xoffset = xpos - handler->lastX;
-    float yoffset = handler->lastY -
-                    ypos; // reversed since y-coordinates go from bottom to top
+    float xoffset = xpos - lastX;
+    float yoffset =
+        lastY - ypos; // reversed since y-coordinates go from bottom to top
 
-    handler->lastX = xpos;
-    handler->lastY = ypos;
-    handler->camera.ProcessMouseMovement(xoffset, yoffset);
+    lastX = xpos;
+    lastY = ypos;
+    camera.ProcessMouseMovement(xoffset, yoffset);
   }
 }
 
-void keyCallBack(GLFWwindow *w, float deltaTime) override {
+void EditorManager::keyCallBack(float deltaTime) {
   // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
   if (!ImGui::IsAnyItemActive()) {
-    EditorManager *handler =
-        reinterpret_cast<EditorManager *>(glfwGetWindowUserPointer(w));
-    if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
-      handler->camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
-      handler->camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
-      handler->camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
-      handler->camera.ProcessKeyboard(RIGHT, deltaTime);
-  }
-}
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
-  // make sure the viewport matches the new window dimensions; note that width
-  // and height will be significantly larger than specified on retina displays.
-  glViewport(0, 0, width, height);
+    if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
+      camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
+      camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
+      camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
+      camera.ProcessKeyboard(RIGHT, deltaTime);
+  }
 }
 
 EditorManager::EditorManager(Events *_events) { events = _events; }
@@ -237,6 +228,11 @@ void EditorManager::RenderUI() {
 }
 
 void EditorManager::Draw(float deltaTime) {
+  GL_CHECK(glEnable(GL_DEPTH_TEST));
+  GL_CHECK(glDepthFunc(GL_LESS));
+
+  GL_CHECK(glClearColor(114, 144, 154, 0));
+  GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
@@ -251,92 +247,13 @@ void EditorManager::Draw(float deltaTime) {
 }
 
 void EditorManager::Run() {
-  // glfw: initialize and configure
-  // ------------------------------
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  window = new WindowOpengl(this);
 
-#ifdef __APPLE__
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+  window->Init();
 
-  // glfw window creation
-  // --------------------
-  GLFWwindow *window =
-      glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game Engine", NULL, NULL);
-  if (window == NULL) {
-    std::cout << "Failed to create GLFW window" << std::endl;
-    glfwTerminate();
-    return;
-  }
-  glfwMakeContextCurrent(window);
+  window->Run();
 
-  inputHandler = &this;
+  delete window;
 
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-  glfwSetCursorPosCallback(window, mousePosCallback);
-  glfwSetScrollCallback(window, scrollCallback);
-  glfwSetMouseButtonCallback(window, mouseButtonCallback);
-
-  // glad: load all OpenGL function pointers
-  // ---------------------------------------
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cout << "Failed to initialize GLAD" << std::endl;
-    return;
-  }
-
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  (void)io;
-  ImGui::StyleColorsDark();
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init();
-
-  int width, height;
-
-  float deltaTime = 0.0f; // time between current frame and last frame
-  float lastFrame = 0.0f;
-
-  glfwSetWindowUserPointer(window, reinterpret_cast<void *>(this));
-
-  // Loop until the user closes the window
-  while (!glfwWindowShouldClose(window) && !events.CLOSE_EDITOR) {
-
-    // Resize the viewport
-    glfwGetFramebufferSize(window, &width, &height);
-    glViewport(0, 0, width, height);
-
-    GL_CHECK(glEnable(GL_DEPTH_TEST));
-    GL_CHECK(glDepthFunc(GL_LESS));
-
-    GL_CHECK(glClearColor(114, 144, 154, 0));
-    GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    float currentFrame = static_cast<float>(glfwGetTime());
-
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-
-    keyCallBack(window, deltaTime);
-
-    Draw(deltaTime);
-
-    // Swap front and back buffers
-    glfwSwapBuffers(window);
-
-    // Poll for and process events
-    glfwPollEvents();
-  }
-
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
-
-  glfwDestroyWindow(window);
-  glfwTerminate();
-  events.CLOSE_EDITOR = false;
+  events->CLOSE_EDITOR = false;
 }

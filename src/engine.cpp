@@ -7,9 +7,9 @@ void Engine::Editor() {
   while (true) {
     if (events.RUN_EDITOR) {
       events.RUN_EDITOR = false;
-      EditorManager *manager = new EditorManager(&events);
+      EditorManager *editorManager = new EditorManager(&events);
       editorManager->Run();
-      delete manager;
+      delete editorManager;
     }
 
     if (events.RUN_GAME) {
