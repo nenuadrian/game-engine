@@ -63,7 +63,7 @@ class World {
 public:
   std::string id;
   std::string name;
-  std::string defaultCameraEntityId = "";
+  std::string mainCameraEntityId = "";
   std::vector<Asset *> assets;
   std::vector<Entity *> entities;
   World();

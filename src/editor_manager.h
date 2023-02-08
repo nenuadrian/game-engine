@@ -3,17 +3,15 @@
 #include "GLFW/glfw3.h"
 #include "events.h"
 #include "imgui_impl_glfw.h"
-#include "project.h"
 #include "input_handler.h"
+#include "project.h"
 
 #include <string>
-
-
 
 class EditorManager : public InputHandler {
 private:
   int selectedEntity = -1;
-  Events* events;
+  Events *events;
 
 public:
   Project *project = nullptr;
@@ -26,8 +24,9 @@ public:
   float lastY = SCR_HEIGHT / 2.0f;
   bool firstMouse = true;
 
-  EditorManager(Events* events);
+  EditorManager(Events *events);
 
+  void Run();
   void Load();
   void NewProject();
   void RenderUI();

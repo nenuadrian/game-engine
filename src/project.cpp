@@ -19,7 +19,7 @@ void Project::Save(std::string directory) {
   for (World *world : worlds) {
     nlohmann::json worldData = nlohmann::json::object();
     worldData["id"] = world->id;
-    worldData["defaultCameraEntityId"] = world->defaultCameraEntityId;
+    worldData["mainCameraEntityId"] = world->mainCameraEntityId;
     worldData["name"] = world->name;
     worldsVector.push_back(worldData);
     for (Asset *asset : world->assets) {

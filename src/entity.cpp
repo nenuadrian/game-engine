@@ -11,7 +11,7 @@
 #include "model_complex.h"
 #include <iostream>
 
-static GLFWwindow *w;
+static GLFWwindow *luaWindow;
 
 extern "C" {
 static int _keyIsPressed(lua_State *L) {
@@ -50,7 +50,7 @@ void Entity::Init(bool running_, GLFWwindow *window) {
       lib->AddCFunction("isKeyPressed", _keyIsPressed);
 
       ctx.AddLibrary(lib);
-      w = window;
+      luaWindow = window;
       ctx.CompileString(engineIdentifier, script);
     }
   }
@@ -81,7 +81,6 @@ Entity::Entity(nlohmann::json data) : Entity() {
   engineIdentifier = data["engineIdentifier"];
 }
 
-
 CameraEntity::CameraEntity() : Entity() { name = "camera"; }
 
 void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
@@ -97,13 +96,12 @@ void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   }
 }
 
-
 void CameraEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
   ImGui::Text("Camera");
-  if (loadedWorld->defaultCameraEntityId != engineIdentifier) {
+  if (loadedWorld->mainCameraEntityId != engineIdentifier) {
     if (ImGui::Button("Set as default camera")) {
-      loadedWorld->defaultCameraEntityId = engineIdentifier;
+      loadedWorld->mainCameraEntityId = engineIdentifier;
     }
   }
 }
@@ -144,7 +142,7 @@ World::World() {
 World::World(nlohmann::json data) : World() {
   id = data["id"];
   name = data["name"];
-  defaultCameraEntityId = data["defaultCameraEntityId"];
+  mainCameraEntityId = data["mainCameraEntityId"];
 }
 
 void World::Init(Project *project) {}

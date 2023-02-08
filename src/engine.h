@@ -1,13 +1,6 @@
 
 #include "events.h"
-#include <GLFW/glfw3.h>
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#include <OpenGL/gl3ext.h>
-#endif
 
-#include <string>
-#include <vector>
 
 class Engine {
   Events events;
@@ -17,6 +10,4 @@ class Engine {
 public:
   Engine(){};
   void Editor();
-  void RunGame();
-  void RunEditor();
 };

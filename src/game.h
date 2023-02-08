@@ -7,6 +7,7 @@
 
 #include "input_handler.h"
 #include "project.h"
+#include "events.h"
 #include <cstddef>
 #include <string>
 
@@ -15,13 +16,16 @@ private:
   Camera camera;
   World *world;
   Project *project;
+  Events *events;
   const unsigned int SCR_WIDTH = 800;
   const unsigned int SCR_HEIGHT = 600;
 
 public:
-  Game(GLFWwindow *w, Project *project);
+  Game(Project *project, Events* _events);
   void Draw(float deltaTime);
+  void Init(GLFWwindow *w);
   void LoadWorld(GLFWwindow *w);
+  void Run();
 
   void scrollCallback(GLFWwindow *w, double x, double y) override {}
 
