@@ -1,5 +1,6 @@
 #include "game.h"
 #include "glm/fwd.hpp"
+#include "window.h"
 
 void Game::mouseButtonCallback(int button, int action, int modsy) {}
 
@@ -10,10 +11,8 @@ Game::Game(Project *project_, Events *events_) {
   events = events_;
 }
 
-void Game::Init() { LoadWorld(); }
-
-void Game::LoadWorld() {
-  Entity *defaultCamera = nullptr;
+void Game::Init() {
+  World *world;
   for (World *w : project->worlds) {
     if (w->id == project->mainWorldId) {
       world = w;
@@ -21,6 +20,14 @@ void Game::LoadWorld() {
     }
   }
   assert(world != nullptr);
+
+  LoadWorld(world);
+}
+
+void Game::LoadWorld(World *newWorld) {
+  world = newWorld;
+
+  Entity *defaultCamera = nullptr;
 
   world->Init(project, window);
   for (Entity *entity : world->entities) {
@@ -72,7 +79,7 @@ void Game::draw(float deltaTime) {
 
 void Game::Run() {
 
-  window = new WindowOpengl(this);
+  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this));
 
   window->Init();
 

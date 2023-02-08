@@ -6,6 +6,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
+#include <string>
 
 void EditorManager::scrollCallback(double x, double y) {
   // ImGui_ImplGlfw_ScrollCallback(w, x, y);
@@ -247,7 +248,7 @@ void EditorManager::Draw(float deltaTime) {
 }
 
 void EditorManager::Run() {
-  window = new WindowOpengl(this);
+  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this));
 
   window->Init();
 

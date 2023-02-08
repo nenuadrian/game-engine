@@ -5,7 +5,6 @@
 #include "project.h"
 #include "window_opengl.h"
 
-#include <string>
 
 class EditorManager : public WindowParent {
 private:

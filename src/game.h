@@ -24,7 +24,7 @@ private:
 public:
   Game(Project *project, Events *_events);
   void Init();
-  void LoadWorld();
+  void LoadWorld(World *newWorld);
   void Run();
 
   void draw(float deltaTime) override;
