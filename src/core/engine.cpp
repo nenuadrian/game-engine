@@ -5,7 +5,7 @@
 
 void Engine::RunEditor() {
   events.RUN_EDITOR = true;
-  while (true) {
+  while (events.RUN_EDITOR || events.RUN_GAME) {
     if (events.RUN_EDITOR) {
       events.RUN_EDITOR = false;
       EditorManager *editorManager = new EditorManager(&events);
