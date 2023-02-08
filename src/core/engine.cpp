@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "editor_manager.h"
+#include "entity.h"
 #include "game.h"
 
 void Engine::RunEditor() {
@@ -14,11 +15,12 @@ void Engine::RunEditor() {
 
     if (events.RUN_GAME) {
       events.RUN_GAME = false;
-      Project project;
-      project.Load("./");
-      Game *game = new Game(&project, &events);
+      Project* project = new Project();
+      project->Load("./");
+      Game *game = new Game(project, &events);
       game->Run();
       delete game;
+      delete project;
     }
   }
 }

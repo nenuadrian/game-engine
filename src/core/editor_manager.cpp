@@ -95,11 +95,7 @@ void EditorManager::SelectWorld(std::string worldId) {
   }
 }
 
-void EditorManager::RenderUI() {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-
+void EditorManager::RenderMenuBarUI() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
       if (ImGui::MenuItem("New")) {
@@ -159,7 +155,11 @@ void EditorManager::RenderUI() {
           ImGui::Separator();
 
           for (World *world : project->worlds) {
-            if (ImGui::MenuItem((world->name + "##" + world->id).c_str())) {
+            if (ImGui::MenuItem(
+                    (world->name +
+                     (world->id == project->mainWorldId ? " (main)" : "") +
+                     "##" + world->id)
+                        .c_str())) {
               SelectWorld(world->id);
             }
           }
@@ -173,57 +173,65 @@ void EditorManager::RenderUI() {
         if (ImGui::MenuItem("Play", __null, false,
                             !project->mainWorldId.empty())) {
           events->RUN_GAME = true;
-          events->CLOSE_EDITOR = true;
+          events->CLOSE_WINDOW = true;
         }
         ImGui::EndMenu();
       }
     }
     ImGui::EndMainMenuBar();
-    if (loadedWorld != nullptr) {
-      ImGui::Begin("Assets");
-      for (Asset *asset : loadedWorld->assets) {
-        if (ImGui::Button(asset->id.c_str())) {
-        }
-      }
-      ImGui::End();
+  }
+}
 
-      ImGui::Begin("Entities");
-      for (auto entity = loadedWorld->entities.begin();
-           entity != loadedWorld->entities.end(); ++entity) {
-        int index = std::distance(loadedWorld->entities.begin(), entity);
-        if (ImGui::Button(((*entity)->name + "##" + (*entity)->engineIdentifier)
-                              .c_str())) {
-          selectedEntity = index;
-        }
-      }
+void EditorManager::RenderUI() {
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
 
-      ImGui::End();
+  RenderMenuBarUI();
 
-      ImGui::Begin("Scene");
-      ImGui::InputText("Name", &loadedWorld->name);
-      if (project->mainWorldId != loadedWorld->id) {
-        if (ImGui::Button("Set as Main World")) {
-          project->mainWorldId = loadedWorld->id;
-        }
-      }
-      ImGui::End();
-
-      if (selectedEntity != -1) {
-        auto entity = loadedWorld->entities.begin() + selectedEntity;
-        ImGui::Begin("Entity");
-
-        (*entity)->EditorUI(loadedWorld);
-
-        if (ImGui::Button("Delete")) {
-          selectedEntity = -1;
-          loadedWorld->entities.erase(entity);
-          delete *entity;
-        }
-        ImGui::End();
+  if (loadedWorld != nullptr) {
+    ImGui::Begin("Assets");
+    for (Asset *asset : loadedWorld->assets) {
+      if (ImGui::Button(asset->id.c_str())) {
       }
     }
-  }
+    ImGui::End();
 
+    ImGui::Begin("Entities");
+    for (auto entity = loadedWorld->entities.begin();
+         entity != loadedWorld->entities.end(); ++entity) {
+      int index = std::distance(loadedWorld->entities.begin(), entity);
+      if (ImGui::Button(
+              ((*entity)->name + "##" + (*entity)->engineIdentifier).c_str())) {
+        selectedEntity = index;
+      }
+    }
+
+    ImGui::End();
+
+    ImGui::Begin("Scene");
+    ImGui::InputText("Name", &loadedWorld->name);
+    if (project->mainWorldId != loadedWorld->id) {
+      if (ImGui::Button("Set as Main World")) {
+        project->mainWorldId = loadedWorld->id;
+      }
+    }
+    ImGui::End();
+
+    if (selectedEntity != -1) {
+      auto entity = loadedWorld->entities.begin() + selectedEntity;
+      ImGui::Begin("Entity");
+
+      (*entity)->EditorUI(loadedWorld);
+
+      if (ImGui::Button("Delete")) {
+        selectedEntity = -1;
+        loadedWorld->entities.erase(entity);
+        delete *entity;
+      }
+      ImGui::End();
+    }
+  }
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -255,6 +263,4 @@ void EditorManager::Run() {
   window->Run();
 
   delete window;
-
-  events->CLOSE_EDITOR = false;
 }

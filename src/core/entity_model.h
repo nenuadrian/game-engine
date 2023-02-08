@@ -1,6 +1,7 @@
 #pragma once
 #include "project.h"
 #include "model.h"
+#include "window.h"
 #include "shader.h"
 #include <string>
 #include <vector>
@@ -18,6 +19,6 @@ public:
   void EditorUI(World *loadedWorld) override;
   void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
   virtual nlohmann::json Save() override;
-  void Init(bool running_, WindowOpengl *window) override;
+  void Init(bool running_, Window *window) override;
   ~ModelEntity();
 };

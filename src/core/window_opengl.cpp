@@ -1,6 +1,5 @@
 #include <glad/glad.h>
 #include "window_opengl.h"
-
 #include "GLFW/glfw3.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -67,22 +66,24 @@ void WindowOpengl::Init() {
   }
 
   IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
+  imGuiContext = ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
-  (void)io;
   ImGui::StyleColorsDark();
 
   // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(w, true);
+
   ImGui_ImplOpenGL3_Init();
+  ImGui_ImplGlfw_InitForOpenGL(w, true);
 
   glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));
 }
 
 WindowOpengl::~WindowOpengl() {
+  events->CLOSE_WINDOW = false;
+
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
+  ImGui::DestroyContext(imGuiContext);
 
   glfwDestroyWindow(w);
   glfwTerminate();
@@ -95,7 +96,7 @@ void WindowOpengl::Run() {
   float lastFrame = 0.0f;
 
   // Loop until the user closes the window
-  while (!glfwWindowShouldClose(w) && !events->CLOSE_EDITOR) {
+  while (!glfwWindowShouldClose(w) && !events->CLOSE_WINDOW) {
 
     // Resize the viewport
     glfwGetFramebufferSize(w, &width, &height);

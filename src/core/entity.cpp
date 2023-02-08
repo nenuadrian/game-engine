@@ -31,7 +31,7 @@ Entity::Entity() {
   name = "Untitled";
 }
 
-void Entity::Init(bool running_, WindowOpengl *window) {
+void Entity::Init(bool running_, Window *window) {
   if (running_) {
     if (!script.empty()) {
       ctx = LuaCpp::LuaContext();
@@ -50,7 +50,7 @@ void Entity::Init(bool running_, WindowOpengl *window) {
       lib->AddCFunction("isKeyPressed", _keyIsPressed);
 
       ctx.AddLibrary(lib);
-      luaWindow = window->w;
+      luaWindow = ((WindowOpengl *)window)->w;
       ctx.CompileString(engineIdentifier, script);
     }
   }
@@ -147,7 +147,7 @@ World::World(nlohmann::json data) : World() {
 
 void World::Init(Project *project) {}
 
-void World::Init(Project *project, WindowOpengl *w) {
+void World::Init(Project *project, Window *w) {
   for (Entity *entity : entities) {
     entity->Init(true, w);
   }

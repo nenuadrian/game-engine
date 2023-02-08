@@ -10,6 +10,7 @@ private:
   int selectedEntity = -1;
   Events *events;
   Window* window;
+  void RenderMenuBarUI();
 
 public:
   Project *project = nullptr;
