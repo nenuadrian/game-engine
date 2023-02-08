@@ -8,16 +8,12 @@
 #include <string>
 
 void EditorManager::scrollCallback(double x, double y) {
-  // ImGui_ImplGlfw_ScrollCallback(w, x, y);
-
   if (!ImGui::IsAnyItemActive()) {
     camera.ProcessMouseScroll(static_cast<float>(y));
   }
 }
 
 void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
-  // ImGui_ImplGlfw_MouseButtonCallback(w, button, action, modsy);
-
   if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
     processCamera = GLFW_PRESS == action;
   }
@@ -43,22 +39,6 @@ void EditorManager::mousePosCallback(double x, double y) {
     lastY = ypos;
     camera.ProcessMouseMovement(xoffset, yoffset);
   }
-}
-// TODO: fix
-void EditorManager::keyCallBack(float deltaTime) {
-  // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
-  /*
-
-if (!ImGui::IsAnyItemActive()) {
-      if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-      if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-      if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-      if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-    }*/
 }
 
 EditorManager::EditorManager(Events *_events) { events = _events; }
@@ -237,6 +217,17 @@ void EditorManager::RenderUI() {
 }
 
 void EditorManager::draw(float deltaTime) {
+  if (!ImGui::IsAnyItemActive()) {
+    if (window->keyPressed(GLFW_KEY_W))
+      camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_S))
+      camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_A))
+      camera.ProcessKeyboard(LEFT, deltaTime);
+    if (window->keyPressed(GLFW_KEY_D))
+      camera.ProcessKeyboard(RIGHT, deltaTime);
+  }
+
   GL_CHECK(glEnable(GL_DEPTH_TEST));
   GL_CHECK(glDepthFunc(GL_LESS));
 

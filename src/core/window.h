@@ -24,6 +24,7 @@ public:
 
   virtual void Init() {}
   virtual void Run() {}
+  virtual bool keyPressed(int code) { return false; }
 
   virtual ~Window() {}
 };

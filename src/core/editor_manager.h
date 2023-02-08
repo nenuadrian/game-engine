@@ -35,5 +35,4 @@ public:
   void scrollCallback(double x, double y) override;
   void mouseButtonCallback(int button, int action, int modsy) override;
   void mousePosCallback(double x, double y) override;
-  void keyCallBack(float deltaTime) override;
 };

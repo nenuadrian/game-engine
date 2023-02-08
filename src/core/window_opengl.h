@@ -16,5 +16,6 @@ public:
 
   void Init() override;
   void Run() override;
+  bool keyPressed(int code) override;
   ~WindowOpengl() override;
 };

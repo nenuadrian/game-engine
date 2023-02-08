@@ -5,6 +5,7 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "window.h"
 #include <iostream>
+
 void Game::mouseButtonCallback(int button, int action, int modsy) {}
 
 void Game::mousePosCallback(double x, double y) {}
@@ -91,6 +92,4 @@ void Game::Run() {
   window->Run();
 
   delete window;
-
-  events->CLOSE_WINDOW = false;
 }

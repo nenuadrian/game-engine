@@ -1,10 +1,10 @@
 #include "window_opengl.h"
+#include <glad/glad.h>
 
 #include "GLFW/glfw3.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include <glad/glad.h>
 #include <iostream>
 
 static void mouse_callback(GLFWwindow *w, double x, double y) {
@@ -32,6 +32,10 @@ static void framebuffer_size_callback(GLFWwindow *WindowOpengl, int width,
   // width and height will be significantly larger than specified on retina
   // displays.
   glViewport(0, 0, width, height);
+}
+
+bool WindowOpengl::keyPressed(int code) {
+  return glfwGetKey(w, code) == GLFW_PRESS;
 }
 
 void WindowOpengl::Init() {
