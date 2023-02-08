@@ -1,17 +1,17 @@
 #include "project.h"
 #include "entity.h"
+#include "entity_model.h"
 #include "model_complex.h"
 #include "nlohmann/json.hpp"
 #include <ctime>
 #include <fstream>
-#include "entity_model.h"
 
 Project::Project() {}
 
-void Project::Save(std::string directory) {
+std::string Project::JSON() {
   nlohmann::json data = nlohmann::json::object();
 
-  data["title"] = title;
+  data["name"] = name;
   data["mainWorldId"] = mainWorldId;
   std::vector<nlohmann::json> worldsVector = {};
   std::vector<nlohmann::json> assetsVector = {};
@@ -43,21 +43,20 @@ void Project::Save(std::string directory) {
   data["assets"] = assetsVector;
   data["entities"] = entitiesVector;
 
-  std::string s = data.dump();
+  return data.dump();
+}
+
+void Project::Save(std::string directory) {
+  std::string s = JSON();
   std::ofstream myfile;
   myfile.open(directory + "data.json");
   myfile << s;
   myfile.close();
 }
 
-void Project::Load(std::string directory) {
-  std::ifstream ifs(directory + "data.json");
-  std::string content((std::istreambuf_iterator<char>(ifs)),
-                      (std::istreambuf_iterator<char>()));
-  ifs.close();
-
-  auto data = nlohmann::json::parse(content);
-  title = data["title"];
+void Project::LoadJSON(std::string json) {
+  auto data = nlohmann::json::parse(json);
+  name = data["name"];
   mainWorldId = data["mainWorldId"];
 
   for (auto worldData : data["worlds"]) {
@@ -90,6 +89,15 @@ void Project::Load(std::string directory) {
       }
     }
   }
+}
+
+void Project::Load(std::string directory) {
+  std::ifstream ifs(directory + "data.json");
+  std::string content((std::istreambuf_iterator<char>(ifs)),
+                      (std::istreambuf_iterator<char>()));
+  ifs.close();
+
+  LoadJSON(content);
 }
 
 std::string Project::NewWorld() {

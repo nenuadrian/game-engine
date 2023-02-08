@@ -7,12 +7,15 @@
 
 class Project {
 public:
-  std::string title;
+  std::string name;
   std::string mainWorldId;
   std::vector<Asset> globalAssets;
   std::vector<World *> worlds;
   Project();
+
   void Load(std::string directory);
   void Save(std::string directory);
+  void LoadJSON(std::string json);
+  std::string JSON();
   std::string NewWorld();
 };

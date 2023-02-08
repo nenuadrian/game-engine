@@ -133,7 +133,7 @@ file(
   libs/imgui/backends/imgui_impl_opengl3.h
   libs/imgui/backends/imgui_impl_opengl3.cpp
   libs/glad/src/glad.c)
-file(GLOB ENGINE-SRC "src/*.h" "src/*.cpp")
+file(GLOB ENGINE-SRC src/*.h src/*.cpp)
 
 link_libraries(${GLEW_LIBRARIES} soloud luacpp_static ${LUA_LIBRARIES})
 add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC})
@@ -153,5 +153,9 @@ target_link_libraries(
   ${GLFW_LIBRARIES}
   ${GLEW_LIBRARIES})
 
-add_executable(tests tests/tests.cpp)
+
+file(GLOB ENGINE-TESTS-SRC tests/*.h tests/*.cpp)
+
+add_executable(tests ${ENGINE-TESTS-SRC})
+
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
