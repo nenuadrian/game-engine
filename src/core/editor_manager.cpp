@@ -1,5 +1,4 @@
 #include "editor_manager.h"
-#include "GLFW/glfw3.h"
 
 #include "../nativefiledialog/src/include/nfd.h"
 #include "entity_model.h"
@@ -45,20 +44,21 @@ void EditorManager::mousePosCallback(double x, double y) {
     camera.ProcessMouseMovement(xoffset, yoffset);
   }
 }
-
+// TODO: fix
 void EditorManager::keyCallBack(float deltaTime) {
   // ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
-  if (!ImGui::IsAnyItemActive()) {
+  /*
 
-    if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
-      camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
-      camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
-      camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
-      camera.ProcessKeyboard(RIGHT, deltaTime);
-  }
+if (!ImGui::IsAnyItemActive()) {
+      if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+      if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+    }*/
 }
 
 EditorManager::EditorManager(Events *_events) { events = _events; }
@@ -228,7 +228,7 @@ void EditorManager::RenderUI() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void EditorManager::Draw(float deltaTime) {
+void EditorManager::draw(float deltaTime) {
   GL_CHECK(glEnable(GL_DEPTH_TEST));
   GL_CHECK(glDepthFunc(GL_LESS));
 
@@ -248,7 +248,7 @@ void EditorManager::Draw(float deltaTime) {
 }
 
 void EditorManager::Run() {
-  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this));
+  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
 
   window->Init();
 

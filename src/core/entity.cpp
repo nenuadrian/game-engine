@@ -18,7 +18,7 @@ static int _keyIsPressed(lua_State *L) {
   int n = lua_gettop(L); /* number of arguments */
 
   int key = lua_tointeger(L, 1);
-  bool result = glfwGetKey(w, key) == GLFW_PRESS;
+  bool result = glfwGetKey(luaWindow, key) == GLFW_PRESS;
   lua_pushboolean(L, result); /* second result */
   return 1;                   /* number of results */
 }
@@ -31,7 +31,7 @@ Entity::Entity() {
   name = "Untitled";
 }
 
-void Entity::Init(bool running_, GLFWwindow *window) {
+void Entity::Init(bool running_, WindowOpengl *window) {
   if (running_) {
     if (!script.empty()) {
       ctx = LuaCpp::LuaContext();
@@ -50,7 +50,7 @@ void Entity::Init(bool running_, GLFWwindow *window) {
       lib->AddCFunction("isKeyPressed", _keyIsPressed);
 
       ctx.AddLibrary(lib);
-      luaWindow = window;
+      luaWindow = window->w;
       ctx.CompileString(engineIdentifier, script);
     }
   }
@@ -147,7 +147,7 @@ World::World(nlohmann::json data) : World() {
 
 void World::Init(Project *project) {}
 
-void World::Init(Project *project, Window *w) {
+void World::Init(Project *project, WindowOpengl *w) {
   for (Entity *entity : entities) {
     entity->Init(true, w);
   }

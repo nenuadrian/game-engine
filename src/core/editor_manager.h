@@ -1,7 +1,6 @@
 #pragma once
 
 #include "events.h"
-#include "imgui_impl_glfw.h"
 #include "project.h"
 #include "window_opengl.h"
 
@@ -10,6 +9,7 @@ class EditorManager : public WindowParent {
 private:
   int selectedEntity = -1;
   Events *events;
+  Window* window;
 
 public:
   Project *project = nullptr;
@@ -35,5 +35,4 @@ public:
   void mouseButtonCallback(int button, int action, int modsy) override;
   void mousePosCallback(double x, double y) override;
   void keyCallBack(float deltaTime) override;
-  void charCallback(unsigned int c) override;
 };

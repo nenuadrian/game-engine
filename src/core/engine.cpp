@@ -2,7 +2,7 @@
 #include "editor_manager.h"
 #include "game.h"
 
-void Engine::Editor() {
+void Engine::RunEditor() {
   events.RUN_EDITOR = true;
   while (true) {
     if (events.RUN_EDITOR) {
@@ -23,7 +23,7 @@ void Engine::Editor() {
   }
 }
 
-void Engine::Game() {
+void Engine::RunGame() {
   events.RUN_GAME = true;
   Project project;
   project.Load("./");

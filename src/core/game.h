@@ -32,5 +32,4 @@ public:
   void mouseButtonCallback(int button, int action, int modsy) override;
   void mousePosCallback(double x, double y) override;
   void keyCallBack(float deltaTime) override {}
-  void charCallback(unsigned int c) override {}
 };

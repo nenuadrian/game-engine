@@ -1,7 +1,7 @@
-#include "engine.h"
+#include "core/engine.h"
 
 int main(void) {
   Engine engine = Engine();
-  engine.Editor();
+  engine.RunEditor();
   return 0;
 }

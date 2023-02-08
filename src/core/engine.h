@@ -8,6 +8,6 @@ class Engine {
 
 public:
   Engine(){};
-  void Editor();
-  void Game();
+  void RunEditor();
+  void RunGame();
 };

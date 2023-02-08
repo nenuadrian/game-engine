@@ -1,31 +1,32 @@
+#include <glad/glad.h>
 #include "window_opengl.h"
 
+#include "GLFW/glfw3.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include "window.h"
+#include <iostream>
 
-static void mouse_callback(GLFWWindow *w, double x, double y) {
+static void mouse_callback(GLFWwindow *w, double x, double y) {
   WindowParent *handler =
-      reinterpret_cast<WindowParent *>(glfwGetWindowOpenglUserPointer(w));
+      reinterpret_cast<WindowParent *>(glfwGetWindowUserPointer(w));
   handler->mousePosCallback(x, y);
 }
 
-static void mouse_button_callback(GLFWWindow *w, int button, int action,
+static void mouse_button_callback(GLFWwindow *w, int button, int action,
                                   int mods) {
   WindowParent *handler =
-      reinterpret_cast<WindowParent *>(glfwGetWindowOpenglUserPointer(w));
+      reinterpret_cast<WindowParent *>(glfwGetWindowUserPointer(w));
   handler->mouseButtonCallback(button, action, mods);
 }
 
-static void scroll_callback(GLFWWindow *w, double x, double y) {
+static void scroll_callback(GLFWwindow *w, double x, double y) {
   WindowParent *handler =
-      reinterpret_cast<WindowParent *>(glfwGetWindowOpenglUserPointer(w));
+      reinterpret_cast<WindowParent *>(glfwGetWindowUserPointer(w));
   handler->scrollCallback(x, y);
 }
 
-
-static void framebuffer_size_callback(GLFWWindow *WindowOpengl, int width,
+static void framebuffer_size_callback(GLFWwindow *WindowOpengl, int width,
                                       int height) {
   // make sure the viewport matches the new WindowOpengl dimensions; note that
   // width and height will be significantly larger than specified on retina
@@ -33,30 +34,30 @@ static void framebuffer_size_callback(GLFWWindow *WindowOpengl, int width,
   glViewport(0, 0, width, height);
 }
 
-
 void WindowOpengl::Init() {
   // glfw: initialize and configure
   // ------------------------------
   glfwInit();
-  GLFWWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  GLFWWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  GLFWWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-  GLFWWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
-  if (window == NULL) {
+  w = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
+  if (w == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
     return;
   }
-  glfwMakeContextCurrent(window);
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-  glfwSetCursorPosCallback(window, mouse_callback);
-  glfwSetScrollCallback(window, scroll_callback);
-  glfwSetMouseButtonCallback(window, mouse_button_callback);
+  glfwMakeContextCurrent(w);
+  glfwSetFramebufferSizeCallback(w, framebuffer_size_callback);
+  glfwSetCursorPosCallback(w, mouse_callback);
+  glfwSetScrollCallback(w, scroll_callback);
+  glfwSetMouseButtonCallback(w, mouse_button_callback);
 
   // glad: load all OpenGL function pointers
   // ---------------------------------------
@@ -72,10 +73,10 @@ void WindowOpengl::Init() {
   ImGui::StyleColorsDark();
 
   // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplGlfw_InitForOpenGL(w, true);
   ImGui_ImplOpenGL3_Init();
 
-  glfwSetWindowUserPointer(window, reinterpret_cast<void *>(parent));
+  glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));
 }
 
 WindowOpengl::~WindowOpengl() {
@@ -83,7 +84,7 @@ WindowOpengl::~WindowOpengl() {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 
-  glfwDestroyWindow(window);
+  glfwDestroyWindow(w);
   glfwTerminate();
 }
 
@@ -94,10 +95,10 @@ void WindowOpengl::Run() {
   float lastFrame = 0.0f;
 
   // Loop until the user closes the window
-  while (!glfwWindowShouldClose(window) && !events->CLOSE_EDITOR) {
+  while (!glfwWindowShouldClose(w) && !events->CLOSE_EDITOR) {
 
     // Resize the viewport
-    glfwGetFramebufferSize(window, &width, &height);
+    glfwGetFramebufferSize(w, &width, &height);
     glViewport(0, 0, width, height);
 
     float currentFrame = static_cast<float>(glfwGetTime());
@@ -110,7 +111,7 @@ void WindowOpengl::Run() {
     parent->draw(deltaTime);
 
     // Swap front and back buffers
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(w);
 
     // Poll for and process events
     glfwPollEvents();

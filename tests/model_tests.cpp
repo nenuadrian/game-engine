@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../src/model_complex.h"
+#include "../src/core/model_complex.h"
 
 TEST_CASE("Models are loaded using Assimp from .obj", "[obj]") { 
     ModelComplex model = ModelComplex("../tests/backpack/12305_backpack_v2_l3.obj");

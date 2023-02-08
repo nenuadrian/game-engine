@@ -1,5 +1,6 @@
 #pragma once
 
+#include "events.h"
 class WindowParent {
 public:
   void virtual draw(float deltaTime) {}
@@ -11,11 +12,16 @@ public:
 };
 
 class Window {
-  WindowParent *parent;
 
 public:
-  Window(WindowParent *_parent) { parent = _parent; }
+  WindowParent *parent;
+  Events *events;
 
-  virtual void Init();
-  virtual void Run();
+  Window(WindowParent *_parent, Events *_events) {
+    parent = _parent;
+    events = _events;
+  }
+
+  virtual void Init() {}
+  virtual void Run() {}
 };

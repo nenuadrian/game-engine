@@ -8,6 +8,14 @@
 #include <vector>
 
 class ModelComplex : public Model {
+private:
+  void loadModel(std::string const &path);
+  void processNode(aiNode *node, const aiScene *scene);
+  Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+  std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+                                            std::string typeName);
+  GLint textureFromFile(const char *filename);
+
 public:
   std::string path;
 
@@ -20,14 +28,5 @@ public:
   ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
   virtual void Draw(GLuint shaderProgram);
   virtual void Draw(Shader *shader);
-
-private:
-  void loadModel(std::string const &path);
-  void processNode(aiNode *node, const aiScene *scene);
-  Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-  std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
-                                            std::string typeName);
-  GLint textureFromFile(const char *filename);
-
   ~ModelComplex();
 };

@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-#include "../src/project.h"
+#include "../src/core/project.h"
 
 TEST_CASE("Project should save to JSON", "[save]") { 
     Project project = Project();
@@ -14,6 +14,6 @@ TEST_CASE("Project should save to JSON", "[save]") {
 
 TEST_CASE("Project should load from JSON", "[load]") { 
     Project project = Project();
-    std::string s = project.loadJSON(R"{"name": "project"}");
+    project.LoadJSON(R"({"name": "project"})");
     REQUIRE(1 == 1); 
 }

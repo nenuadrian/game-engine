@@ -1,7 +1,9 @@
 #include "game.h"
 #include "glm/fwd.hpp"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "misc/cpp/imgui_stdlib.h"
 #include "window.h"
-
 void Game::mouseButtonCallback(int button, int action, int modsy) {}
 
 void Game::mousePosCallback(double x, double y) {}
@@ -29,7 +31,7 @@ void Game::LoadWorld(World *newWorld) {
 
   Entity *defaultCamera = nullptr;
 
-  world->Init(project, window);
+  world->Init(project, (WindowOpengl *)window);
   for (Entity *entity : world->entities) {
     if (entity->engineIdentifier == world->mainCameraEntityId) {
       defaultCamera = entity;
@@ -65,8 +67,8 @@ void Game::draw(float deltaTime) {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Game")) {
       if (ImGui::MenuItem("Stop")) {
-        events.RUN_EDITOR = true;
-        events.CLOSE_GAME = true;
+        events->RUN_EDITOR = true;
+        events->CLOSE_GAME = true;
       }
 
       ImGui::EndMenu();
@@ -79,7 +81,7 @@ void Game::draw(float deltaTime) {
 
 void Game::Run() {
 
-  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this));
+  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
 
   window->Init();
 

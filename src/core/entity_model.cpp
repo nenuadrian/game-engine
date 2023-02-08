@@ -9,7 +9,7 @@
 #include "nlohmann/json.hpp"
 #include <iostream>
 
-void ModelEntity::Init(bool running_, GLFWwindow *window) {
+void ModelEntity::Init(bool running_, WindowOpengl *window) {
   Entity::Init(running_, window);
 
   shader = new Shader("../sample_project/3.3.shader.vs",
