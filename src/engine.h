@@ -1,7 +1,6 @@
 
 #include "events.h"
 
-
 class Engine {
   Events events;
   const unsigned int SCR_WIDTH = 800;
@@ -10,4 +9,5 @@ class Engine {
 public:
   Engine(){};
   void Editor();
+  void Game();
 };
