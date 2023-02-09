@@ -27,8 +27,7 @@ static int _keyIsPressed(lua_State *L) {
 Entity::Entity() {
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
-  id = std::to_string(t);
-  name = "Untitled";
+  id = "untitled" + std::to_string(t);
 }
 
 void Entity::Init(bool running_, Window *window) {
@@ -61,7 +60,6 @@ void Entity::Init(bool running_, Window *window) {
 nlohmann::json Entity::JSON() {
   nlohmann::json entityData = nlohmann::json::object();
   entityData["id"] = id;
-  entityData["name"] = name;
   entityData["type"] = type();
   entityData["engineIdentifier"] = engineIdentifier;
   entityData["x"] = x;
@@ -72,7 +70,6 @@ nlohmann::json Entity::JSON() {
 }
 
 Entity::Entity(nlohmann::json data) : Entity() {
-  name = data["name"];
   id = data["id"];
   x = data["x"];
   y = data["y"];
@@ -81,7 +78,7 @@ Entity::Entity(nlohmann::json data) : Entity() {
   engineIdentifier = data["engineIdentifier"];
 }
 
-CameraEntity::CameraEntity() : Entity() { name = "camera"; }
+CameraEntity::CameraEntity() : Entity() { }
 
 void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -107,27 +104,28 @@ void CameraEntity::EditorUI(World *loadedWorld) {
 }
 
 void Entity::EditorUI(World *loadedWorld) {
-  ImGui::Text("EngineID");
-  ImGui::Text("%s", engineIdentifier.c_str());
+  ImGui::Text("EngineID: %s", engineIdentifier.c_str());
   ImGui::InputText("ID", &id);
-  ImGui::InputText("Name", &name);
   ImGui::InputFloat("X", &x);
   ImGui::InputFloat("Y", &y);
   ImGui::InputFloat("Z", &z);
-  ImGui::InputTextMultiline("Script", &script);
+  if (ImGui::CollapsingHeader("Script")) {
 
-  if (scriptError != "") {
-    ImGui::Text("%s", scriptError.c_str());
-  }
+    ImGui::InputTextMultiline("Code", &script);
 
-  if (ImGui::Button("Compile Script")) {
-    scriptError = "";
+    if (scriptError != "") {
+      ImGui::Text("%s", scriptError.c_str());
+    }
 
-    try {
-      auto ctx = LuaCpp::LuaContext();
-      ctx.CompileString(engineIdentifier, script);
-    } catch (std::exception &e) {
-      scriptError = e.what();
+    if (ImGui::Button("Compile Script")) {
+      scriptError = "";
+
+      try {
+        auto ctx = LuaCpp::LuaContext();
+        ctx.CompileString(engineIdentifier, script);
+      } catch (std::exception &e) {
+        scriptError = e.what();
+      }
     }
   }
 }

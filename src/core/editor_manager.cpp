@@ -67,7 +67,7 @@ void EditorManager::Open() {
   }
 }
 
-void EditorManager::Load(Project* newProject) {
+void EditorManager::Load(Project *newProject) {
   if (project != nullptr) {
     delete project;
   }
@@ -200,52 +200,51 @@ void EditorManager::RenderUI() {
   RenderMenuBarUI();
 
   if (loadedWorld != nullptr) {
-    ImGui::Begin("Assets");
-    for (Asset *asset : loadedWorld->assets) {
-      if (ImGui::Button(asset->id.c_str())) {
-      }
-    }
-    ImGui::End();
-
-    ImGui::Begin("Entities");
-    for (auto entity = loadedWorld->entities.begin();
-         entity != loadedWorld->entities.end(); ++entity) {
-      int index = std::distance(loadedWorld->entities.begin(), entity);
-      if (ImGui::Button(
-              ((*entity)->name +
-               ((*entity)->engineIdentifier == loadedWorld->mainCameraEntityId
-                    ? " [main camera]"
-                    : "") +
-               "##" + (*entity)->engineIdentifier)
-                  .c_str())) {
-        selectedEntity = index;
-      }
-    }
-
-    ImGui::End();
-
     ImGui::Begin("Scene");
+
     ImGui::InputText("Name", &loadedWorld->name);
     if (project->mainWorldId != loadedWorld->id) {
       if (ImGui::Button("Set as Main World")) {
         project->mainWorldId = loadedWorld->id;
       }
     }
-    ImGui::End();
+    if (ImGui::CollapsingHeader("Assets")) {
 
-    if (selectedEntity != -1) {
-      auto entity = loadedWorld->entities.begin() + selectedEntity;
-      ImGui::Begin("Entity");
-
-      (*entity)->EditorUI(loadedWorld);
-
-      if (ImGui::Button("Delete")) {
-        selectedEntity = -1;
-        loadedWorld->entities.erase(entity);
-        delete *entity;
+      for (Asset *asset : loadedWorld->assets) {
+        if (ImGui::Button(asset->id.c_str())) {
+        }
       }
-      ImGui::End();
     }
+    if (ImGui::CollapsingHeader("Entities")) {
+      for (auto entity = loadedWorld->entities.begin();
+           entity != loadedWorld->entities.end(); ++entity) {
+        int index = std::distance(loadedWorld->entities.begin(), entity);
+        if (ImGui::Button(
+                ((*entity)->id +
+                 ((*entity)->engineIdentifier == loadedWorld->mainCameraEntityId
+                      ? " [main camera]"
+                      : "") +
+                 "##" + (*entity)->engineIdentifier)
+                    .c_str())) {
+          selectedEntity = index;
+        }
+      }
+    }
+    ImGui::End();
+  }
+
+  if (selectedEntity != -1) {
+    auto entity = loadedWorld->entities.begin() + selectedEntity;
+    ImGui::Begin("Entity");
+
+    (*entity)->EditorUI(loadedWorld);
+
+    if (ImGui::Button("Delete")) {
+      selectedEntity = -1;
+      loadedWorld->entities.erase(entity);
+      delete *entity;
+    }
+    ImGui::End();
   }
 
   if (showDebugStats) {

@@ -16,11 +16,13 @@ void ModelEntity::Init(bool running_, Window *window) {
 
   shader = new Shader();
   shader->Load(generator.generateVertexShader(true).c_str(),
-               generator.generateFragmentShader(2).c_str());
+               generator.generateFragmentShader(4).c_str());
   GL_CHECK(glUseProgram(shader->ID));
   GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0));
   GL_CHECK(
       glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 1));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_normal"), 2));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_height"), 3));
   GL_CHECK(glUseProgram(0));
 
   model =
@@ -43,33 +45,46 @@ void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
 
 void ModelEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
-  ImGui::Text("Model");
-  ImGui::Text("%s", model->name.c_str());
 
-  if (ImGui::Button("Change Model")) {
-    modelSelectionWindowOpen = true;
+  if (ImGui::CollapsingHeader("Model Object")) {
+    ImGui::Text("Model");
+    ImGui::Text("%s", model->name.c_str());
+
+    if (ImGui::Button("Change Model")) {
+      modelSelectionWindowOpen = true;
+    }
+
+    if (modelSelectionWindowOpen) {
+      ImGui::Begin("Select Model");
+      for (Asset *asset : loadedWorld->assets) {
+        if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
+                           engineIdentifier + "asset" + asset->id)
+                              .c_str())) {
+          modelSelectionWindowOpen = false;
+          delete model;
+          model = new ModelComplex(asset->file);
+        }
+      }
+
+      if (ImGui::Button("Cancel")) {
+        modelSelectionWindowOpen = false;
+      }
+      ImGui::End();
+    }
   }
 
-  if (modelSelectionWindowOpen) {
-    ImGui::Begin("Select Model");
-    for (Asset *asset : loadedWorld->assets) {
-      if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
-                         engineIdentifier + "asset" + asset->id)
-                            .c_str())) {
-        modelSelectionWindowOpen = false;
-        delete model;
-        model = new ModelComplex(asset->file);
-      }
+  if (shader != nullptr) {
+    ImGui::Text("Shaders");
+    if (ImGui::CollapsingHeader("Fragment Shader")) {
+      ImGui::Text("%s", shader->fragmentShaderSource.c_str());
     }
-
-    if (ImGui::Button("Cancel")) {
-      modelSelectionWindowOpen = false;
+    if (ImGui::CollapsingHeader("Vertex Shader")) {
+      ImGui::Text("%s", shader->vertexShaderSource.c_str());
     }
-    ImGui::End();
   }
 }
 
-ModelEntity::ModelEntity() : Entity() { name = "Model"; }
+ModelEntity::ModelEntity() : Entity() {  }
 
 ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}
 

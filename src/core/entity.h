@@ -22,7 +22,6 @@ class Entity {
 public:
   std::string engineIdentifier;
   std::string id;
-  std::string name;
   std::string script;
   std::string scriptError = "";
 

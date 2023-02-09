@@ -40,6 +40,9 @@ void Shader::Load(const char *vertexSource, const char *fragmentSource) {
 
   setInt("texture1", 0);
   setInt("texture2", 1);
+
+  vertexShaderSource = vertexSource;
+  fragmentShaderSource = fragmentSource;
 }
 
 Shader::Shader() {}
