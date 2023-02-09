@@ -34,7 +34,8 @@ public:
   EditorManager(Events *events);
 
   void Run();
-  void Load();
+  void Open();
+  void Load(Project* newProject);
   void NewProject();
   void RenderUI();
   void SelectWorld(std::string worldId);

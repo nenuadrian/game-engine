@@ -7,20 +7,20 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
 #include "nlohmann/json.hpp"
+#include "shaders/shader_generator.h"
 #include <iostream>
 
 void ModelEntity::Init(bool running_, Window *window) {
   Entity::Init(running_, window);
+  ShaderGenerator generator = ShaderGenerator();
 
-  shader = new Shader("../sample_project/3.3.shader.vs",
-                      "../sample_project/3.3.shader.fs");
+  shader = new Shader();
+  shader->Load(generator.generateVertexShader(true).c_str(),
+               generator.generateFragmentShader(2).c_str());
   GL_CHECK(glUseProgram(shader->ID));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_diffuse").c_str()),
-      0));
-  GL_CHECK(glUniform1i(
-      glGetUniformLocation(shader->ID, std::string("texture_specular").c_str()),
-      1));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0));
+  GL_CHECK(
+      glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 1));
   GL_CHECK(glUseProgram(0));
 
   model =

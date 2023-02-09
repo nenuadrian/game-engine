@@ -1,7 +1,7 @@
 #pragma once
 
 #include "model.h"
-#include "shader.h"
+#include "shaders/shader.h"
 #include <assimp/scene.h> // Output data structure
 #include <glm/glm.hpp>
 #include <string>

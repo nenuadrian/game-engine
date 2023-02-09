@@ -10,14 +10,20 @@ void Engine::RunEditor() {
     if (events.RUN_EDITOR) {
       events.RUN_EDITOR = false;
       EditorManager *editorManager = new EditorManager(&events);
+      if (!events.data.empty()) {
+        Project *project = new Project();
+        project->LoadJSON(events.data);
+        editorManager->Load(project);
+        events.data = "";
+      }
       editorManager->Run();
       delete editorManager;
     }
 
     if (events.RUN_GAME) {
       events.RUN_GAME = false;
-      Project* project = new Project();
-      project->Load("./");
+      Project *project = new Project();
+      project->LoadJSON(events.data);
       Game *game = new Game(project, &events);
       game->Run();
       delete game;

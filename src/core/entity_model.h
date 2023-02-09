@@ -2,7 +2,7 @@
 #include "project.h"
 #include "model.h"
 #include "window.h"
-#include "shader.h"
+#include "shaders/shader.h"
 #include <string>
 #include <vector>
 

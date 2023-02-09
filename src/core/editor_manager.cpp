@@ -54,21 +54,24 @@ void EditorManager::NewProject() {
   project->mainWorldId = loadedWorld->id;
 }
 
-void EditorManager::Load() {
-  if (project != nullptr) {
-    delete project;
-  }
-
+void EditorManager::Open() {
   nfdchar_t *outPath = NULL;
   nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
   if (result == NFD_OKAY) {
-    project = new Project();
+    auto project = new Project();
     project->Load(std::string(outPath));
-
     free(outPath);
+    Load(project);
   } else {
     printf("Error: %s\n", NFD_GetError());
   }
+}
+
+void EditorManager::Load(Project* newProject) {
+  if (project != nullptr) {
+    delete project;
+  }
+  project = newProject;
 }
 
 void EditorManager::SelectWorld(std::string worldId) {
@@ -92,7 +95,7 @@ void EditorManager::RenderMenuBarUI() {
         NewProject();
       }
       if (ImGui::MenuItem("Open")) {
-        Load();
+        Open();
       }
       if (project != nullptr) {
 
@@ -169,6 +172,7 @@ void EditorManager::RenderMenuBarUI() {
                             !project->mainWorldId.empty())) {
           events->RUN_GAME = true;
           events->CLOSE_WINDOW = true;
+          events->data = project->JSON();
         }
         ImGui::EndMenu();
       }

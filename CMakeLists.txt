@@ -133,7 +133,7 @@ file(
   libs/imgui/backends/imgui_impl_opengl3.h
   libs/imgui/backends/imgui_impl_opengl3.cpp
   libs/glad/src/glad.c)
-file(GLOB ENGINE-SRC src/main.cpp src/core/*.h src/core/*.cpp)
+file(GLOB ENGINE-SRC src/main.cpp src/core/*.h src/core/*.cpp src/core/shaders/*.cpp src/core/shaders/*.h)
 
 link_libraries(${GLEW_LIBRARIES} soloud luacpp_static ${LUA_LIBRARIES})
 add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC})
@@ -154,7 +154,7 @@ target_link_libraries(
   ${GLEW_LIBRARIES})
 
 
-file(GLOB ENGINE-TESTS-SRC tests/*.h tests/*.cpp src/core/*.cpp src/core/*.h)
+file(GLOB ENGINE-TESTS-SRC tests/*.h tests/*.cpp src/core/*.cpp src/core/*.h src/core/shaders/*.cpp src/core/shaders/*.h)
 
 add_executable(tests ${ENGINE-LIBS} ${ENGINE-TESTS-SRC})
 
