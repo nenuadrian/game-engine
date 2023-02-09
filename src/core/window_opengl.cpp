@@ -45,11 +45,12 @@ void WindowOpengl::Init() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
 
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-  w = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Game", NULL, NULL);
+  w = glfwCreateWindow(width, height, "Game", NULL, NULL);
   if (w == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -95,7 +96,6 @@ void WindowOpengl::Run() {
   if (parent != nullptr) {
     glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));
   }
-  int width, height;
 
   float deltaTime = 0.0f; // time between current frame and last frame
   float lastFrame = 0.0f;
@@ -106,7 +106,11 @@ void WindowOpengl::Run() {
     // Resize the viewport
     glfwGetFramebufferSize(w, &width, &height);
     glViewport(0, 0, width, height);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
+    glClearColor(114, 144, 154, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     float currentFrame = static_cast<float>(glfwGetTime());
 
     deltaTime = currentFrame - lastFrame;

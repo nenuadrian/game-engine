@@ -50,16 +50,12 @@ void Game::LoadWorld(World *newWorld) {
 }
 
 void Game::draw(float deltaTime) {
-  GL_CHECK(glDepthFunc(GL_LESS));
-
-  GL_CHECK(glClearColor(114, 144, 154, 0));
-  GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
   if (world != nullptr) {
     for (Entity *entity : world->entities) {
       glm::mat4 projection =
           glm::perspective(glm::radians(camera.Zoom),
-                           (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+                           (float)window->width / (float)window->height, 0.1f, 100.0f);
 
       entity->Draw(deltaTime, camera, projection);
     }

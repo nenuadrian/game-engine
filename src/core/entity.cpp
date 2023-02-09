@@ -194,6 +194,6 @@ World::~World() {
 }
 
 void CameraEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
-  
-  
+  Entity::Draw(deltaTime, camera, projection);
+
 }

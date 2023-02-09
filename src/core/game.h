@@ -18,8 +18,6 @@ private:
   Project *project;
   Events *events;
   Window *window;
-  const unsigned int SCR_WIDTH = 800;
-  const unsigned int SCR_HEIGHT = 600;
 
 public:
   Game(Project *project, Events *_events);

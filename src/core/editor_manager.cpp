@@ -288,12 +288,6 @@ void EditorManager::draw(float deltaTime) {
       camera.ProcessKeyboard(RIGHT, deltaTime);
   }
 
-  GL_CHECK(glEnable(GL_DEPTH_TEST));
-  GL_CHECK(glDepthFunc(GL_LESS));
-
-  GL_CHECK(glClearColor(114, 144, 154, 0));
-  GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
       glm::mat4 projection =
@@ -304,6 +298,7 @@ void EditorManager::draw(float deltaTime) {
     }
   }
   RenderUI();
+  
 }
 
 void EditorManager::Run() {

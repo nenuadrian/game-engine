@@ -16,6 +16,7 @@ class Window {
 public:
   WindowParent *parent;
   Events *events;
+  int width = 800, height = 600;
 
   Window(WindowParent *_parent, Events *_events) {
     parent = _parent;
