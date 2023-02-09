@@ -78,7 +78,7 @@ Entity::Entity(nlohmann::json data) : Entity() {
   engineIdentifier = data["engineIdentifier"];
 }
 
-CameraEntity::CameraEntity() : Entity() { }
+CameraEntity::CameraEntity() : Entity() {}
 
 void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -151,8 +151,6 @@ void World::Init(Project *project, Window *w) {
   }
 }
 
-void World::Uninit() {}
-
 Asset::Asset(nlohmann::json data) {
   file = data["file"];
   id = data["id"];
@@ -164,4 +162,14 @@ Asset::Asset(std::string _file) {
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
   id = std::to_string(t);
+}
+
+World::~World() {
+  for (Entity *entity : entities) {
+    delete entity;
+  }
+
+  for (Asset *asset : assets) {
+    delete asset;
+  }
 }

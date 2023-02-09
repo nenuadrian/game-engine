@@ -75,10 +75,7 @@ void EditorManager::Load(Project *newProject) {
 }
 
 void EditorManager::SelectWorld(std::string worldId) {
-  if (loadedWorld != nullptr) {
-    loadedWorld->Uninit();
-  }
-
+  selectedEntity = nullptr;
   for (World *w : project->worlds) {
     if (w->id == worldId) {
       loadedWorld = w;
@@ -216,33 +213,34 @@ void EditorManager::RenderUI() {
       }
     }
     if (ImGui::CollapsingHeader("Entities")) {
-      for (auto entity = loadedWorld->entities.begin();
-           entity != loadedWorld->entities.end(); ++entity) {
-        int index = std::distance(loadedWorld->entities.begin(), entity);
+      for (auto entity : loadedWorld->entities) {
         if (ImGui::Button(
-                ((*entity)->id +
-                 ((*entity)->engineIdentifier == loadedWorld->mainCameraEntityId
+                (entity->id +
+                 (entity->engineIdentifier == loadedWorld->mainCameraEntityId
                       ? " [main camera]"
                       : "") +
-                 "##" + (*entity)->engineIdentifier)
+                 "##" + entity->engineIdentifier)
                     .c_str())) {
-          selectedEntity = index;
+          selectedEntity = entity;
         }
       }
     }
     ImGui::End();
   }
 
-  if (selectedEntity != -1) {
-    auto entity = loadedWorld->entities.begin() + selectedEntity;
+  if (selectedEntity != nullptr) {
     ImGui::Begin("Entity");
 
-    (*entity)->EditorUI(loadedWorld);
+    selectedEntity->EditorUI(loadedWorld);
 
     if (ImGui::Button("Delete")) {
-      selectedEntity = -1;
-      loadedWorld->entities.erase(entity);
-      delete *entity;
+      loadedWorld->entities.erase(
+          std::remove_if(loadedWorld->entities.begin(),
+                         loadedWorld->entities.end(),
+                         [this](Entity *e) { return e == selectedEntity; }),
+          loadedWorld->entities.end());
+
+      delete selectedEntity;
     }
     ImGui::End();
   }

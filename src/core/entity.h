@@ -70,5 +70,5 @@ public:
   World(nlohmann::json data);
   void Init(Project *project);
   void Init(Project *project, Window *w);
-  void Uninit();
+  ~World();
 };
