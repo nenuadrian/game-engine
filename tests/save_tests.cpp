@@ -15,5 +15,5 @@ TEST_CASE("Project should save to JSON", "[save]") {
 TEST_CASE("Project should load from JSON", "[load]") { 
     Project project = Project();
     project.LoadJSON(R"({"name": "project", "mainWorldId": ""})");
-    REQUIRE(1 == 1); 
+    REQUIRE(project.name == "project"); 
 }

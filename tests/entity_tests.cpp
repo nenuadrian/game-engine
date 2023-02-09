@@ -13,7 +13,7 @@ TEST_CASE("Entities are initialised", "[entity]") {
   WindowOpengl *w = new WindowOpengl(nullptr, &events);
   w->Init();
   ModelEntity entity = ModelEntity();
-  entity.JSON();
+  auto json = entity.JSON();
 
-  REQUIRE(1 == 1);
+  REQUIRE(!json.contains("model"));
 }
