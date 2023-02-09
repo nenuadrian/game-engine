@@ -73,8 +73,8 @@ ModelEntity::ModelEntity() : Entity() { name = "Model"; }
 
 ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}
 
-nlohmann::json ModelEntity::Save() {
-  nlohmann::json data = Entity::Save();
+nlohmann::json ModelEntity::JSON() {
+  nlohmann::json data = Entity::JSON();
 
   return data;
 }

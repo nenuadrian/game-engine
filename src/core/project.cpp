@@ -32,7 +32,7 @@ std::string Project::JSON() {
     }
 
     for (Entity *entity : world->entities) {
-      nlohmann::json entityData = entity->Save();
+      nlohmann::json entityData = entity->JSON();
 
       entityData["world"] = world->id;
       entitiesVector.push_back(entityData);
@@ -91,8 +91,8 @@ void Project::LoadJSON(std::string json) {
   }
 }
 
-void Project::Load(std::string directory) {
-  std::ifstream ifs(directory + "data.json");
+void Project::Load(std::string dataFile) {
+  std::ifstream ifs(dataFile);
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));
   ifs.close();

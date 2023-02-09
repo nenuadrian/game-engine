@@ -13,7 +13,7 @@ public:
   std::vector<World *> worlds;
   Project();
 
-  void Load(std::string directory);
+  void Load(std::string dataFile);
   void Save(std::string directory);
   void LoadJSON(std::string json);
   std::string JSON();

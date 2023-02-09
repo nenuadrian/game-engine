@@ -15,10 +15,10 @@ private:
 public:
   ModelEntity();
   ModelEntity(nlohmann::json data);
-  std::string type() override { return "camera"; };
+  std::string type() override { return "model"; };
   void EditorUI(World *loadedWorld) override;
   void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
-  virtual nlohmann::json Save() override;
+  virtual nlohmann::json JSON() override;
   void Init(bool running_, Window *window) override;
   ~ModelEntity();
 };

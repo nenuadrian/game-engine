@@ -34,7 +34,7 @@ public:
   virtual void Init(bool running, Window *window);
   virtual void Draw(float deltaTime, Camera camera, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
-  virtual nlohmann::json Save();
+  virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
 };
 
@@ -55,7 +55,7 @@ public:
   std::string engineIdentifier;
   std::string id;
   std::string file;
-  Asset(const char *file_);
+  Asset(std::string _file);
   Asset(nlohmann::json data);
 };
 

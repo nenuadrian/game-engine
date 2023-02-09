@@ -58,7 +58,7 @@ void Entity::Init(bool running_, Window *window) {
   running = running_;
 }
 
-nlohmann::json Entity::Save() {
+nlohmann::json Entity::JSON() {
   nlohmann::json entityData = nlohmann::json::object();
   entityData["id"] = id;
   entityData["name"] = name;
@@ -161,8 +161,8 @@ Asset::Asset(nlohmann::json data) {
   engineIdentifier = data["engineIdentifier"];
 }
 
-Asset::Asset(const char *file_) {
-  file = file_;
+Asset::Asset(std::string _file) {
+  file = _file;
   long int t = static_cast<long int>(time(NULL));
   engineIdentifier = std::to_string(t);
   id = std::to_string(t);

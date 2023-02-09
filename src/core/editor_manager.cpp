@@ -58,8 +58,17 @@ void EditorManager::Load() {
   if (project != nullptr) {
     delete project;
   }
-  project = new Project();
-  project->Load("./");
+
+  nfdchar_t *outPath = NULL;
+  nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+  if (result == NFD_OKAY) {
+    project = new Project();
+    project->Load(std::string(outPath));
+
+    free(outPath);
+  } else {
+    printf("Error: %s\n", NFD_GetError());
+  }
 }
 
 void EditorManager::SelectWorld(std::string worldId) {
@@ -92,6 +101,10 @@ void EditorManager::RenderMenuBarUI() {
         }
       }
 
+      if (ImGui::MenuItem("Close")) {
+        events->CLOSE_WINDOW = true;
+      }
+
       ImGui::EndMenu();
     }
     if (project != nullptr) {
@@ -102,10 +115,11 @@ void EditorManager::RenderMenuBarUI() {
             nfdchar_t *outPath = NULL;
             nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
             if (result == NFD_OKAY) {
-              Asset *asset = new Asset(outPath);
+              Asset *asset = new Asset(std::string(outPath));
+              free(outPath);
+
               loadedWorld->assets.push_back(asset);
 
-              free(outPath);
             } else {
               printf("Error: %s\n", NFD_GetError());
             }
