@@ -50,7 +50,6 @@ void Game::LoadWorld(World *newWorld) {
 }
 
 void Game::draw(float deltaTime) {
-  GL_CHECK(glEnable(GL_DEPTH_TEST));
   GL_CHECK(glDepthFunc(GL_LESS));
 
   GL_CHECK(glClearColor(114, 144, 154, 0));

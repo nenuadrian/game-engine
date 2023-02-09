@@ -4,13 +4,14 @@
 #include "GLFW/glfw3.h"
 #include "LuaContext.hpp"
 #include "camera.h"
+#include "glm/ext.hpp"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
+#include "shaders/shader_generator.h"
 #include <iostream>
-#include "glm/ext.hpp"
 
 static GLFWwindow *luaWindow;
 
@@ -84,7 +85,13 @@ Entity::Entity(nlohmann::json data) : Entity() {
   scale = glm::vec3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"]);
 }
 
-CameraEntity::CameraEntity() : Entity() {}
+CameraEntity::CameraEntity() : Entity() {
+  ShaderGenerator generator = ShaderGenerator();
+
+  shader = new Shader();
+  shader->Load(generator.generateVertexShader(false).c_str(),
+               generator.generateFragmentShader(0).c_str());
+}
 
 void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -187,35 +194,6 @@ World::~World() {
 }
 
 void CameraEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
-  const std::vector<float> vertices = {
-    // Camera body
-    0.0f, 0.0f, 0.0f,
-    1.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f,
-
-    // View direction
-    0.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f,
-};
-
-  glm::vec3 eye = glm::vec3(0.0f, 0.0f, 3.0f);
-  glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f);
-  glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-  glm::mat4 view = glm::lookAt(eye, center, up) * projection;
-
-  // Apply the view transformation
-  glMatrixMode(GL_MODELVIEW);
-  glLoadMatrixf(glm::value_ptr(view));
-glLineWidth(2.0f);
-glColor3f(1.0f, 1.0f, 1.0f);
-  // Draw the camera body
-  glBegin(GL_LINES);
-  for (int i = 0; i < vertices.size(); i += 6) {
-    glVertex3f(vertices[i + 0], vertices[i + 1], vertices[i + 2]);
-    glVertex3f(vertices[i + 3], vertices[i + 4], vertices[i + 5]);
-  }
-  glEnd();
+  
+  
 }

@@ -265,7 +265,7 @@ void EditorManager::RenderUI() {
 
     ImGui::Begin("Debug Stats");
     ImGui::Text("%d FPS", last_fps);
-    if (ImGui::Button("Hide")) {
+    if (ImGui::Button("Close")) {
       showDebugStats = false;
     }
     ImGui::End();

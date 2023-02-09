@@ -41,6 +41,8 @@ public:
 };
 
 class CameraEntity : public Entity {
+  Shader *shader = nullptr;
+
 public:
   CameraEntity();
   CameraEntity(nlohmann::json data) : Entity(data) {}

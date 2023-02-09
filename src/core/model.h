@@ -35,8 +35,10 @@ private:
 };
 
 class Model {
-public:
+protected:
   std::vector<Mesh> meshes;
+
+public:
   std::string id;
   std::string type;
   Model() {

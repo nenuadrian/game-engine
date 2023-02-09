@@ -67,6 +67,14 @@ void WindowOpengl::Init() {
     std::cout << "Failed to initialize GLAD" << std::endl;
     return;
   }
+
+  printf("Renderer: %s\n", glGetString(GL_RENDERER));
+  printf("OpenGL version supported %s\n", glGetString(GL_VERSION));
+
+  glEnable(GL_DEPTH_TEST); // Depth Testing
+  glDepthFunc(GL_LEQUAL);
+  glDisable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
 }
 
 WindowOpengl::~WindowOpengl() {
