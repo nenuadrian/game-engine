@@ -158,6 +158,14 @@ void EditorManager::RenderMenuBarUI() {
         ImGui::EndMenu();
       }
     }
+    if (ImGui::BeginMenu("Help")) {
+      if (ImGui::MenuItem("Docs")) {
+      }
+      if (ImGui::MenuItem("About")) {
+      }
+
+      ImGui::EndMenu();
+    }
     ImGui::EndMainMenuBar();
   }
 }
