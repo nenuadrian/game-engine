@@ -244,8 +244,9 @@ void EditorManager::RenderUI() {
                          loadedWorld->entities.end(),
                          [this](Entity *e) { return e == selectedEntity; }),
           loadedWorld->entities.end());
-
-      delete selectedEntity;
+      Entity *toDelete = selectedEntity;
+      selectedEntity = nullptr;
+      delete toDelete;
     }
     ImGui::End();
   }

@@ -1,8 +1,8 @@
 #pragma once
-#include "project.h"
 #include "model.h"
-#include "window.h"
+#include "project.h"
 #include "shaders/shader.h"
+#include "window.h"
 #include <string>
 #include <vector>
 

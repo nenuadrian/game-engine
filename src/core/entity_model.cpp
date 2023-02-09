@@ -36,10 +36,12 @@ void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
     glUseProgram(shader->ID);
     shader->setMat4("projection", projection);
     glm::mat4 view = camera.GetViewMatrix();
-    glm::mat4 modelPosition = glm::mat4(1.0f);
-    modelPosition = glm::translate(modelPosition, glm::vec3(x, y, z));
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::scale(modelMatrix, scale);
+
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(x, y, z));
     shader->setMat4("view", view);
-    shader->setMat4("model", modelPosition);
+    shader->setMat4("model", modelMatrix);
     model->Draw(shader->ID);
     GL_CHECK(glUseProgram(0));
   }
@@ -103,10 +105,13 @@ nlohmann::json ModelEntity::JSON() {
   if (model != nullptr) {
     data["model"] = model->JSON();
   }
+
   return data;
 }
 
 ModelEntity::~ModelEntity() {
-  delete model;
-  delete shader;
+  if (model)
+    delete model;
+  if (shader)
+    delete shader;
 }

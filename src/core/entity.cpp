@@ -10,6 +10,7 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
 #include <iostream>
+#include "glm/ext.hpp"
 
 static GLFWwindow *luaWindow;
 
@@ -58,15 +59,19 @@ void Entity::Init(bool running_, Window *window) {
 }
 
 nlohmann::json Entity::JSON() {
-  nlohmann::json entityData = nlohmann::json::object();
-  entityData["id"] = id;
-  entityData["type"] = type();
-  entityData["engineIdentifier"] = engineIdentifier;
-  entityData["x"] = x;
-  entityData["y"] = y;
-  entityData["z"] = z;
-  entityData["script"] = script;
-  return entityData;
+  nlohmann::json data = nlohmann::json::object();
+  data["id"] = id;
+  data["type"] = type();
+  data["engineIdentifier"] = engineIdentifier;
+  data["x"] = x;
+  data["y"] = y;
+  data["z"] = z;
+  data["script"] = script;
+  data["scale"] = nlohmann::json::object();
+  data["scale"]["x"] = scale.x;
+  data["scale"]["y"] = scale.y;
+  data["scale"]["z"] = scale.z;
+  return data;
 }
 
 Entity::Entity(nlohmann::json data) : Entity() {
@@ -76,6 +81,7 @@ Entity::Entity(nlohmann::json data) : Entity() {
   z = data["z"];
   script = data["script"];
   engineIdentifier = data["engineIdentifier"];
+  scale = glm::vec3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"]);
 }
 
 CameraEntity::CameraEntity() : Entity() {}
@@ -106,9 +112,17 @@ void CameraEntity::EditorUI(World *loadedWorld) {
 void Entity::EditorUI(World *loadedWorld) {
   ImGui::Text("EngineID: %s", engineIdentifier.c_str());
   ImGui::InputText("ID", &id);
-  ImGui::InputFloat("X", &x);
-  ImGui::InputFloat("Y", &y);
-  ImGui::InputFloat("Z", &z);
+
+  if (ImGui::CollapsingHeader("Position & Scale")) {
+    ImGui::Text("Position");
+    ImGui::InputFloat("X", &x);
+    ImGui::InputFloat("Y", &y);
+    ImGui::InputFloat("Z", &z);
+    ImGui::Text("Scale");
+    ImGui::InputFloat("X##scalex", &scale.x);
+    ImGui::InputFloat("Y##scaley", &scale.y);
+    ImGui::InputFloat("Z##scalez", &scale.z);
+  }
   if (ImGui::CollapsingHeader("Script")) {
 
     ImGui::InputTextMultiline("Code", &script);
@@ -143,7 +157,6 @@ World::World(nlohmann::json data) : World() {
   mainCameraEntityId = data["mainCameraEntityId"];
 }
 
-
 void World::Init(Project *project, Window *w) {
   for (Entity *entity : entities) {
     entity->Init(true, w);
@@ -171,4 +184,38 @@ World::~World() {
   for (Asset *asset : assets) {
     delete asset;
   }
+}
+
+void CameraEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
+  const std::vector<float> vertices = {
+    // Camera body
+    0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+
+    // View direction
+    0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+};
+
+  glm::vec3 eye = glm::vec3(0.0f, 0.0f, 3.0f);
+  glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+  glm::mat4 view = glm::lookAt(eye, center, up) * projection;
+
+  // Apply the view transformation
+  glMatrixMode(GL_MODELVIEW);
+  glLoadMatrixf(glm::value_ptr(view));
+glLineWidth(2.0f);
+glColor3f(1.0f, 1.0f, 1.0f);
+  // Draw the camera body
+  glBegin(GL_LINES);
+  for (int i = 0; i < vertices.size(); i += 6) {
+    glVertex3f(vertices[i + 0], vertices[i + 1], vertices[i + 2]);
+    glVertex3f(vertices[i + 3], vertices[i + 4], vertices[i + 5]);
+  }
+  glEnd();
 }

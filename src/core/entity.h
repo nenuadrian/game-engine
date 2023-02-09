@@ -19,6 +19,9 @@ class Entity {
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> deltaTimeLua;
   bool running;
 
+protected:
+  glm::vec3 scale = glm::vec3(1, 1, 1);
+
 public:
   std::string engineIdentifier;
   std::string id;
@@ -43,10 +46,9 @@ public:
   CameraEntity(nlohmann::json data) : Entity(data) {}
   void EditorUI(World *loadedWorld) override;
 
+  void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
   std::string type() override { return "camera"; };
 };
-
-
 
 class Asset {
 
