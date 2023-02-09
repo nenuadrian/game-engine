@@ -37,9 +37,12 @@ private:
 class Model {
 public:
   std::vector<Mesh> meshes;
-  std::string name;
+  std::string id;
   std::string type;
-  int uuid = -1;
+  Model() {
+    long int t = static_cast<long int>(time(NULL));
+    id = "model" + std::to_string(t);
+  }
   virtual void Init(){};
   virtual void Draw(Shader *shader){};
   virtual void Draw(GLuint shaderProgram){};

@@ -18,7 +18,7 @@ private:
 
 public:
   std::string path;
-  ModelComplex() { type = "complex"; }
+  ModelComplex() : Model() { type = "complex"; }
 
   ModelComplex(const char *path) : ModelComplex() { this->path = path; }
 
@@ -35,10 +35,11 @@ public:
     nlohmann::json data = nlohmann::json::object();
     data["type"] = type;
     data["path"] = path;
+    data["id"] = id;
     return data;
   };
 
-  void LoadJSON(nlohmann::json data) override { data["path"] = data["path"]; };
+  void LoadJSON(nlohmann::json data) override { path = data["path"]; };
 
   ~ModelComplex();
 };

@@ -71,7 +71,6 @@ void ModelComplex::processNode(aiNode *node, const aiScene *scene) {
 }
 
 void ModelComplex::loadModel(std::string const &path) {
-  this->name = path;
   const aiScene *scene =
       aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
     if (scene == nullptr) {

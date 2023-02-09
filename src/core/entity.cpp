@@ -143,7 +143,6 @@ World::World(nlohmann::json data) : World() {
   mainCameraEntityId = data["mainCameraEntityId"];
 }
 
-void World::Init(Project *project) {}
 
 void World::Init(Project *project, Window *w) {
   for (Entity *entity : entities) {

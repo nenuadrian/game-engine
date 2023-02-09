@@ -51,7 +51,7 @@ void ModelEntity::EditorUI(World *loadedWorld) {
   if (ImGui::CollapsingHeader("Model Object")) {
     ImGui::Text("Model");
     if (model) {
-      ImGui::Text("%s", model->name.c_str());
+      ImGui::Text("%s", model->id.c_str());
     }
 
     if (ImGui::Button("Change Model")) {

@@ -68,7 +68,6 @@ public:
   std::vector<Entity *> entities;
   World();
   World(nlohmann::json data);
-  void Init(Project *project);
   void Init(Project *project, Window *w);
   ~World();
 };

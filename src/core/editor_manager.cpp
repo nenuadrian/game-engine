@@ -58,8 +58,12 @@ void EditorManager::Open() {
   nfdchar_t *outPath = NULL;
   nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
   if (result == NFD_OKAY) {
-    auto project = new Project();
-    project->Load(std::string(outPath));
+
+    events->data = outPath;
+    events->CLOSE_WINDOW = true;
+    events->RUN_EDITOR = true;
+    events->OPEN_PROJECT = true;
+
     free(outPath);
     Load(project);
   } else {
@@ -79,7 +83,7 @@ void EditorManager::SelectWorld(std::string worldId) {
   for (World *w : project->worlds) {
     if (w->id == worldId) {
       loadedWorld = w;
-      w->Init(project);
+      w->Init(project, window);
       return;
     }
   }
