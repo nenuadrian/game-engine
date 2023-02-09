@@ -61,7 +61,6 @@ void Project::LoadJSON(std::string json) {
 
   for (auto worldData : data["worlds"]) {
     World *world = new World(worldData);
-
     worlds.push_back(world);
   }
 

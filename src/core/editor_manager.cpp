@@ -110,20 +110,7 @@ void EditorManager::RenderMenuBarUI() {
     if (project != nullptr) {
       if (ImGui::BeginMenu("Editor")) {
         if (loadedWorld != nullptr) {
-          if (ImGui::MenuItem("Import Asset")) {
 
-            nfdchar_t *outPath = NULL;
-            nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
-            if (result == NFD_OKAY) {
-              Asset *asset = new Asset(std::string(outPath));
-              free(outPath);
-
-              loadedWorld->assets.push_back(asset);
-
-            } else {
-              printf("Error: %s\n", NFD_GetError());
-            }
-          }
           if (ImGui::BeginMenu("New Entity")) {
             if (ImGui::MenuItem("Model")) {
               ModelEntity *entity = new ModelEntity();
@@ -206,6 +193,20 @@ void EditorManager::RenderUI() {
       }
     }
     if (ImGui::CollapsingHeader("Assets")) {
+      if (ImGui::Button("Import Asset")) {
+
+        nfdchar_t *outPath = NULL;
+        nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+        if (result == NFD_OKAY) {
+          Asset *asset = new Asset(std::string(outPath));
+          free(outPath);
+
+          loadedWorld->assets.push_back(asset);
+
+        } else {
+          printf("Error: %s\n", NFD_GetError());
+        }
+      }
 
       for (Asset *asset : loadedWorld->assets) {
         if (ImGui::Button(asset->id.c_str())) {

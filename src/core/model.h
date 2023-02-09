@@ -1,9 +1,10 @@
 #pragma once
 
+#include "nlohmann/json.hpp"
 #include "shaders/shader.h"
+#include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <glm/glm.hpp>
 
 struct Vertex {
   glm::vec3 Position;
@@ -39,7 +40,9 @@ public:
   std::string name;
   std::string type;
   int uuid = -1;
-
+  virtual void Init(){};
   virtual void Draw(Shader *shader){};
   virtual void Draw(GLuint shaderProgram){};
+  virtual nlohmann::json JSON() { return nlohmann::json::object(); };
+  virtual void LoadJSON(nlohmann::json data){};
 };

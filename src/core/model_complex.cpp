@@ -74,6 +74,9 @@ void ModelComplex::loadModel(std::string const &path) {
   this->name = path;
   const aiScene *scene =
       aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+    if (scene == nullptr) {
+      throw std::invalid_argument("Could not load model");
+    }
   processNode(scene->mRootNode, scene);
 }
 
@@ -193,4 +196,5 @@ void ModelComplex::Draw(GLuint shaderProgram) {
     meshes[i].Draw(shaderProgram);
 }
 
-ModelComplex::~ModelComplex() {}
+ModelComplex::~ModelComplex() {
+}

@@ -18,15 +18,27 @@ private:
 
 public:
   std::string path;
+  ModelComplex() { type = "complex"; }
 
-  ModelComplex(const char *path) {
-    type = "complex";
-    this->path = path;
-    loadModel(path);
+  ModelComplex(const char *path) : ModelComplex() { this->path = path; }
+
+  void Init() override {
+    if (!path.empty()) {
+      loadModel(path);
+    }
   }
 
   ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
-  virtual void Draw(GLuint shaderProgram);
-  virtual void Draw(Shader *shader);
+  void Draw(GLuint shaderProgram) override;
+  void Draw(Shader *shader) override;
+  nlohmann::json JSON() override {
+    nlohmann::json data = nlohmann::json::object();
+    data["type"] = type;
+    data["path"] = path;
+    return data;
+  };
+
+  void LoadJSON(nlohmann::json data) override { data["path"] = data["path"]; };
+
   ~ModelComplex();
 };

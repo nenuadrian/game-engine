@@ -25,22 +25,24 @@ void ModelEntity::Init(bool running_, Window *window) {
   GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_height"), 3));
   GL_CHECK(glUseProgram(0));
 
-  model =
-      new ModelComplex("../sample_project/backpack/12305_backpack_v2_l3.obj");
+  if (model != nullptr) {
+    model->Init();
+  }
 }
 
 void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
   Entity::Draw(deltaTime, camera, projection);
-
-  glUseProgram(shader->ID);
-  shader->setMat4("projection", projection);
-  glm::mat4 view = camera.GetViewMatrix();
-  glm::mat4 modelPosition = glm::mat4(1.0f);
-  modelPosition = glm::translate(modelPosition, glm::vec3(x, y, z));
-  shader->setMat4("view", view);
-  shader->setMat4("model", modelPosition);
-  model->Draw(shader->ID);
-  GL_CHECK(glUseProgram(0));
+  if (model != nullptr) {
+    glUseProgram(shader->ID);
+    shader->setMat4("projection", projection);
+    glm::mat4 view = camera.GetViewMatrix();
+    glm::mat4 modelPosition = glm::mat4(1.0f);
+    modelPosition = glm::translate(modelPosition, glm::vec3(x, y, z));
+    shader->setMat4("view", view);
+    shader->setMat4("model", modelPosition);
+    model->Draw(shader->ID);
+    GL_CHECK(glUseProgram(0));
+  }
 }
 
 void ModelEntity::EditorUI(World *loadedWorld) {
@@ -48,7 +50,9 @@ void ModelEntity::EditorUI(World *loadedWorld) {
 
   if (ImGui::CollapsingHeader("Model Object")) {
     ImGui::Text("Model");
-    ImGui::Text("%s", model->name.c_str());
+    if (model) {
+      ImGui::Text("%s", model->name.c_str());
+    }
 
     if (ImGui::Button("Change Model")) {
       modelSelectionWindowOpen = true;
@@ -63,6 +67,7 @@ void ModelEntity::EditorUI(World *loadedWorld) {
           modelSelectionWindowOpen = false;
           delete model;
           model = new ModelComplex(asset->file);
+          model->Init();
         }
       }
 
@@ -84,13 +89,20 @@ void ModelEntity::EditorUI(World *loadedWorld) {
   }
 }
 
-ModelEntity::ModelEntity() : Entity() {  }
+ModelEntity::ModelEntity() : Entity() {}
 
-ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {}
+ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {
+  if (data["model"]["type"] == "complex") {
+    model = new ModelComplex();
+    model->LoadJSON(data["model"]);
+  }
+}
 
 nlohmann::json ModelEntity::JSON() {
   nlohmann::json data = Entity::JSON();
-
+  if (model != nullptr) {
+    data["model"] = model->JSON();
+  }
   return data;
 }
 
