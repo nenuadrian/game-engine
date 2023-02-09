@@ -34,14 +34,16 @@ void Game::LoadWorld(World *newWorld) {
   Entity *defaultCamera = nullptr;
 
   world->Init(project, window);
-  auto camera = std::find_if(world->entities.begin(), world->entities.end(), [world](Entity* entity) {
-        return entity->engineIdentifier == world->mainCameraEntityId;
-    });
-  
-  if (it == myVector.end()) {
-        std::cout << "Could not find main camera" << std::endl;
-    } else {
-    defaultCamera = *camera;
+  auto cam = std::find_if(world->entities.begin(), world->entities.end(),
+                          [newWorld](Entity *entity) {
+                            return entity->engineIdentifier ==
+                                   newWorld->mainCameraEntityId;
+                          });
+
+  if (cam == world->entities.end()) {
+    std::cout << "Could not find main camera" << std::endl;
+  } else {
+    defaultCamera = *cam;
   }
 
   camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));

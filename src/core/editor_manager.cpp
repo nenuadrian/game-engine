@@ -5,6 +5,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
+#include <iostream>
 #include <string>
 
 void EditorManager::scrollCallback(double x, double y) {
@@ -159,6 +160,9 @@ void EditorManager::RenderMenuBarUI() {
       }
     }
     if (ImGui::BeginMenu("Help")) {
+      if (ImGui::MenuItem("Debug Stats")) {
+        showDebugStats = !showDebugStats;
+      }
       if (ImGui::MenuItem("Docs")) {
       }
       if (ImGui::MenuItem("About")) {
@@ -190,7 +194,12 @@ void EditorManager::RenderUI() {
          entity != loadedWorld->entities.end(); ++entity) {
       int index = std::distance(loadedWorld->entities.begin(), entity);
       if (ImGui::Button(
-              ((*entity)->name + "##" + (*entity)->engineIdentifier).c_str())) {
+              ((*entity)->name +
+               ((*entity)->engineIdentifier == loadedWorld->mainCameraEntityId
+                    ? " [main camera]"
+                    : "") +
+               "##" + (*entity)->engineIdentifier)
+                  .c_str())) {
         selectedEntity = index;
       }
     }
@@ -220,11 +229,33 @@ void EditorManager::RenderUI() {
       ImGui::End();
     }
   }
+
+  if (showDebugStats) {
+    ++frame_count;
+
+    auto t_current = std::chrono::high_resolution_clock::now();
+    if (t_current >= t_one_second) {
+      last_fps = frame_count;
+      // Reset the frame count and start time
+      frame_count = 0;
+      t_start = t_current;
+      t_one_second = t_start + std::chrono::seconds(1);
+    }
+
+    ImGui::Begin("Debug Stats");
+    ImGui::Text("%d FPS", last_fps);
+    if (ImGui::Button("Hide")) {
+      showDebugStats = false;
+    }
+    ImGui::End();
+  }
+
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void EditorManager::draw(float deltaTime) {
+
   if (!ImGui::IsAnyItemActive()) {
     if (window->keyPressed(GLFW_KEY_W))
       camera.ProcessKeyboard(FORWARD, deltaTime);

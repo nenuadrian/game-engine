@@ -3,14 +3,22 @@
 #include "events.h"
 #include "project.h"
 #include "window_opengl.h"
-
+#include <chrono>
 
 class EditorManager : public WindowParent {
 private:
   int selectedEntity = -1;
   Events *events;
-  Window* window;
+  Window *window;
+  bool showDebugStats;
   void RenderMenuBarUI();
+
+  std::chrono::time_point<std::chrono::steady_clock> t_start =
+      std::chrono::high_resolution_clock::now();
+  int last_fps = 0;
+  int frame_count = 0;
+  std::chrono::time_point<std::chrono::steady_clock> t_one_second =
+      t_start + std::chrono::seconds(1);
 
 public:
   Project *project = nullptr;
