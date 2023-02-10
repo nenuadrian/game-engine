@@ -92,10 +92,10 @@ void EditorManager::SelectWorld(std::string worldId) {
 void EditorManager::RenderMenuBarUI() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
-      if (ImGui::MenuItem("New")) {
+      if (ImGui::MenuItem("New project")) {
         NewProject();
       }
-      if (ImGui::MenuItem("Open")) {
+      if (ImGui::MenuItem("Open project")) {
         Open();
       }
       if (project != nullptr) {
@@ -105,7 +105,7 @@ void EditorManager::RenderMenuBarUI() {
         }
       }
 
-      if (ImGui::MenuItem("Close")) {
+      if (ImGui::MenuItem("Quit")) {
         events->CLOSE_WINDOW = true;
       }
 
@@ -113,26 +113,7 @@ void EditorManager::RenderMenuBarUI() {
     }
     if (project != nullptr) {
       if (ImGui::BeginMenu("Editor")) {
-        if (loadedWorld != nullptr) {
 
-          if (ImGui::BeginMenu("New Entity")) {
-            if (ImGui::MenuItem("Model")) {
-              ModelEntity *entity = new ModelEntity();
-              entity->Init(false, nullptr);
-              loadedWorld->entities.push_back(entity);
-            }
-
-            if (ImGui::MenuItem("Camera")) {
-              CameraEntity *entity = new CameraEntity();
-              loadedWorld->entities.push_back(entity);
-              if (loadedWorld->mainCameraEntityId.empty()) {
-                loadedWorld->mainCameraEntityId = entity->engineIdentifier;
-              }
-            }
-
-            ImGui::EndMenu();
-          }
-        }
         if (ImGui::BeginMenu("Worlds")) {
           if (ImGui::MenuItem("New World")) {
             std::string worldId = project->NewWorld();
@@ -211,13 +192,35 @@ void EditorManager::RenderUI() {
           printf("Error: %s\n", NFD_GetError());
         }
       }
-
+      if (loadedWorld->assets.empty()) {
+        ImGui::Text("No entities created");
+      }
       for (Asset *asset : loadedWorld->assets) {
         if (ImGui::Button(asset->id.c_str())) {
         }
       }
     }
     if (ImGui::CollapsingHeader("Entities")) {
+
+      if (ImGui::CollapsingHeader("New Entity")) {
+        if (ImGui::Button("Model")) {
+          ModelEntity *entity = new ModelEntity();
+          entity->Init(false, nullptr);
+          loadedWorld->entities.push_back(entity);
+        }
+
+        if (ImGui::Button("Camera")) {
+          CameraEntity *entity = new CameraEntity();
+          loadedWorld->entities.push_back(entity);
+          if (loadedWorld->mainCameraEntityId.empty()) {
+            loadedWorld->mainCameraEntityId = entity->engineIdentifier;
+          }
+        }
+      }
+      ImGui::Text("Entities");
+      if (loadedWorld->entities.empty()) {
+        ImGui::Text("No entities created");
+      }
       for (auto entity : loadedWorld->entities) {
         if (ImGui::Button(
                 (entity->id +
@@ -298,7 +301,6 @@ void EditorManager::draw(float deltaTime) {
     }
   }
   RenderUI();
-  
 }
 
 void EditorManager::Run() {
