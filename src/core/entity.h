@@ -27,7 +27,7 @@ public:
   std::string script;
   std::string scriptError = "";
 
-  float x = 0, y = 0, z = 0;
+  glm::vec3 position = glm::vec3(1, 1, 1);
 
   Entity();
   Entity(nlohmann::json data);

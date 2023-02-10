@@ -58,30 +58,35 @@ void Entity::Init(bool running_, Window *window) {
   running = running_;
 }
 
+nlohmann::json vec3JSON(glm::vec3 v) {
+  auto json = nlohmann::json::object();
+  json["x"] = v.x;
+  json["y"] = v.y;
+  json["z"] = v.z;
+  return json;
+}
+
 nlohmann::json Entity::JSON() {
   nlohmann::json data = nlohmann::json::object();
   data["id"] = id;
   data["type"] = type();
   data["engineIdentifier"] = engineIdentifier;
-  data["x"] = x;
-  data["y"] = y;
-  data["z"] = z;
+  data["position"] = vec3JSON(position);
   data["script"] = script;
-  data["scale"] = nlohmann::json::object();
-  data["scale"]["x"] = scale.x;
-  data["scale"]["y"] = scale.y;
-  data["scale"]["z"] = scale.z;
+  data["scale"] = vec3JSON(scale);
   return data;
+}
+
+glm::vec3 JSONvec3(nlohmann::json data) {
+  return glm::vec3(data["x"], data["y"], data["z"]);
 }
 
 Entity::Entity(nlohmann::json data) : Entity() {
   id = data["id"];
-  x = data["x"];
-  y = data["y"];
-  z = data["z"];
   script = data["script"];
   engineIdentifier = data["engineIdentifier"];
-  scale = glm::vec3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"]);
+  position = JSONvec3(data["position"]);
+  scale = JSONvec3(data["scale"]);
 }
 
 CameraEntity::CameraEntity() : Entity() {
@@ -95,13 +100,13 @@ CameraEntity::CameraEntity() : Entity() {
 void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
     deltaTimeLua->setValue(deltaTime);
-    xLua->setValue(x);
-    yLua->setValue(y);
-    zLua->setValue(z);
+    xLua->setValue(position.x);
+    yLua->setValue(position.y);
+    zLua->setValue(position.z);
     ctx.Run(engineIdentifier);
-    x = xLua->getValue();
-    y = yLua->getValue();
-    z = zLua->getValue();
+    position.x = xLua->getValue();
+    position.y = yLua->getValue();
+    position.z = zLua->getValue();
   }
 }
 
@@ -121,9 +126,9 @@ void Entity::EditorUI(World *loadedWorld) {
 
   if (ImGui::CollapsingHeader("Position & Scale")) {
     ImGui::Text("Position");
-    ImGui::InputFloat("X", &x);
-    ImGui::InputFloat("Y", &y);
-    ImGui::InputFloat("Z", &z);
+    ImGui::InputFloat("X", &position.x);
+    ImGui::InputFloat("Y", &position.y);
+    ImGui::InputFloat("Z", &position.z);
     ImGui::Text("Scale");
     ImGui::InputFloat("X##scalex", &scale.x);
     ImGui::InputFloat("Y##scaley", &scale.y);
@@ -194,5 +199,4 @@ World::~World() {
 
 void CameraEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   Entity::Draw(deltaTime, view, projection);
-
 }

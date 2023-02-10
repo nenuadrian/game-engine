@@ -43,12 +43,12 @@ void Game::LoadWorld(World *newWorld) {
                           });
 
   if (cam == world->entities.end()) {
-    std::cout << "Could not find main camera" << std::endl;
+    throw std::invalid_argument("Could not find main camera");
   } else {
     defaultCamera = *cam;
   }
 
-  //camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+  camera = Camera(defaultCamera->position);
 }
 
 void Game::draw(float deltaTime) {

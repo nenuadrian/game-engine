@@ -17,10 +17,10 @@ void Engine::RunEditor() {
         if (events.OPEN_PROJECT) {
           events.OPEN_PROJECT = false;
           project->Load(events.data);
-          editorManager->Load(project);
         } else {
           project->LoadJSON(events.data);
         }
+        editorManager->Load(project);
 
         events.data = "";
       }
