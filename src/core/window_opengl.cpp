@@ -99,6 +99,7 @@ void WindowOpengl::Run() {
 
   float deltaTime = 0.0f; // time between current frame and last frame
   float lastFrame = 0.0f;
+  glClearColor(114, 144, 154, 0);
 
   // Loop until the user closes the window
   while (!glfwWindowShouldClose(w) && !events->CLOSE_WINDOW) {
@@ -109,8 +110,8 @@ void WindowOpengl::Run() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    glClearColor(114, 144, 154, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     float currentFrame = static_cast<float>(glfwGetTime());
 
     deltaTime = currentFrame - lastFrame;

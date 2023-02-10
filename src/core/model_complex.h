@@ -22,7 +22,7 @@ public:
 
   ModelComplex(const char *path) : ModelComplex() { this->path = path; }
 
-  void Init() override {
+  virtual void Init() override {
     if (!path.empty()) {
       loadModel(path);
     }

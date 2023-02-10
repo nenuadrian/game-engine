@@ -1,4 +1,5 @@
 #include "model_complex.h"
+#include <iostream>
 #include <stdexcept>
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC

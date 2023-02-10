@@ -19,6 +19,7 @@ void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
     processCamera = GLFW_PRESS == action;
   }
 }
+
 void EditorManager::mousePosCallback(double x, double y) {
 
   if (!ImGui::IsAnyItemActive() && processCamera) {
