@@ -33,9 +33,9 @@ private:
 public:
   EditorManager(Events *events);
 
-  void Run();
+  void run();
   void Open();
-  void Load(Project *newProject);
+  void load(Project *newProject);
   void NewProject();
   void RenderUI();
   void SelectWorld(std::string worldId);

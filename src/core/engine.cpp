@@ -16,15 +16,15 @@ void Engine::RunEditor() {
 
         if (events.OPEN_PROJECT) {
           events.OPEN_PROJECT = false;
-          project->Load(events.data);
+          project->load(events.data);
         } else {
           project->LoadJSON(events.data);
         }
-        editorManager->Load(project);
+        editorManager->load(project);
 
         events.data = "";
       }
-      editorManager->Run();
+      editorManager->run();
       delete editorManager;
     }
 
@@ -33,7 +33,7 @@ void Engine::RunEditor() {
       Project *project = new Project();
       project->LoadJSON(events.data);
       Game *game = new Game(project, &events);
-      game->Run();
+      game->run();
       delete game;
       delete project;
     }
@@ -43,8 +43,8 @@ void Engine::RunEditor() {
 void Engine::RunGame() {
   events.RUN_GAME = true;
   Project project;
-  project.Load("./");
+  project.load("./");
   Game *game = new Game(&project, &events);
-  game->Run();
+  game->run();
   delete game;
 }

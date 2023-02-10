@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-void Shader::Load(const char *vertexSource, const char *fragmentSource) {
+void Shader::load(const char *vertexSource, const char *fragmentSource) {
   // Create Vertex Shader Object and get its reference
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   // Attach Vertex Shader source to the Vertex Shader Object
@@ -80,7 +80,7 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile) {
   // Convert the shader source strings into character arrays
   const char *vertexSource = vertexCode.c_str();
   const char *fragmentSource = fragmentCode.c_str();
-  Load(vertexSource, fragmentSource);
+  load(vertexSource, fragmentSource);
 }
 
 // Checks if the different Shaders have compiled properly

@@ -34,8 +34,8 @@ public:
   Entity();
   Entity(nlohmann::json data);
 
-  virtual void Init(bool running, Window *window);
-  virtual void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection);
+  virtual void init(bool running, Window *window);
+  virtual void draw(float deltaTime, glm::mat4 view, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
@@ -75,6 +75,6 @@ public:
   std::vector<Entity *> entities;
   World();
   World(nlohmann::json data);
-  void Init(Project *project, Window *w);
+  void init(Project *project, Window *w);
   ~World();
 };

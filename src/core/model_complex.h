@@ -22,15 +22,15 @@ public:
 
   ModelComplex(const char *path) : ModelComplex() { this->path = path; }
 
-  virtual void Init() override {
+  virtual void init() override {
     if (!path.empty()) {
       loadModel(path);
     }
   }
 
   ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
-  void Draw(GLuint shaderProgram) override;
-  void Draw(Shader *shader) override;
+  void draw(GLuint shaderProgram) override;
+  void draw(Shader *shader) override;
   nlohmann::json JSON() override {
     nlohmann::json data = nlohmann::json::object();
     data["type"] = type;

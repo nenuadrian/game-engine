@@ -13,13 +13,13 @@ class CameraEntity : public ModelEntity {
 
 public:
   CameraEntity();
-  CameraEntity(nlohmann::json data) : ModelEntity(data) {};
+  CameraEntity(nlohmann::json data) : ModelEntity(data){};
 
   void EditorUI(World *loadedWorld) override;
 
-  virtual void Init(bool running_, Window *window) override {
-    InitBasicModel("camera");
-    ModelEntity::Init(running_, window);
+  virtual void init(bool running_, Window *window) override {
+    initBasicModel("camera");
+    ModelEntity::init(running_, window);
   }
 
   std::string type() override { return "camera"; };

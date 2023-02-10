@@ -12,12 +12,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-void ModelEntity::Init(bool running_, Window *window) {
-  Entity::Init(running_, window);
+void ModelEntity::init(bool running_, Window *window) {
+  Entity::init(running_, window);
   ShaderGenerator generator = ShaderGenerator();
   shader = new Shader();
 
-  shader->Load(generator.generateVertexShader(true).c_str(),
+  shader->load(generator.generateVertexShader(true).c_str(),
                generator.generateFragmentShader(4).c_str());
   GL_CHECK(glUseProgram(shader->ID));
   GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0));
@@ -28,12 +28,12 @@ void ModelEntity::Init(bool running_, Window *window) {
   GL_CHECK(glUseProgram(0));
 
   if (model != nullptr) {
-    model->Init();
+    model->init();
   }
 }
 
-void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
-  Entity::Draw(deltaTime, view, projection);
+void ModelEntity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
+  Entity::draw(deltaTime, view, projection);
   if (model != nullptr) {
 
     GL_CHECK(glUseProgram(shader->ID));
@@ -42,7 +42,7 @@ void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
    
     shader->setMat4("view", view);
     shader->setMat4("model", entityMatrix());
-    model->Draw(shader->ID);
+    model->draw(shader->ID);
     GL_CHECK(glUseProgram(0));
   }
 }
@@ -70,7 +70,7 @@ void ModelEntity::EditorUI(World *loadedWorld) {
         modelSelectionWindowOpen = false;
         delete model;
         model = new ModelComplex(asset->file);
-        model->Init();
+        model->init();
       }
     }
 
@@ -93,7 +93,7 @@ void ModelEntity::EditorUI(World *loadedWorld) {
 
 ModelEntity::ModelEntity() : Entity() {}
 
-void ModelEntity::InitBasicModel(std::string shape) {
+void ModelEntity::initBasicModel(std::string shape) {
   model = new ModelBasic(shape);
 }
 

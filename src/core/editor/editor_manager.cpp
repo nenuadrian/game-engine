@@ -66,13 +66,13 @@ void EditorManager::Open() {
     events->OPEN_PROJECT = true;
 
     free(outPath);
-    Load(project);
+    load(project);
   } else {
     printf("Error: %s\n", NFD_GetError());
   }
 }
 
-void EditorManager::Load(Project *newProject) {
+void EditorManager::load(Project *newProject) {
   if (project != nullptr) {
     delete project;
   }
@@ -84,7 +84,7 @@ void EditorManager::SelectWorld(std::string worldId) {
   for (World *w : project->worlds) {
     if (w->id == worldId) {
       loadedWorld = w;
-      w->Init(project, window);
+      w->init(project, window);
       return;
     }
   }
@@ -102,7 +102,7 @@ void EditorManager::RenderMenuBarUI() {
       if (project != nullptr) {
 
         if (ImGui::MenuItem("Save")) {
-          project->Save("./");
+          project->save("./");
         }
       }
 
@@ -206,20 +206,20 @@ void EditorManager::RenderUI() {
       if (ImGui::CollapsingHeader("New Entity")) {
         if (ImGui::Button("Model")) {
           ModelEntity *entity = new ModelEntity();
-          entity->Init(false, nullptr);
+          entity->init(false, nullptr);
           loadedWorld->entities.push_back(entity);
         }
 
         if (ImGui::Button("Cube")) {
           ModelEntity *entity = new ModelEntity();
-          entity->InitBasicModel("cube");
-          entity->Init(false, nullptr);
+          entity->initBasicModel("cube");
+          entity->init(false, nullptr);
           loadedWorld->entities.push_back(entity);
         }
 
         if (ImGui::Button("Camera")) {
           CameraEntity *entity = new CameraEntity();
-          entity->Init(false, nullptr);
+          entity->init(false, nullptr);
 
           loadedWorld->entities.push_back(entity);
           if (loadedWorld->mainCameraEntityId.empty()) {
@@ -307,18 +307,18 @@ void EditorManager::draw(float deltaTime) {
           glm::radians(camera.Zoom),
           (float)window->width / (float)window->height, 0.1f, 100.0f);
       glm::mat4 view = camera.GetViewMatrix();
-      entity->Draw(deltaTime, view, projection);
+      entity->draw(deltaTime, view, projection);
     }
   }
   RenderUI();
 }
 
-void EditorManager::Run() {
+void EditorManager::run() {
   window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
 
-  window->Init();
+  window->init();
 
-  window->Run();
+  window->run();
 
   delete window;
 }

@@ -38,7 +38,7 @@ bool WindowOpengl::keyPressed(int code) {
   return glfwGetKey(w, code) == GLFW_PRESS;
 }
 
-void WindowOpengl::Init() {
+void WindowOpengl::init() {
   if (!glfwInit())
     return;
 
@@ -84,7 +84,7 @@ WindowOpengl::~WindowOpengl() {
   glfwTerminate();
 }
 
-void WindowOpengl::Run() {
+void WindowOpengl::run() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();

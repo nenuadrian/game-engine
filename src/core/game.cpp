@@ -17,7 +17,7 @@ Game::Game(Project *project_, Events *events_) {
   events = events_;
 }
 
-void Game::Init() {
+void Game::init() {
   World *world;
   for (World *w : project->worlds) {
     if (w->id == project->mainWorldId) {
@@ -35,7 +35,7 @@ void Game::LoadWorld(World *newWorld) {
 
   Entity *defaultCamera = nullptr;
 
-  world->Init(project, window);
+  world->init(project, window);
   auto cam = std::find_if(world->entities.begin(), world->entities.end(),
                           [newWorld](Entity *entity) {
                             return entity->engineIdentifier ==
@@ -60,7 +60,7 @@ void Game::draw(float deltaTime) {
                            (float)window->width / (float)window->height, 0.1f, 100.0f);
       glm::mat4 view = camera.GetViewMatrix();
 
-      entity->Draw(deltaTime, view, projection);
+      entity->draw(deltaTime, view, projection);
     }
   }
 
@@ -83,15 +83,15 @@ void Game::draw(float deltaTime) {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Game::Run() {
+void Game::run() {
 
   window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
 
-  window->Init();
+  window->init();
 
-  Init();
+  init();
 
-  window->Run();
+  window->run();
 
   delete window;
 }

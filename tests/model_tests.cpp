@@ -10,7 +10,7 @@
 TEST_CASE("Models are loaded using Assimp from .obj", "[obj]") {
   Events events;
   WindowOpengl *w = new WindowOpengl(nullptr, &events);
-  w->Init();
+  w->init();
   ModelComplex model =
       ModelComplex("../tests/backpack/12305_backpack_v2_l3.obj");
   REQUIRE(!model.path.empty());

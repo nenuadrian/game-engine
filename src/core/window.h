@@ -23,8 +23,8 @@ public:
     events = _events;
   }
 
-  virtual void Init() {}
-  virtual void Run() {}
+  virtual void init() {}
+  virtual void run() {}
   virtual bool keyPressed(int code) { return false; }
 
   virtual ~Window() {}

@@ -26,8 +26,8 @@ public:
 
   Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
        std::vector<Texture> textures);
-  void Draw(Shader *shader);
-  void Draw(int shaderProgram);
+  void draw(Shader *shader);
+  void draw(int shaderProgram);
 
 private:
   unsigned int VAO, VBO, EBO;
@@ -46,9 +46,9 @@ public:
     long int t = static_cast<long int>(time(NULL));
     id = "model" + std::to_string(t);
   }
-  virtual void Init(){};
-  virtual void Draw(Shader *shader){};
-  virtual void Draw(GLuint shaderProgram){};
+  virtual void init(){};
+  virtual void draw(Shader *shader){};
+  virtual void draw(GLuint shaderProgram){};
   virtual nlohmann::json JSON() { return nlohmann::json::object(); };
   virtual void LoadJSON(nlohmann::json data){};
 };

@@ -24,9 +24,9 @@ private:
 
 public:
   Game(Project *project, Events *_events);
-  void Init();
+  void init();
   void LoadWorld(World *newWorld);
-  void Run();
+  void run();
 
   void draw(float deltaTime) override;
   void scrollCallback(double x, double y) override {}

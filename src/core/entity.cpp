@@ -31,7 +31,7 @@ Entity::Entity() {
   id = "untitled" + std::to_string(t);
 }
 
-void Entity::Init(bool running_, Window *window) {
+void Entity::init(bool running_, Window *window) {
   if (running_) {
     if (!script.empty()) {
       ctx = LuaCpp::LuaContext();
@@ -91,7 +91,7 @@ Entity::Entity(nlohmann::json data) : Entity() {
   rotation = JSONvec3(data["rotation"]);
 }
 
-void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
+void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
     deltaTimeLua->setValue(deltaTime);
     xLua->setValue(position.x);
@@ -156,9 +156,9 @@ World::World(nlohmann::json data) : World() {
   mainCameraEntityId = data["mainCameraEntityId"];
 }
 
-void World::Init(Project *project, Window *w) {
+void World::init(Project *project, Window *w) {
   for (Entity *entity : entities) {
-    entity->Init(true, w);
+    entity->init(true, w);
   }
 }
 

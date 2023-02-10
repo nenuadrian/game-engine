@@ -19,7 +19,7 @@ public:
     shape = _shape;
   };
 
-  void Init() override {
+  void init() override {
     std::vector<Vertex> vertices;
     if (shape == "cube") {
       vertices = {// Front face

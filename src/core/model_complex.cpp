@@ -80,7 +80,7 @@ void ModelComplex::loadModel(std::string const &path) {
   processNode(scene->mRootNode, scene);
 }
 
-void Mesh::Draw(int shaderProgram) {
+void Mesh::draw(int shaderProgram) {
   for (int i = 0; i < textures.size(); i++) {
     GL_CHECK(glActiveTexture(GL_TEXTURE0 + i));
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, textures[i].id));
@@ -184,16 +184,16 @@ void Mesh::setupMesh() {
   glBindVertexArray(0);
 }
 
-void Mesh::Draw(Shader *shader) { Draw(shader->ID); }
+void Mesh::draw(Shader *shader) { draw(shader->ID); }
 
-void ModelComplex::Draw(Shader *shader) {
+void ModelComplex::draw(Shader *shader) {
   for (unsigned int i = 0; i < meshes.size(); i++)
-    meshes[i].Draw(shader);
+    meshes[i].draw(shader);
 }
 
-void ModelComplex::Draw(GLuint shaderProgram) {
+void ModelComplex::draw(GLuint shaderProgram) {
   for (unsigned int i = 0; i < meshes.size(); i++)
-    meshes[i].Draw(shaderProgram);
+    meshes[i].draw(shaderProgram);
 }
 
 ModelComplex::~ModelComplex() {

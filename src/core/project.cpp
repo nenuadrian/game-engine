@@ -46,7 +46,7 @@ std::string Project::JSON() {
   return data.dump();
 }
 
-void Project::Save(std::string directory) {
+void Project::save(std::string directory) {
   std::string s = JSON();
   std::ofstream myfile;
   myfile.open(directory + "data.json");
@@ -90,7 +90,7 @@ void Project::LoadJSON(std::string json) {
   }
 }
 
-void Project::Load(std::string dataFile) {
+void Project::load(std::string dataFile) {
   std::ifstream ifs(dataFile);
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));

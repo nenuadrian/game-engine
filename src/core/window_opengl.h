@@ -12,8 +12,8 @@ public:
 
   WindowOpengl(WindowParent *parent, Events *events) : Window(parent, events) {}
 
-  void Init() override;
-  void Run() override;
+  void init() override;
+  void run() override;
   bool keyPressed(int code) override;
   ~WindowOpengl() override;
 };
