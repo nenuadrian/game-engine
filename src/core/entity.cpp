@@ -89,13 +89,6 @@ Entity::Entity(nlohmann::json data) : Entity() {
   scale = JSONvec3(data["scale"]);
 }
 
-CameraEntity::CameraEntity() : Entity() {
-  ShaderGenerator generator = ShaderGenerator();
-
-  shader = new Shader();
-  shader->Load(generator.generateVertexShader(false).c_str(),
-               generator.generateFragmentShader(0).c_str());
-}
 
 void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -107,16 +100,6 @@ void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
     position.x = xLua->getValue();
     position.y = yLua->getValue();
     position.z = zLua->getValue();
-  }
-}
-
-void CameraEntity::EditorUI(World *loadedWorld) {
-  Entity::EditorUI(loadedWorld);
-  ImGui::Text("Camera");
-  if (loadedWorld->mainCameraEntityId != engineIdentifier) {
-    if (ImGui::Button("Set as default camera")) {
-      loadedWorld->mainCameraEntityId = engineIdentifier;
-    }
   }
 }
 
@@ -195,8 +178,4 @@ World::~World() {
   for (Asset *asset : assets) {
     delete asset;
   }
-}
-
-void CameraEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
-  Entity::Draw(deltaTime, view, projection);
 }

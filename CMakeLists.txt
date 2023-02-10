@@ -8,7 +8,8 @@ set(JSON_BuildTests
     CACHE INTERNAL "")
 option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" OFF)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
+set(BUILD_TESTING
+    OFF)
 set(BUILD_OPENGL3_DEMOS
     OFF
     CACHE BOOL "Set when you want to build the OpenGL3+ demos")

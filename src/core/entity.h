@@ -39,17 +39,6 @@ public:
   virtual std::string type() { return "unknown"; };
 };
 
-class CameraEntity : public Entity {
-  Shader *shader = nullptr;
-
-public:
-  CameraEntity();
-  CameraEntity(nlohmann::json data) : Entity(data) {}
-  void EditorUI(World *loadedWorld) override;
-
-  void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
-  std::string type() override { return "camera"; };
-};
 
 class Asset {
 

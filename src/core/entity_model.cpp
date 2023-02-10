@@ -17,25 +17,16 @@ void ModelEntity::Init(bool running_, Window *window) {
   ShaderGenerator generator = ShaderGenerator();
   shader = new Shader();
 
-  if (model == nullptr || model->type == "complex") {
-    shader->Load(generator.generateVertexShader(true).c_str(),
-                 generator.generateFragmentShader(4).c_str());
-    GL_CHECK(glUseProgram(shader->ID));
-    GL_CHECK(
-        glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0));
-    GL_CHECK(
-        glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 1));
-    GL_CHECK(
-        glUniform1i(glGetUniformLocation(shader->ID, "texture_normal"), 2));
-    GL_CHECK(
-        glUniform1i(glGetUniformLocation(shader->ID, "texture_height"), 3));
-    GL_CHECK(glUseProgram(0));
-  } else if (model != nullptr && model->type == "basic") {
-     shader->Load(generator.generateVertexShader(false).c_str(),
-                 generator.generateFragmentShader(0).c_str());
-    GL_CHECK(glUseProgram(shader->ID));
-    GL_CHECK(glUseProgram(0));
-  }
+  shader->Load(generator.generateVertexShader(true).c_str(),
+               generator.generateFragmentShader(4).c_str());
+  GL_CHECK(glUseProgram(shader->ID));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0));
+  GL_CHECK(
+      glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 1));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_normal"), 2));
+  GL_CHECK(glUniform1i(glGetUniformLocation(shader->ID, "texture_height"), 3));
+  GL_CHECK(glUseProgram(0));
+
   if (model != nullptr) {
     model->Init();
   }

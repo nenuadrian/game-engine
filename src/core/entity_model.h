@@ -20,6 +20,6 @@ public:
   void EditorUI(World *loadedWorld) override;
   void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
   virtual nlohmann::json JSON() override;
-  void Init(bool running_, Window *window) override;
+  virtual void Init(bool running_, Window *window) override;
   ~ModelEntity();
 };
