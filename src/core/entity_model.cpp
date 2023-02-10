@@ -1,5 +1,6 @@
 #include "entity_model.h"
 #include "GLFW/glfw3.h"
+#include "core/model_cube.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -7,9 +8,9 @@
 #include "model_complex.h"
 #include "nlohmann/json.hpp"
 #include "shaders/shader_generator.h"
-#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 void ModelEntity::Init(bool running_, Window *window) {
   Entity::Init(running_, window);
@@ -36,7 +37,7 @@ void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (model != nullptr) {
     glUseProgram(shader->ID);
     shader->setMat4("projection", projection);
-    
+
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::scale(modelMatrix, scale);
 
@@ -50,35 +51,35 @@ void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
 
 void ModelEntity::EditorUI(World *loadedWorld) {
   Entity::EditorUI(loadedWorld);
-
-  if (ImGui::CollapsingHeader("Model Object")) {
-    ImGui::Text("Model");
-    if (model) {
-      ImGui::Text("%s", model->id.c_str());
-    }
-
-    if (ImGui::Button("Change Model")) {
-      modelSelectionWindowOpen = true;
-    }
-
-    if (modelSelectionWindowOpen) {
-      ImGui::Begin("Select Model");
-      for (Asset *asset : loadedWorld->assets) {
-        if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
-                           engineIdentifier + "asset" + asset->id)
-                              .c_str())) {
-          modelSelectionWindowOpen = false;
-          delete model;
-          model = new ModelComplex(asset->file);
-          model->Init();
-        }
+  if (model == nullptr || model->type == "complex") {
+    if (ImGui::CollapsingHeader("Model Object")) {
+      ImGui::Text("Model");
+      if (model) {
+        ImGui::Text("%s", model->id.c_str());
       }
 
-      if (ImGui::Button("Cancel")) {
+      if (ImGui::Button("Change Model")) {
+        modelSelectionWindowOpen = true;
+      }
+    }
+  }
+  if (modelSelectionWindowOpen) {
+    ImGui::Begin("Select Model");
+    for (Asset *asset : loadedWorld->assets) {
+      if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
+                         engineIdentifier + "asset" + asset->id)
+                            .c_str())) {
         modelSelectionWindowOpen = false;
+        delete model;
+        model = new ModelComplex(asset->file);
+        model->Init();
       }
-      ImGui::End();
     }
+
+    if (ImGui::Button("Cancel")) {
+      modelSelectionWindowOpen = false;
+    }
+    ImGui::End();
   }
 
   if (shader != nullptr) {
@@ -94,11 +95,19 @@ void ModelEntity::EditorUI(World *loadedWorld) {
 
 ModelEntity::ModelEntity() : Entity() {}
 
+void ModelEntity::InitBasicModel(std::string shape) {
+  if (shape == "cube") {
+    model = new ModelCube();
+  }
+}
+
 ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {
   if (data["model"]["type"] == "complex") {
     model = new ModelComplex();
-    model->LoadJSON(data["model"]);
+  } else if (data["model"]["type"] == "cube") {
+    model = new ModelCube();
   }
+  model->LoadJSON(data["model"]);
 }
 
 nlohmann::json ModelEntity::JSON() {

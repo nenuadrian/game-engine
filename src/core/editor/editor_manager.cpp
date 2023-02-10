@@ -209,6 +209,13 @@ void EditorManager::RenderUI() {
           loadedWorld->entities.push_back(entity);
         }
 
+        if (ImGui::Button("Cube")) {
+          ModelEntity *entity = new ModelEntity();
+          entity->InitBasicModel("cube");
+          entity->Init(false, nullptr);
+          loadedWorld->entities.push_back(entity);
+        }
+
         if (ImGui::Button("Camera")) {
           CameraEntity *entity = new CameraEntity();
           loadedWorld->entities.push_back(entity);
