@@ -3,7 +3,6 @@
 #include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
 #include "LuaContext.hpp"
-#include "camera.h"
 #include "glm/ext.hpp"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
@@ -93,7 +92,7 @@ CameraEntity::CameraEntity() : Entity() {
                generator.generateFragmentShader(0).c_str());
 }
 
-void Entity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
+void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
     deltaTimeLua->setValue(deltaTime);
     xLua->setValue(x);
@@ -193,7 +192,7 @@ World::~World() {
   }
 }
 
-void CameraEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
-  Entity::Draw(deltaTime, camera, projection);
+void CameraEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
+  Entity::Draw(deltaTime, view, projection);
 
 }

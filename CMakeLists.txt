@@ -50,6 +50,7 @@ option(ASSIMP_BUILD_TESTS
 option(BUILD_UNIT_TESTS "Build Unit Tests" OFF)
 option(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" OFF)
 include_directories(
+  "src"
   "libs/imgui"
   "libs/imgui/backends"
   ${OPENGL_INCLUDE_DIRS}
@@ -133,8 +134,7 @@ file(
   libs/imgui/backends/imgui_impl_opengl3.h
   libs/imgui/backends/imgui_impl_opengl3.cpp
   libs/glad/src/glad.c)
-file(GLOB ENGINE-SRC src/core/*.h src/core/*.cpp src/core/shaders/*.cpp
-     src/core/shaders/*.h)
+file(GLOB ENGINE-SRC src/core/* src/core/shaders/* src/core/editor/*)
 
 link_libraries(
   glew_s

@@ -1,6 +1,6 @@
 #include "engine.h"
 
-#include "editor_manager.h"
+#include "editor/editor_manager.h"
 #include "entity.h"
 #include "game.h"
 

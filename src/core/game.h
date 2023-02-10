@@ -1,5 +1,8 @@
 #include "events.h"
 #include "window.h"
+
+#include "editor/camera.h"
+
 #include <GLFW/glfw3.h>
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>

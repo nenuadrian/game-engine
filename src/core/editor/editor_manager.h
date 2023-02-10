@@ -1,8 +1,8 @@
 #pragma once
-
-#include "events.h"
-#include "project.h"
-#include "window_opengl.h"
+#include "camera.h"
+#include "../events.h"
+#include "../project.h"
+#include "../window_opengl.h"
 #include <chrono>
 
 class EditorManager : public WindowParent {

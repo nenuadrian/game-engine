@@ -1,5 +1,4 @@
 #pragma once
-#include "camera.h"
 #include "model.h"
 #include "nlohmann/json.hpp"
 #include "window_opengl.h"
@@ -34,7 +33,7 @@ public:
   Entity(nlohmann::json data);
 
   virtual void Init(bool running, Window *window);
-  virtual void Draw(float deltaTime, Camera camera, glm::mat4 projection);
+  virtual void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection);
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
@@ -48,7 +47,7 @@ public:
   CameraEntity(nlohmann::json data) : Entity(data) {}
   void EditorUI(World *loadedWorld) override;
 
-  void Draw(float deltaTime, Camera camera, glm::mat4 projection) override;
+  void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
   std::string type() override { return "camera"; };
 };
 

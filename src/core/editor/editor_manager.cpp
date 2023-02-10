@@ -1,10 +1,10 @@
 #include "editor_manager.h"
 
-#include "../nativefiledialog/src/include/nfd.h"
-#include "entity_model.h"
+#include "../entity_model.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
+#include "nfd.h"
 #include <iostream>
 #include <string>
 
@@ -293,11 +293,11 @@ void EditorManager::draw(float deltaTime) {
 
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
-      glm::mat4 projection =
-          glm::perspective(glm::radians(camera.Zoom),
-                           (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-      entity->Draw(deltaTime, camera, projection);
+      glm::mat4 projection = glm::perspective(
+          glm::radians(camera.Zoom),
+          (float)window->width / (float)window->height, 0.1f, 100.0f);
+      glm::mat4 view = camera.GetViewMatrix();
+      entity->Draw(deltaTime, view, projection);
     }
   }
   RenderUI();

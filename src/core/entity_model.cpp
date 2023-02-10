@@ -1,6 +1,5 @@
 #include "entity_model.h"
 #include "GLFW/glfw3.h"
-#include "camera.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -9,6 +8,8 @@
 #include "nlohmann/json.hpp"
 #include "shaders/shader_generator.h"
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 void ModelEntity::Init(bool running_, Window *window) {
   Entity::Init(running_, window);
@@ -30,12 +31,12 @@ void ModelEntity::Init(bool running_, Window *window) {
   }
 }
 
-void ModelEntity::Draw(float deltaTime, Camera camera, glm::mat4 projection) {
-  Entity::Draw(deltaTime, camera, projection);
+void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
+  Entity::Draw(deltaTime, view, projection);
   if (model != nullptr) {
     glUseProgram(shader->ID);
     shader->setMat4("projection", projection);
-    glm::mat4 view = camera.GetViewMatrix();
+    
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::scale(modelMatrix, scale);
 
