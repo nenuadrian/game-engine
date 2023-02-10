@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/ext/matrix_transform.hpp"
 #include "model.h"
 #include "nlohmann/json.hpp"
 #include "window_opengl.h"
@@ -20,6 +21,7 @@ class Entity {
 
 protected:
   glm::vec3 scale = glm::vec3(1, 1, 1);
+  glm::vec3 rotation = glm::vec3(0, 0, 0);
 
 public:
   std::string engineIdentifier;
@@ -37,8 +39,21 @@ public:
   virtual void EditorUI(World *loadedWorld);
   virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
-};
+  glm::mat4 entityMatrix() {
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::scale(modelMatrix, scale);
+    modelMatrix = glm::translate(modelMatrix, position);
 
+    glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x),
+                                   glm::vec3(1.0f, 0.0f, 0.0f)) *
+                       glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y),
+                                   glm::vec3(0.0f, 1.0f, 0.0f)) *
+                       glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z),
+                                   glm::vec3(0.0f, 0.0f, 1.0f));
+
+    return modelMatrix * rotate;
+  }
+};
 
 class Asset {
 

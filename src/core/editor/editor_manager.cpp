@@ -219,6 +219,8 @@ void EditorManager::RenderUI() {
 
         if (ImGui::Button("Camera")) {
           CameraEntity *entity = new CameraEntity();
+          entity->Init(false, nullptr);
+
           loadedWorld->entities.push_back(entity);
           if (loadedWorld->mainCameraEntityId.empty()) {
             loadedWorld->mainCameraEntityId = entity->engineIdentifier;

@@ -39,12 +39,9 @@ void ModelEntity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
     GL_CHECK(glUseProgram(shader->ID));
     shader->setMat4("projection", projection);
 
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::scale(modelMatrix, scale);
-
-    modelMatrix = glm::translate(modelMatrix, position);
+   
     shader->setMat4("view", view);
-    shader->setMat4("model", modelMatrix);
+    shader->setMat4("model", entityMatrix());
     model->Draw(shader->ID);
     GL_CHECK(glUseProgram(0));
   }

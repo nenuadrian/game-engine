@@ -74,6 +74,7 @@ nlohmann::json Entity::JSON() {
   data["position"] = vec3JSON(position);
   data["script"] = script;
   data["scale"] = vec3JSON(scale);
+  data["rotation"] = vec3JSON(rotation);
   return data;
 }
 
@@ -87,8 +88,8 @@ Entity::Entity(nlohmann::json data) : Entity() {
   engineIdentifier = data["engineIdentifier"];
   position = JSONvec3(data["position"]);
   scale = JSONvec3(data["scale"]);
+  rotation = JSONvec3(data["rotation"]);
 }
-
 
 void Entity::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -116,6 +117,10 @@ void Entity::EditorUI(World *loadedWorld) {
     ImGui::InputFloat("X##scalex", &scale.x);
     ImGui::InputFloat("Y##scaley", &scale.y);
     ImGui::InputFloat("Z##scalez", &scale.z);
+    ImGui::Text("Rotate");
+    ImGui::InputFloat("X##rotatex", &rotation.x);
+    ImGui::InputFloat("Y##rotatey", &rotation.y);
+    ImGui::InputFloat("Z##rotatez", &rotation.z);
   }
   if (ImGui::CollapsingHeader("Script")) {
 
