@@ -1,4 +1,5 @@
 #pragma once
+#include "core/editor/camera.h"
 #include "entity.h"
 #include "entity_model.h"
 #include "model.h"
@@ -10,6 +11,7 @@
 #include <vector>
 
 class CameraEntity : public ModelEntity {
+Camera camera;
 
 public:
   CameraEntity();

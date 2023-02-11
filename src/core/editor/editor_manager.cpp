@@ -8,11 +8,7 @@
 #include <iostream>
 #include <string>
 
-void EditorManager::scrollCallback(double x, double y) {
-  if (!ImGui::IsAnyItemActive()) {
-    camera.ProcessMouseScroll(static_cast<float>(y));
-  }
-}
+void EditorManager::scrollCallback(double x, double y) {}
 
 void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
   if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -312,8 +308,8 @@ void EditorManager::draw(float deltaTime) {
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
       glm::mat4 projection = glm::perspective(
-          glm::radians(camera.Zoom),
-          (float)window->width / (float)window->height, 0.1f, 100.0f);
+          glm::radians(45.0f), (float)window->width / (float)window->height,
+          0.1f, 100.0f);
       glm::mat4 view = camera.GetViewMatrix();
       entity->draw(deltaTime, view, projection);
     }
