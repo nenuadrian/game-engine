@@ -16,42 +16,54 @@ void Camera::updateCameraVectors() {
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
-    float velocity = MovementSpeed * deltaTime;
-    if (direction == FORWARD)
-      Position += Front * velocity;
-    if (direction == BACKWARD)
-      Position -= Front * velocity;
-    if (direction == LEFT)
-      Position -= Right * velocity;
-    if (direction == RIGHT)
-      Position += Right * velocity;
-  }
-
-  // processes input received from a mouse input system. Expects the offset
-  // value in both the x and y direction.
-  void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
-    xoffset *= MouseSensitivity;
-    yoffset *= MouseSensitivity;
-
-    Yaw += xoffset;
-    Pitch += yoffset;
-
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (Pitch > 89.0f)
-      Pitch = 89.0f;
-    if (Pitch < -89.0f)
-      Pitch = -89.0f;
-
-    // update Front, Right and Up Vectors using the updated Euler angles
+  float velocity = MovementSpeed * deltaTime;
+  if (direction == FORWARD)
+    Position += Front * velocity;
+  if (direction == BACKWARD)
+    Position -= Front * velocity;
+  if (direction == LEFTA)
+    Position -= Right * velocity;
+  if (direction == RIGHTD)
+    Position += Right * velocity;
+  if (direction == UP)
+    Position -= glm::vec3(0.0f, -SPEED, 0.0f) * velocity;
+  if (direction == DOWN)
+    Position += glm::vec3(0.0f, -SPEED, 0.0f) * velocity;
+  if (direction == LEFT) {
+    Yaw -= 1.0f;
     updateCameraVectors();
   }
-
-  // processes input received from a mouse scroll-wheel event. Only requires
-  // input on the vertical wheel-axis
-  void Camera::ProcessMouseScroll(float yoffset) {
-    Zoom -= (float)yoffset;
-    if (Zoom < 1.0f)
-      Zoom = 1.0f;
-    if (Zoom > 45.0f)
-      Zoom = 45.0f;
+  if (direction == RIGHT) {
+    Yaw += 1.0f;
+    updateCameraVectors();
   }
+}
+
+// processes input received from a mouse input system. Expects the offset
+// value in both the x and y direction.
+void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
+  xoffset *= MouseSensitivity;
+  yoffset *= MouseSensitivity;
+
+  Yaw += xoffset;
+  Pitch += yoffset;
+
+  // make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (Pitch > 89.0f)
+    Pitch = 89.0f;
+  if (Pitch < -89.0f)
+    Pitch = -89.0f;
+
+  // update Front, Right and Up Vectors using the updated Euler angles
+  updateCameraVectors();
+}
+
+// processes input received from a mouse scroll-wheel event. Only requires
+// input on the vertical wheel-axis
+void Camera::ProcessMouseScroll(float yoffset) {
+  Zoom -= (float)yoffset;
+  if (Zoom < 1.0f)
+    Zoom = 1.0f;
+  if (Zoom > 45.0f)
+    Zoom = 45.0f;
+}

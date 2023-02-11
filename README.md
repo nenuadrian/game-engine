@@ -1,8 +1,8 @@
 # Hades - Light C++ 3D Game Engine 
 
-Small WIP game engine. 
+Small, farily dumb, C++ game engine. 
 
-Lua used for scripting. OpenGL for rendering.
+Available renderers: OpenGL.
 
 ## goals
  * develop C++ software engineering skills
@@ -18,6 +18,7 @@ Lua used for scripting. OpenGL for rendering.
  * model loading using assimp and stb
  * sound using soloud
  * tests using catch2
+ * generating shaders dynamically
 
 ## screennshots
 
@@ -27,6 +28,3 @@ Lua used for scripting. OpenGL for rendering.
 
 https://github.com/nenuadrian/game-engine/wiki
 
-```
-brew install hugo
-```

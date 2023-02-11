@@ -5,7 +5,16 @@
 
 // Defines several possible options for camera movement. Used as abstraction to
 // stay away from window-system specific input methods
-enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT };
+enum Camera_Movement {
+  FORWARD,
+  BACKWARD,
+  LEFTA,
+  RIGHTD,
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT
+};
 
 // Default camera values
 const float YAW = -90.0f;

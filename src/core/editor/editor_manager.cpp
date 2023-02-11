@@ -296,8 +296,16 @@ void EditorManager::draw(float deltaTime) {
     if (window->keyPressed(GLFW_KEY_S))
       camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (window->keyPressed(GLFW_KEY_A))
-      camera.ProcessKeyboard(LEFT, deltaTime);
+      camera.ProcessKeyboard(LEFTA, deltaTime);
     if (window->keyPressed(GLFW_KEY_D))
+      camera.ProcessKeyboard(RIGHTD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_UP))
+      camera.ProcessKeyboard(UP, deltaTime);
+    if (window->keyPressed(GLFW_KEY_DOWN))
+      camera.ProcessKeyboard(DOWN, deltaTime);
+    if (window->keyPressed(GLFW_KEY_LEFT))
+      camera.ProcessKeyboard(LEFT, deltaTime);
+    if (window->keyPressed(GLFW_KEY_RIGHT))
       camera.ProcessKeyboard(RIGHT, deltaTime);
   }
 
