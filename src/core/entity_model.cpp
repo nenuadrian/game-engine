@@ -37,10 +37,7 @@ void ModelEntity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (model != nullptr) {
 
     GL_CHECK(glUseProgram(shader->ID));
-    shader->setMat4("projection", projection);
-
-   
-    shader->setMat4("view", view);
+    shader->setMat4("camera", projection * view );
     shader->setMat4("model", entityMatrix());
     model->draw(shader->ID);
     GL_CHECK(glUseProgram(0));

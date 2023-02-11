@@ -4,9 +4,9 @@
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "window.h"
-#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 void Game::mouseButtonCallback(int button, int action, int modsy) {}
 
@@ -48,19 +48,20 @@ void Game::LoadWorld(World *newWorld) {
     defaultCamera = *cam;
   }
 
-  camera = Camera(defaultCamera->position);
+  camera = new Camera(defaultCamera->position);
 }
 
 void Game::draw(float deltaTime) {
 
   if (world != nullptr) {
     for (Entity *entity : world->entities) {
-      glm::mat4 projection =
-          glm::perspective(glm::radians(camera.Zoom),
-                           (float)window->width / (float)window->height, 0.1f, 100.0f);
-      glm::mat4 view = camera.GetViewMatrix();
+      glm::mat4 proj = glm::perspective(
+          glm::radians(45.0f), (float)window->width / (float)window->height,
+          0.1f, 100.0f);
 
-      entity->draw(deltaTime, view, projection);
+      glm::mat4 view = camera->GetViewMatrix();
+
+      entity->draw(deltaTime, view, proj);
     }
   }
 

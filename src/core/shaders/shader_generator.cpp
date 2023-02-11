@@ -33,10 +33,9 @@ std::string ShaderGenerator::generateVertexShader(bool hasTexture) {
   }
 
   shader += "uniform mat4 model;\n";
-  shader += "uniform mat4 view;\n";
-  shader += "uniform mat4 projection;\n\n";
+  shader += "uniform mat4 camera;\n";
   shader += "void main()\n{\n";
-  shader += "    gl_Position = projection * view * model * vec4(aPos, 1.0);\n";
+  shader += "    gl_Position = camera * model * vec4(aPos, 1.0);\n";
 
   if (hasTexture) {
     shader += "    TexCoord = aTexCoord;\n";

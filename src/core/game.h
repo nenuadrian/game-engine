@@ -16,7 +16,7 @@
 
 class Game : public WindowParent {
 private:
-  Camera camera;
+  Camera *camera;
   World *world;
   Project *project;
   Events *events;
