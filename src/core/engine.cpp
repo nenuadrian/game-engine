@@ -35,7 +35,6 @@ void Engine::RunEditor() {
       Game *game = new Game(project, &events);
       game->run();
       delete game;
-      delete project;
     }
   }
 }

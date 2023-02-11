@@ -101,41 +101,39 @@ public:
       // Texture coordinates
       glm::vec2 texCoord = glm::vec2(0.0f, 0.0f);
 
-      // Push back vertices for near plane
-      vertices.push_back({ntl, front, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({ntr, front, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({nbl, front, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({nbr, front, glm::vec2(1.0f, 0.0f)});
-
-      // Push back vertices for far plane
-      vertices.push_back({ftl, back, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({ftr, back, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({fbl, back, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({fbr, back, glm::vec2(1.0f, 0.0f)});
-
-      // Push back vertices for top plane
-      vertices.push_back({ntr, top, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({ntl, top, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({ftl, top, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({ftr, top, glm::vec2(1.0f, 0.0f)});
-
-      // Push back vertices for bottom plane
-      vertices.push_back({nbl, bottom, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({nbr, bottom, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({fbr, bottom, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({fbl, bottom, glm::vec2(1.0f, 0.0f)});
-
-      // Push back vertices for right plane
-      vertices.push_back({nbr, right, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({ntr, right, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({ftr, right, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({fbr, right, glm::vec2(1.0f, 0.0f)});
-
-      // Push back vertices for left plane
-      vertices.push_back({ntl, left, glm::vec2(0.0f, 1.0f)});
-      vertices.push_back({nbl, left, glm::vec2(1.0f, 1.0f)});
-      vertices.push_back({fbl, left, glm::vec2(0.0f, 0.0f)});
-      vertices.push_back({ftl, left, glm::vec2(1.0f, 0.0f)});
+      vertices = {{ntl, front, glm::vec2(0.0f, 1.0f)},
+                  {ntr, front, glm::vec2(1.0f, 1.0f)},
+                  {nbl, front, glm::vec2(0.0f, 0.0f)},
+                  {nbr, front, glm::vec2(1.0f, 0.0f)},
+                  {ftl, back, glm::vec2(0.0f, 1.0f)},
+                  {ftr, back, glm::vec2(1.0f, 1.0f)},
+                  {fbl, back, glm::vec2(0.0f, 0.0f)},
+                  {fbr, back, glm::vec2(1.0f, 0.0f)},
+                  {ntr, top, glm::vec2(0.0f, 1.0f)},
+                  {ntl, top, glm::vec2(1.0f, 1.0f)},
+                  {ftl, top, glm::vec2(0.0f, 0.0f)},
+                  {ftr, top, glm::vec2(1.0f, 0.0f)},
+                  {nbl, bottom, glm::vec2(0.0f, 1.0f)},
+                  {nbr, bottom, glm::vec2(1.0f, 1.0f)},
+                  {fbr, bottom, glm::vec2(0.0f, 0.0f)},
+                  {fbl, bottom, glm::vec2(1.0f, 0.0f)},
+                  {nbr, right, glm::vec2(0.0f, 1.0f)},
+                  {ntr, right, glm::vec2(1.0f, 1.0f)},
+                  {ftr, right, glm::vec2(0.0f, 0.0f)},
+                  {fbr, right, glm::vec2(1.0f, 0.0f)},
+                  {ntl, left, glm::vec2(0.0f, 1.0f)},
+                  {nbl, left, glm::vec2(1.0f, 1.0f)},
+                  {fbl, left, glm::vec2(0.0f, 0.0f)},
+                  {ftl, left, glm::vec2(1.0f, 0.0f)}};
+    } else if (type == "axis") {
+      vertices = {{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+                   glm::vec2(0.0f, 0.0f)},
+                  {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+                   glm::vec2(1.0f, 0.0f)},
+                  {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+                   glm::vec2(1.0f, 1.0f)},
+                  {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+                   glm::vec2(0.0f, 1.0f)}};
     }
 
     std::vector<unsigned int> indices;

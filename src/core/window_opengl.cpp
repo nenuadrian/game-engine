@@ -121,6 +121,7 @@ void WindowOpengl::run() {
 
     parent->draw(deltaTime);
 
+    
     // Swap front and back buffers
     glfwSwapBuffers(w);
 

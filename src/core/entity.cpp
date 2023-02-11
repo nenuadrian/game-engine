@@ -125,7 +125,7 @@ void Entity::EditorUI(EditorManager *editor) {
 
     ImGui::InputTextMultiline("Code", &script);
 
-    if (scriptError != "") {
+    if (!scriptError.empty()) {
       ImGui::Text("%s", scriptError.c_str());
     }
 

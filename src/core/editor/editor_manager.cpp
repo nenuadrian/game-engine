@@ -45,8 +45,8 @@ void EditorManager::NewProject() {
   if (project != nullptr) {
     delete project;
   }
-  project = new Project();
-
+  auto project = new Project();
+  load(project);
   SelectWorld(project->NewWorld());
   project->mainWorldId = loadedWorld->id;
 }
@@ -165,117 +165,117 @@ void EditorManager::RenderUI() {
 
   RenderMenuBarUI();
 
-  if (loadedWorld != nullptr) {
-    ImGui::Begin("Scene");
+  if (project != nullptr) {
+    if (loadedWorld != nullptr) {
+      ImGui::Begin("Scene");
 
-    ImGui::InputText("Name", &loadedWorld->name);
-    if (project->mainWorldId != loadedWorld->id) {
-      if (ImGui::Button("Set as Main World")) {
-        project->mainWorldId = loadedWorld->id;
-      }
-    }
-    if (ImGui::CollapsingHeader("Assets")) {
-      if (ImGui::Button("Import Asset")) {
-
-        nfdchar_t *outPath = NULL;
-        nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
-        if (result == NFD_OKAY) {
-          auto asset = new Asset(std::string(outPath));
-          free(outPath);
-
-          project->assets.push_back(asset);
-
-        } else {
-          printf("Error: %s\n", NFD_GetError());
+      ImGui::InputText("Name", &loadedWorld->name);
+      if (project->mainWorldId != loadedWorld->id) {
+        if (ImGui::Button("Set as Main World")) {
+          project->mainWorldId = loadedWorld->id;
         }
       }
-      if (project->assets.empty()) {
-        ImGui::Text("No assets created");
-      }
-      for (Asset *asset : project->assets) {
-        if (ImGui::Button(asset->id.c_str())) {
-          selectedAsset = asset;
+
+      if (ImGui::CollapsingHeader("Entities")) {
+
+        if (ImGui::CollapsingHeader("New Entity")) {
+          if (ImGui::Button("Model")) {
+            ModelEntity *entity = new ModelEntity();
+            entity->init(false, nullptr);
+            loadedWorld->entities.push_back(entity);
+          }
+
+          if (ImGui::Button("Cube")) {
+            ModelEntity *entity = new ModelEntity();
+            entity->initBasicModel("cube");
+            entity->init(false, nullptr);
+            loadedWorld->entities.push_back(entity);
+          }
+
+          if (ImGui::Button("Camera")) {
+            CameraEntity *entity = new CameraEntity();
+            entity->init(false, nullptr);
+
+            loadedWorld->entities.push_back(entity);
+            if (loadedWorld->mainCameraEntityId.empty()) {
+              loadedWorld->mainCameraEntityId = entity->engineIdentifier;
+            }
+          }
         }
-      }
-    }
-    if (ImGui::CollapsingHeader("Entities")) {
-
-      if (ImGui::CollapsingHeader("New Entity")) {
-        if (ImGui::Button("Model")) {
-          ModelEntity *entity = new ModelEntity();
-          entity->init(false, nullptr);
-          loadedWorld->entities.push_back(entity);
+        ImGui::Text("Entities");
+        if (loadedWorld->entities.empty()) {
+          ImGui::Text("No entities created");
         }
-
-        if (ImGui::Button("Cube")) {
-          ModelEntity *entity = new ModelEntity();
-          entity->initBasicModel("cube");
-          entity->init(false, nullptr);
-          loadedWorld->entities.push_back(entity);
-        }
-
-        if (ImGui::Button("Camera")) {
-          CameraEntity *entity = new CameraEntity();
-          entity->init(false, nullptr);
-
-          loadedWorld->entities.push_back(entity);
-          if (loadedWorld->mainCameraEntityId.empty()) {
-            loadedWorld->mainCameraEntityId = entity->engineIdentifier;
+        for (auto entity : loadedWorld->entities) {
+          if (ImGui::Button(
+                  (entity->id +
+                   (entity->engineIdentifier == loadedWorld->mainCameraEntityId
+                        ? " [main camera]"
+                        : "") +
+                   "##" + entity->engineIdentifier)
+                      .c_str())) {
+            selectedEntity = entity;
           }
         }
       }
-      ImGui::Text("Entities");
-      if (loadedWorld->entities.empty()) {
-        ImGui::Text("No entities created");
+      ImGui::End();
+    }
+
+    ImGui::Begin("Assets");
+    if (ImGui::Button("Import Asset")) {
+
+      nfdchar_t *outPath = NULL;
+      nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+      if (result == NFD_OKAY) {
+        auto asset = new Asset(std::string(outPath));
+        free(outPath);
+
+        project->assets.push_back(asset);
+
+      } else {
+        printf("Error: %s\n", NFD_GetError());
       }
-      for (auto entity : loadedWorld->entities) {
-        if (ImGui::Button(
-                (entity->id +
-                 (entity->engineIdentifier == loadedWorld->mainCameraEntityId
-                      ? " [main camera]"
-                      : "") +
-                 "##" + entity->engineIdentifier)
-                    .c_str())) {
-          selectedEntity = entity;
-        }
+    }
+    for (Asset *asset : project->assets) {
+      if (ImGui::Button(asset->id.c_str())) {
+        selectedAsset = asset;
       }
     }
     ImGui::End();
-  }
 
-  if (selectedEntity != nullptr) {
-    ImGui::Begin("Entity");
+    if (selectedEntity != nullptr) {
+      ImGui::Begin("Entity");
 
-    selectedEntity->EditorUI(this);
+      selectedEntity->EditorUI(this);
 
-    if (ImGui::Button("Delete")) {
-      loadedWorld->entities.erase(
-          std::remove_if(loadedWorld->entities.begin(),
-                         loadedWorld->entities.end(),
-                         [this](Entity *e) { return e == selectedEntity; }),
-          loadedWorld->entities.end());
-      Entity *toDelete = selectedEntity;
-      selectedEntity = nullptr;
-      delete toDelete;
+      if (ImGui::Button("Delete")) {
+        loadedWorld->entities.erase(
+            std::remove_if(loadedWorld->entities.begin(),
+                           loadedWorld->entities.end(),
+                           [this](Entity *e) { return e == selectedEntity; }),
+            loadedWorld->entities.end());
+        Entity *toDelete = selectedEntity;
+        selectedEntity = nullptr;
+        delete toDelete;
+      }
+      ImGui::End();
     }
-    ImGui::End();
-  }
 
-  if (selectedAsset != nullptr) {
-    ImGui::Begin("Asset");
+    if (selectedAsset != nullptr) {
+      ImGui::Begin("Asset");
 
-    selectedAsset->EditorUI(this);
+      selectedAsset->EditorUI(this);
 
-    if (ImGui::Button("Delete")) {
-      project->assets.erase(
-          std::remove_if(project->assets.begin(), project->assets.end(),
-                         [this](Asset *e) { return e == selectedAsset; }),
-          project->assets.end());
-      selectedAsset = nullptr;
+      if (ImGui::Button("Delete")) {
+        project->assets.erase(
+            std::remove_if(project->assets.begin(), project->assets.end(),
+                           [this](Asset *e) { return e == selectedAsset; }),
+            project->assets.end());
+        selectedAsset = nullptr;
+      }
+      ImGui::End();
     }
-    ImGui::End();
   }
-
   if (showDebugStats) {
     ++frame_count;
 
@@ -301,7 +301,11 @@ void EditorManager::RenderUI() {
 }
 
 void EditorManager::draw(float deltaTime) {
-
+  if (axis == nullptr) {
+    axis = new ModelEntity();
+    axis->initBasicModel("axis");
+    axis->init(false, window);
+  }
   if (!ImGui::IsAnyItemActive()) {
     if (window->keyPressed(GLFW_KEY_W))
       camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -321,12 +325,14 @@ void EditorManager::draw(float deltaTime) {
       camera.ProcessKeyboard(RIGHT, deltaTime);
   }
 
+  glm::mat4 projection = glm::perspective(
+      glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
+      100.0f);
+
+  glm::mat4 view = camera.GetViewMatrix();
+  axis->draw(deltaTime, view, projection);
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
-      glm::mat4 projection = glm::perspective(
-          glm::radians(45.0f), (float)window->width / (float)window->height,
-          0.1f, 100.0f);
-      glm::mat4 view = camera.GetViewMatrix();
       entity->draw(deltaTime, view, projection);
     }
   }
@@ -339,6 +345,9 @@ void EditorManager::run() {
   window->init();
 
   window->run();
+}
 
+EditorManager::~EditorManager() {
+  delete project;
   delete window;
 }

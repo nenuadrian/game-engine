@@ -1,5 +1,6 @@
 #pragma once
 #include "core/camera.h"
+#include "core/entity_model.h"
 #include "core/events.h"
 #include "core/project.h"
 #include "core/window_opengl.h"
@@ -7,8 +8,9 @@
 
 class EditorManager : public WindowParent {
 private:
-  Entity* selectedEntity = nullptr;
-  Asset* selectedAsset = nullptr;
+  ModelEntity *axis;
+  Entity *selectedEntity = nullptr;
+  Asset *selectedAsset = nullptr;
   Events *events;
   Window *window;
   bool showDebugStats;
@@ -46,4 +48,5 @@ public:
   void scrollCallback(double x, double y) override;
   void mouseButtonCallback(int button, int action, int modsy) override;
   void mousePosCallback(double x, double y) override;
+  ~EditorManager();
 };

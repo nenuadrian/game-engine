@@ -47,7 +47,7 @@ void Game::LoadWorld(World *newWorld) {
   if (cam == world->entities.end()) {
     throw std::invalid_argument("Could not find main camera");
   } else {
-    defaultCamera = (CameraEntity*)*cam;
+    defaultCamera = (CameraEntity *)*cam;
   }
 
   camera = &defaultCamera->camera;
@@ -96,5 +96,6 @@ void Game::run() {
 
   window->run();
 
+  delete project;
   delete window;
 }
