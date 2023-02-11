@@ -10,6 +10,7 @@
 #include <vector>
 
 class World;
+class EditorManager;
 
 class Entity {
   LuaCpp::LuaContext ctx;
@@ -36,7 +37,7 @@ public:
 
   virtual void init(bool running, Window *window);
   virtual void draw(float deltaTime, glm::mat4 view, glm::mat4 projection);
-  virtual void EditorUI(World *loadedWorld);
+  virtual void EditorUI(EditorManager *editor);
   virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
   glm::mat4 entityMatrix() {
@@ -63,6 +64,7 @@ public:
   std::string file;
   Asset(std::string _file);
   Asset(nlohmann::json data);
+  void EditorUI(EditorManager *editor);
 };
 
 class Project;
@@ -71,7 +73,6 @@ public:
   std::string id;
   std::string name;
   std::string mainCameraEntityId = "";
-  std::vector<Asset *> assets;
   std::vector<Entity *> entities;
   World();
   World(nlohmann::json data);

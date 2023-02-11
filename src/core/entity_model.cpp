@@ -1,5 +1,6 @@
 #include "entity_model.h"
 #include "GLFW/glfw3.h"
+#include "core/editor/editor_manager.h"
 #include "core/model_basic.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
@@ -37,15 +38,15 @@ void ModelEntity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (model != nullptr) {
 
     GL_CHECK(glUseProgram(shader->ID));
-    shader->setMat4("camera", projection * view );
+    shader->setMat4("camera", projection * view);
     shader->setMat4("model", entityMatrix());
     model->draw(shader->ID);
     GL_CHECK(glUseProgram(0));
   }
 }
 
-void ModelEntity::EditorUI(World *loadedWorld) {
-  Entity::EditorUI(loadedWorld);
+void ModelEntity::EditorUI(EditorManager *editor) {
+  Entity::EditorUI(editor);
   if (model == nullptr || model->type == "complex") {
     if (ImGui::CollapsingHeader("Model Object")) {
       ImGui::Text("Model");
@@ -58,9 +59,10 @@ void ModelEntity::EditorUI(World *loadedWorld) {
       }
     }
   }
+
   if (modelSelectionWindowOpen) {
     ImGui::Begin("Select Model");
-    for (Asset *asset : loadedWorld->assets) {
+    for (Asset *asset : editor->project->assets) {
       if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
                          engineIdentifier + "asset" + asset->id)
                             .c_str())) {

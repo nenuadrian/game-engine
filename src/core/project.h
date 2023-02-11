@@ -9,7 +9,7 @@ class Project {
 public:
   std::string name;
   std::string mainWorldId;
-  std::vector<Asset> globalAssets;
+  std::vector<Asset*> assets;
   std::vector<World *> worlds;
   Project();
 
@@ -18,4 +18,6 @@ public:
   void LoadJSON(std::string json);
   std::string JSON();
   std::string NewWorld();
+
+  ~Project();
 };

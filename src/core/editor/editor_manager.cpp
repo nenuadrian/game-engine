@@ -180,20 +180,21 @@ void EditorManager::RenderUI() {
         nfdchar_t *outPath = NULL;
         nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
         if (result == NFD_OKAY) {
-          Asset *asset = new Asset(std::string(outPath));
+          auto asset = new Asset(std::string(outPath));
           free(outPath);
 
-          loadedWorld->assets.push_back(asset);
+          project->assets.push_back(asset);
 
         } else {
           printf("Error: %s\n", NFD_GetError());
         }
       }
-      if (loadedWorld->assets.empty()) {
-        ImGui::Text("No entities created");
+      if (project->assets.empty()) {
+        ImGui::Text("No assets created");
       }
-      for (Asset *asset : loadedWorld->assets) {
+      for (Asset *asset : project->assets) {
         if (ImGui::Button(asset->id.c_str())) {
+          selectedAsset = asset;
         }
       }
     }
@@ -245,7 +246,7 @@ void EditorManager::RenderUI() {
   if (selectedEntity != nullptr) {
     ImGui::Begin("Entity");
 
-    selectedEntity->EditorUI(loadedWorld);
+    selectedEntity->EditorUI(this);
 
     if (ImGui::Button("Delete")) {
       loadedWorld->entities.erase(
@@ -256,6 +257,21 @@ void EditorManager::RenderUI() {
       Entity *toDelete = selectedEntity;
       selectedEntity = nullptr;
       delete toDelete;
+    }
+    ImGui::End();
+  }
+
+  if (selectedAsset != nullptr) {
+    ImGui::Begin("Asset");
+
+    selectedAsset->EditorUI(this);
+
+    if (ImGui::Button("Delete")) {
+      project->assets.erase(
+          std::remove_if(project->assets.begin(), project->assets.end(),
+                         [this](Asset *e) { return e == selectedAsset; }),
+          project->assets.end());
+      selectedAsset = nullptr;
     }
     ImGui::End();
   }

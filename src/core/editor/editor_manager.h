@@ -8,6 +8,7 @@
 class EditorManager : public WindowParent {
 private:
   Entity* selectedEntity = nullptr;
+  Asset* selectedAsset = nullptr;
   Events *events;
   Window *window;
   bool showDebugStats;
@@ -24,13 +25,14 @@ private:
   float lastX = SCR_WIDTH / 2.0f;
   float lastY = SCR_HEIGHT / 2.0f;
   bool firstMouse = true;
-  Project *project = nullptr;
-  World *loadedWorld = nullptr;
   bool processCamera = false;
 
   void RenderMenuBarUI();
 
 public:
+  World *loadedWorld = nullptr;
+  Project *project = nullptr;
+
   EditorManager(Events *events);
 
   void run();

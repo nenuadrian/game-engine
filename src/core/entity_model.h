@@ -17,7 +17,7 @@ public:
   ModelEntity(nlohmann::json data);
   void initBasicModel(std::string shape);
   std::string type() override { return "model"; };
-  void EditorUI(World *loadedWorld) override;
+  void EditorUI(EditorManager *editor) override;
   void draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
   virtual nlohmann::json JSON() override;
   virtual void init(bool running_, Window *window) override;

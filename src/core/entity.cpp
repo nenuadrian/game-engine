@@ -104,8 +104,7 @@ void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   }
 }
 
-void Entity::EditorUI(World *loadedWorld) {
-  ImGui::Text("EngineID: %s", engineIdentifier.c_str());
+void Entity::EditorUI(EditorManager *editor) {
   ImGui::InputText("ID", &id);
 
   if (ImGui::CollapsingHeader("Position & Scale")) {
@@ -179,8 +178,8 @@ World::~World() {
   for (Entity *entity : entities) {
     delete entity;
   }
+}
 
-  for (Asset *asset : assets) {
-    delete asset;
-  }
+void Asset::EditorUI(EditorManager *editor) {
+  ImGui::InputText("Identifier", &id);
 }

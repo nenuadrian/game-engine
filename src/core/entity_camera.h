@@ -22,7 +22,7 @@ public:
     camera.updateCameraVectors();
   };
 
-  void EditorUI(World *loadedWorld) override;
+  void EditorUI(EditorManager *editor) override;
 
   virtual void init(bool running_, Window *window) override {
     if (!running_) {

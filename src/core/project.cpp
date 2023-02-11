@@ -22,14 +22,6 @@ std::string Project::JSON() {
     worldData["mainCameraEntityId"] = world->mainCameraEntityId;
     worldData["name"] = world->name;
     worldsVector.push_back(worldData);
-    for (Asset *asset : world->assets) {
-      nlohmann::json assetData = nlohmann::json::object();
-      assetData["file"] = asset->file;
-      assetData["engineIdentifier"] = asset->engineIdentifier;
-      assetData["id"] = asset->id;
-      assetData["world"] = world->id;
-      assetsVector.push_back(assetData);
-    }
 
     for (Entity *entity : world->entities) {
       nlohmann::json entityData = entity->JSON();
@@ -37,6 +29,14 @@ std::string Project::JSON() {
       entityData["world"] = world->id;
       entitiesVector.push_back(entityData);
     }
+  }
+
+  for (Asset *asset : assets) {
+    nlohmann::json assetData = nlohmann::json::object();
+    assetData["file"] = asset->file;
+    assetData["engineIdentifier"] = asset->engineIdentifier;
+    assetData["id"] = asset->id;
+    assetsVector.push_back(assetData);
   }
 
   data["worlds"] = worldsVector;
@@ -65,13 +65,8 @@ void Project::LoadJSON(std::string json) {
   }
 
   for (auto assetData : data["assets"]) {
-    Asset *asset = new Asset(assetData);
-
-    for (World *w : worlds) {
-      if (w->id == assetData["world"]) {
-        w->assets.push_back(asset);
-      }
-    }
+    auto asset = new Asset(assetData);
+    assets.push_back(asset);
   }
 
   for (auto entityData : data["entities"]) {
@@ -104,4 +99,14 @@ std::string Project::NewWorld() {
   worlds.push_back(world);
 
   return world->id;
+}
+
+Project::~Project() {
+  for (auto world : worlds) {
+    delete world;
+  }
+
+  for (auto asset : assets) {
+    delete asset;
+  }
 }
