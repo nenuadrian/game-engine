@@ -13,4 +13,7 @@ void CameraEntity::EditorUI(World *loadedWorld) {
       loadedWorld->mainCameraEntityId = engineIdentifier;
     }
   }
+  ImGui::InputFloat2("Yaw", &camera.Yaw);
+  ImGui::InputFloat2("Pitch", &camera.Pitch);
+  camera.Position = position;
 }

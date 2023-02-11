@@ -1,5 +1,5 @@
 #pragma once
-#include "camera.h"
+#include "core/camera.h"
 #include "core/events.h"
 #include "core/project.h"
 #include "core/window_opengl.h"

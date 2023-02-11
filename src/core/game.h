@@ -1,8 +1,6 @@
 #include "events.h"
 #include "window.h"
 
-#include "editor/camera.h"
-
 #include <GLFW/glfw3.h>
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
@@ -13,6 +11,7 @@
 #include "project.h"
 #include "window_opengl.h"
 #include <cstddef>
+#include "core/camera.h"
 
 class Game : public WindowParent {
 private:

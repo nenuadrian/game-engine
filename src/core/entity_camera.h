@@ -1,5 +1,5 @@
 #pragma once
-#include "core/editor/camera.h"
+#include "core/camera.h"
 #include "entity.h"
 #include "entity_model.h"
 #include "model.h"
@@ -11,7 +11,7 @@
 #include <vector>
 
 class CameraEntity : public ModelEntity {
-Camera camera;
+  Camera camera;
 
 public:
   CameraEntity();
@@ -22,6 +22,7 @@ public:
   virtual void init(bool running_, Window *window) override {
     initBasicModel("camera");
     ModelEntity::init(running_, window);
+    camera.Position = position;
   }
 
   std::string type() override { return "camera"; };
