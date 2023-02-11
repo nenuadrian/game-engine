@@ -1,4 +1,6 @@
 #include "game.h"
+#include "core/entity_camera.h"
+#include "entity.h"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -33,7 +35,7 @@ void Game::init() {
 void Game::LoadWorld(World *newWorld) {
   world = newWorld;
 
-  Entity *defaultCamera = nullptr;
+  CameraEntity *defaultCamera = nullptr;
 
   world->init(project, window);
   auto cam = std::find_if(world->entities.begin(), world->entities.end(),
@@ -45,10 +47,10 @@ void Game::LoadWorld(World *newWorld) {
   if (cam == world->entities.end()) {
     throw std::invalid_argument("Could not find main camera");
   } else {
-    defaultCamera = *cam;
+    defaultCamera = (CameraEntity*)*cam;
   }
 
-  camera = new Camera(defaultCamera->position);
+  camera = &defaultCamera->camera;
 }
 
 void Game::draw(float deltaTime) {

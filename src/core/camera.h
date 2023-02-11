@@ -69,8 +69,5 @@ public:
   }
   void ProcessKeyboard(Camera_Movement direction, float deltaTime);
   void ProcessMouseMovement(float xoffset, float yoffset);
-
-private:
-  // calculates the front vector from the Camera's (updated) Euler Angles
   void updateCameraVectors();
 };

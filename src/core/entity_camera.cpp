@@ -17,3 +17,10 @@ void CameraEntity::EditorUI(World *loadedWorld) {
   ImGui::InputFloat2("Pitch", &camera.Pitch);
   camera.Position = position;
 }
+
+nlohmann::json CameraEntity::JSON() {
+  nlohmann::json data = ModelEntity::JSON();
+  data["yaw"] = camera.Yaw;
+  data["pitch"] = camera.Pitch;
+  return data;
+}

@@ -11,19 +11,27 @@
 #include <vector>
 
 class CameraEntity : public ModelEntity {
-  Camera camera;
 
 public:
+  Camera camera;
+
   CameraEntity();
-  CameraEntity(nlohmann::json data) : ModelEntity(data){};
+  CameraEntity(nlohmann::json data) : ModelEntity(data) {
+    camera.Yaw = data["yaw"];
+    camera.Pitch = data["pitch"];
+    camera.updateCameraVectors();
+  };
 
   void EditorUI(World *loadedWorld) override;
 
   virtual void init(bool running_, Window *window) override {
-    initBasicModel("camera");
+    if (!running_) {
+      initBasicModel("camera");
+    }
     ModelEntity::init(running_, window);
     camera.Position = position;
+    camera.updateCameraVectors();
   }
-
+  virtual nlohmann::json JSON() override;
   std::string type() override { return "camera"; };
 };
