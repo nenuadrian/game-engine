@@ -222,6 +222,9 @@ void EditorManager::RenderUI() {
     }
 
     ImGui::Begin("Assets");
+    if (project->assets.empty()) {
+      ImGui::Text("No assets imported");
+    }
     if (ImGui::Button("Import Asset")) {
 
       nfdchar_t *outPath = NULL;
@@ -273,6 +276,7 @@ void EditorManager::RenderUI() {
             project->assets.end());
         selectedAsset = nullptr;
       }
+
       ImGui::End();
     }
   }
