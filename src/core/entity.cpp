@@ -2,13 +2,13 @@
 #include "Engine/LuaTNumber.hpp"
 #include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
-#include "LuaContext.hpp"
 #include "glm/ext.hpp"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
+#include "engine.h"
 #include "shaders/shader_generator.h"
 #include <iostream>
 
@@ -26,9 +26,8 @@ static int _keyIsPressed(lua_State *L) {
 }
 
 Entity::Entity() {
-  long int t = static_cast<long int>(time(NULL));
-  engineIdentifier = std::to_string(t);
-  id = "untitled" + std::to_string(t);
+  engineIdentifier = Engine::newEngineId();
+  id = "untitled" + engineIdentifier;
 }
 
 void Entity::init(bool running_, Window *window) {
@@ -169,9 +168,9 @@ Asset::Asset(nlohmann::json data) {
 
 Asset::Asset(std::string _file) {
   file = _file;
-  long int t = static_cast<long int>(time(NULL));
-  engineIdentifier = std::to_string(t);
-  id = std::to_string(t);
+  
+  engineIdentifier = Engine::newEngineId();;
+  id = engineIdentifier;
 }
 
 World::~World() {

@@ -1,4 +1,5 @@
 
+#pragma once
 #include "events.h"
 
 class Engine {
@@ -8,4 +9,5 @@ public:
   Engine(){};
   void RunEditor();
   void RunGame();
+  static long int newEngineId();
 };

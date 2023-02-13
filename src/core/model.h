@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nlohmann/json.hpp"
+#include "engine.h"
 #include "shaders/shader.h"
 #include <glm/glm.hpp>
 #include <string>
@@ -42,10 +43,7 @@ protected:
 public:
   std::string id;
   std::string type;
-  Model() {
-    long int t = static_cast<long int>(time(NULL));
-    id = "model" + std::to_string(t);
-  }
+  Model() { id = "model" + std::to_string(Engine::newEngineId()); }
   virtual void init(){};
   virtual void draw(Shader *shader){};
   virtual void draw(GLuint shaderProgram){};

@@ -4,6 +4,12 @@
 #include "entity.h"
 #include "game.h"
 
+long int Engine::newEngineId() {
+  static std::atomic<int64_t> value(static_cast<long int>(time(NULL)));
+  value += 1;
+  return value;
+}
+
 void Engine::RunEditor() {
   events.RUN_EDITOR = true;
   while (events.RUN_EDITOR || events.RUN_GAME) {
