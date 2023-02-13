@@ -179,26 +179,29 @@ void EditorManager::RenderUI() {
       if (ImGui::CollapsingHeader("Entities")) {
 
         if (ImGui::CollapsingHeader("New Entity")) {
+          Entity *entity;
+          if (ImGui::Button("Container")) {
+            entity = new Entity();
+          }
+
           if (ImGui::Button("Model")) {
-            ModelEntity *entity = new ModelEntity();
-            entity->init(false, nullptr);
-            loadedWorld->entities.push_back(entity);
+            entity = new ModelEntity();
           }
 
           if (ImGui::Button("Cube")) {
-            ModelEntity *entity = new ModelEntity();
-            entity->initBasicModel("cube");
-            entity->init(false, nullptr);
-            loadedWorld->entities.push_back(entity);
+            entity = new ModelEntity();
+            ((ModelEntity *)entity)->initBasicModel("cube");
           }
 
           if (ImGui::Button("Camera")) {
-            CameraEntity *entity = new CameraEntity();
-            entity->init(false, nullptr);
+            entity = new CameraEntity();
 
-            loadedWorld->entities.push_back(entity);
             if (loadedWorld->mainCameraEntityId.empty()) {
               loadedWorld->mainCameraEntityId = entity->engineIdentifier;
+            }
+            if (entity) {
+              entity->init(false, nullptr);
+              loadedWorld->entities.push_back(entity);
             }
           }
         }
@@ -332,15 +335,20 @@ void EditorManager::renderAssetsUI(Asset *parent) {
 void EditorManager::renderEntitiesUI(Entity *parent) {
   for (auto entity : loadedWorld->entities) {
     if (entity->parent == parent) {
-      if (ImGui::Button(
-              (entity->id +
+      ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
+
+        if (ImGui::TreeNodeEx((entity->id +
                (entity->engineIdentifier == loadedWorld->mainCameraEntityId
                     ? " [main camera]"
                     : "") +
                "##" + entity->engineIdentifier)
-                  .c_str())) {
-        selectedEntity = entity;
-      }
+                  .c_str(), flags)) {
+          if (ImGui::IsItemClicked()) {
+            selectedEntity = entity;
+          }
+          ImGui::TreePop();
+        }
+      
     }
   }
 }
