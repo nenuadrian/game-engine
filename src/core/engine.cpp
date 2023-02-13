@@ -3,6 +3,8 @@
 #include "editor/editor_manager.h"
 #include "entity.h"
 #include "game.h"
+#include "json_export.h"
+#include <fstream>
 
 long int Engine::newEngineId() {
   static std::atomic<long int> value(static_cast<long int>(time(NULL)));
@@ -18,13 +20,18 @@ void Engine::RunEditor() {
       EditorManager *editorManager = new EditorManager(&events);
 
       if (!events.data.empty()) {
-        Project *project = new Project();
+        Project *project;
 
         if (events.OPEN_PROJECT) {
           events.OPEN_PROJECT = false;
-          project->load(events.data);
+          // from file
+          std::ifstream ifs(events.data);
+          std::string content((std::istreambuf_iterator<char>(ifs)),
+                              (std::istreambuf_iterator<char>()));
+          ifs.close();
+          project = JSONExporter::toProject(content);
         } else {
-          project->LoadJSON(events.data);
+          project = JSONExporter::toProject(events.data);
         }
 
         editorManager->load(project);
@@ -38,8 +45,7 @@ void Engine::RunEditor() {
 
     if (events.RUN_GAME) {
       events.RUN_GAME = false;
-      Project *project = new Project();
-      project->LoadJSON(events.data);
+      Project *project = JSONExporter::toProject(events.data);
       Game *game = new Game(project, &events);
       game->run();
       delete game;
@@ -49,9 +55,15 @@ void Engine::RunEditor() {
 
 void Engine::RunGame() {
   events.RUN_GAME = true;
-  Project project;
-  project.load("./");
-  Game *game = new Game(&project, &events);
+  std::ifstream ifs("./");
+  std::string content((std::istreambuf_iterator<char>(ifs)),
+                      (std::istreambuf_iterator<char>()));
+  ifs.close();
+  auto project = JSONExporter::toProject(content);
+
+  Game *game = new Game(project, &events);
   game->run();
   delete game;
+  delete project;
+
 }

@@ -31,15 +31,6 @@ public:
   ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
   void draw(GLuint shaderProgram) override;
   void draw(Shader *shader) override;
-  nlohmann::json JSON() override {
-    nlohmann::json data = nlohmann::json::object();
-    data["type"] = type;
-    data["path"] = path;
-    data["id"] = id;
-    return data;
-  };
-
-  void LoadJSON(nlohmann::json data) override { path = data["path"]; };
 
   ~ModelComplex();
 };

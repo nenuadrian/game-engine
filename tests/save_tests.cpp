@@ -4,16 +4,18 @@
 
 #include <cstdint>
 
+#include "../src/core/json_export.h"
 #include "../src/core/project.h"
 
-TEST_CASE("Project should save to JSON", "[save]") { 
-    Project project = Project();
-    std::string s = project.JSON();
-    REQUIRE(1 == 1); 
+TEST_CASE("Project should save to JSON", "[save]") {
+  Project project = Project();
+  std::string s = JSONExporter::fromProject(&project);
+  REQUIRE(1 == 1);
 }
 
-TEST_CASE("Project should load from JSON", "[load]") { 
-    Project project = Project();
-    project.LoadJSON(R"({"name": "project", "mainWorldId": ""})");
-    REQUIRE(project.name == "project"); 
+TEST_CASE("Project should load from JSON", "[load]") {
+  Project *project =
+      JSONExporter::toProject(R"({"name": "project", "mainWorldId": ""})");
+  REQUIRE(project->name == "project");
+  delete project;
 }

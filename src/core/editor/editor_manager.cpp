@@ -1,11 +1,13 @@
 #include "editor_manager.h"
 
 #include "core/entities.h"
+#include "core/json_export.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "nfd.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 
 void EditorManager::scrollCallback(double x, double y) {
@@ -65,7 +67,6 @@ void EditorManager::Open() {
     events->OPEN_PROJECT = true;
 
     free(outPath);
-    load(project);
   } else {
     printf("Error: %s\n", NFD_GetError());
   }
@@ -101,7 +102,12 @@ void EditorManager::RenderMenuBarUI() {
       if (project != nullptr) {
 
         if (ImGui::MenuItem("Save")) {
-          project->save("./");
+
+          std::string s = JSONExporter::fromProject(project);
+          std::ofstream myfile;
+          myfile.open("./data.json");
+          myfile << s;
+          myfile.close();
         }
       }
 
@@ -141,7 +147,7 @@ void EditorManager::RenderMenuBarUI() {
                             !project->mainWorldId.empty())) {
           events->RUN_GAME = true;
           events->CLOSE_WINDOW = true;
-          events->data = project->JSON();
+          events->data = JSONExporter::fromProject(project);
         }
         ImGui::EndMenu();
       }
@@ -162,9 +168,6 @@ void EditorManager::RenderMenuBarUI() {
 }
 
 void EditorManager::RenderUI() {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
 
   RenderMenuBarUI();
 
@@ -302,9 +305,6 @@ void EditorManager::RenderUI() {
     }
     ImGui::End();
   }
-
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void EditorManager::renderAssetsUI(Asset *parent) {

@@ -18,10 +18,3 @@ void CameraEntity::EditorUI(EditorManager *editor) {
   ImGui::InputFloat("Pitch", &camera.Pitch);
   camera.Position = position;
 }
-
-nlohmann::json CameraEntity::JSON() {
-  nlohmann::json data = ModelEntity::JSON();
-  data["yaw"] = camera.Yaw;
-  data["pitch"] = camera.Pitch;
-  return data;
-}

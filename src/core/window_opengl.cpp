@@ -116,11 +116,17 @@ void WindowOpengl::run() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
     parent->keyCallBack(deltaTime);
 
     parent->draw(deltaTime);
 
-    
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
     // Swap front and back buffers
     glfwSwapBuffers(w);
 

@@ -8,18 +8,17 @@
 
 class ModelEntity : public Entity {
 private:
-  Model *model = nullptr;
   Shader *shader = nullptr;
   bool modelSelectionWindowOpen = false;
 
 public:
+  Model *model = nullptr;
+
   ModelEntity();
-  ModelEntity(nlohmann::json data);
   void initBasicModel(std::string shape);
   std::string type() override { return "model"; };
   void EditorUI(EditorManager *editor) override;
   void draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
-  virtual nlohmann::json JSON() override;
   virtual void init(bool running_, Window *window) override;
   ~ModelEntity();
 };

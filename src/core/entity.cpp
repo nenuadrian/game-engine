@@ -95,38 +95,6 @@ void Entity::play(const char *song) {
 
   // Clean up SoLoud
 }
-nlohmann::json vec3JSON(glm::vec3 v) {
-  auto json = nlohmann::json::object();
-  json["x"] = v.x;
-  json["y"] = v.y;
-  json["z"] = v.z;
-  return json;
-}
-
-nlohmann::json Entity::JSON() {
-  nlohmann::json data = nlohmann::json::object();
-  data["id"] = id;
-  data["type"] = type();
-  data["engineIdentifier"] = engineIdentifier;
-  data["position"] = vec3JSON(position);
-  data["script"] = script;
-  data["scale"] = vec3JSON(scale);
-  data["rotation"] = vec3JSON(rotation);
-  return data;
-}
-
-glm::vec3 JSONvec3(nlohmann::json data) {
-  return glm::vec3(data["x"], data["y"], data["z"]);
-}
-
-Entity::Entity(nlohmann::json data) : Entity() {
-  id = data["id"];
-  script = data["script"];
-  engineIdentifier = data["engineIdentifier"];
-  position = JSONvec3(data["position"]);
-  scale = JSONvec3(data["scale"]);
-  rotation = JSONvec3(data["rotation"]);
-}
 
 void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
@@ -185,22 +153,10 @@ World::World() {
   name = "Untitled";
 }
 
-World::World(nlohmann::json data) : World() {
-  id = data["id"];
-  name = data["name"];
-  mainCameraEntityId = data["mainCameraEntityId"];
-}
-
 void World::init(Project *project, Window *w) {
   for (Entity *entity : entities) {
     entity->init(true, w);
   }
-}
-
-Asset::Asset(nlohmann::json data) {
-  file = data["file"];
-  id = data["id"];
-  engineIdentifier = data["engineIdentifier"];
 }
 
 Asset::Asset(std::string _file) {

@@ -67,9 +67,7 @@ void Game::draw(float deltaTime) {
     }
   }
 
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
+  
 
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Game")) {
@@ -82,8 +80,7 @@ void Game::draw(float deltaTime) {
     }
   }
   ImGui::EndMainMenuBar();
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 void Game::run() {

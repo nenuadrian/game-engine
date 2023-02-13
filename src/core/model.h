@@ -1,6 +1,5 @@
 #pragma once
 
-#include "nlohmann/json.hpp"
 #include "engine.h"
 #include "shaders/shader.h"
 #include <glm/glm.hpp>
@@ -47,6 +46,5 @@ public:
   virtual void init(){};
   virtual void draw(Shader *shader){};
   virtual void draw(GLuint shaderProgram){};
-  virtual nlohmann::json JSON() { return nlohmann::json::object(); };
-  virtual void LoadJSON(nlohmann::json data){};
+
 };

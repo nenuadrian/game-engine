@@ -1,7 +1,6 @@
 #pragma once
 #include "glm/ext/matrix_transform.hpp"
 #include "model.h"
-#include "nlohmann/json.hpp"
 #include "soloud.h"
 #include "soloud_speech.h"
 #include "soloud_thread.h"
@@ -25,11 +24,10 @@ class Entity {
   bool running;
   SoLoud::Soloud soloud;
 
-protected:
+public:
   glm::vec3 scale = glm::vec3(1, 1, 1);
   glm::vec3 rotation = glm::vec3(0, 0, 0);
 
-public:
   std::string engineIdentifier;
   std::string id;
   std::string script;
@@ -40,12 +38,11 @@ public:
   Entity *parent;
 
   Entity();
-  Entity(nlohmann::json data);
 
   virtual void init(bool running, Window *window);
   virtual void draw(float deltaTime, glm::mat4 view, glm::mat4 projection);
   virtual void EditorUI(EditorManager *editor);
-  virtual nlohmann::json JSON();
+
   virtual std::string type() { return "unknown"; };
   void play(const char *song);
   glm::mat4 entityMatrix() {
@@ -74,7 +71,8 @@ public:
   bool directory;
   Asset *parent;
   Asset(std::string _file);
-  Asset(nlohmann::json data);
+  Asset(std::string id, std::string file, std::string engineIdentifier)
+      : id(id), file(file), engineIdentifier(engineIdentifier) {}
   void EditorUI(EditorManager *editor);
   bool isDirectory() { return directory; }
 };
@@ -87,7 +85,8 @@ public:
   std::string mainCameraEntityId = "";
   std::vector<Entity *> entities;
   World();
-  World(nlohmann::json data);
+  World(std::string id, std::string name, std::string mainCameraEntityId)
+      : id(id), name(name), mainCameraEntityId(mainCameraEntityId){};
   void init(Project *project, Window *w);
   ~World();
 };

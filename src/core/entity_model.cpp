@@ -7,7 +7,6 @@
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
-#include "nlohmann/json.hpp"
 #include "shaders/shader_generator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -99,24 +98,6 @@ ModelEntity::ModelEntity() : Entity() {}
 
 void ModelEntity::initBasicModel(std::string shape) {
   model = new ModelBasic(shape);
-}
-
-ModelEntity::ModelEntity(nlohmann::json data) : Entity(data) {
-  if (data["model"]["type"] == "complex") {
-    model = new ModelComplex();
-  } else {
-    model = new ModelBasic(data["model"]["type"]);
-  }
-  model->LoadJSON(data["model"]);
-}
-
-nlohmann::json ModelEntity::JSON() {
-  nlohmann::json data = Entity::JSON();
-  if (model != nullptr) {
-    data["model"] = model->JSON();
-  }
-
-  return data;
 }
 
 ModelEntity::~ModelEntity() {
