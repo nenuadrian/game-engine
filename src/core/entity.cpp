@@ -2,17 +2,18 @@
 #include "Engine/LuaTNumber.hpp"
 #include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
+#include "engine.h"
 #include "glm/ext.hpp"
 #include "glm/fwd.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "model_complex.h"
-#include "engine.h"
 #include "shaders/shader_generator.h"
 #include <iostream>
 
 static GLFWwindow *luaWindow;
+static Entity *globalEntity;
 
 extern "C" {
 static int _keyIsPressed(lua_State *L) {
@@ -22,6 +23,13 @@ static int _keyIsPressed(lua_State *L) {
   bool result = glfwGetKey(luaWindow, key) == GLFW_PRESS;
   lua_pushboolean(L, result); /* second result */
   return 1;                   /* number of results */
+}
+
+static int _play(lua_State *L) {
+  int n = lua_gettop(L); /* number of arguments */
+  const char *song = lua_tostring(L, 1);
+  globalEntity->play(song);
+  return 0; /* number of results */
 }
 }
 
@@ -57,6 +65,36 @@ void Entity::init(bool running_, Window *window) {
   running = running_;
 }
 
+void Entity::play(const char *song) {
+  SoLoud::Speech speech; // A sound source (speech, in this case)
+  SoLoud::Wav gWave;     // One wave file
+  gWave.load(song);      // Load a wave
+
+  // Configure sound source
+  // speech.setText("1 2 3   1 2 3   Hello world. Welcome to So-Loud.");
+
+  // initialize SoLoud.
+  soloud.init();
+
+  // Play the sound source (we could do this several times if we wanted)
+  soloud.play(gWave);
+  /*
+   // Wait until sounds have finished
+   while (soloud.getActiveVoiceCount() > 0) {
+     // Still going, sleep for a bit
+     SoLoud::Thread::sleep(100);
+   }
+
+  soloud.play(speech);
+
+   // Wait until sounds have finished
+   while (soloud.getActiveVoiceCount() > 0) {
+     // Still going, sleep for a bit
+     SoLoud::Thread::sleep(100);
+   }*/
+
+  // Clean up SoLoud
+}
 nlohmann::json vec3JSON(glm::vec3 v) {
   auto json = nlohmann::json::object();
   json["x"] = v.x;
@@ -96,6 +134,7 @@ void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
     xLua->setValue(position.x);
     yLua->setValue(position.y);
     zLua->setValue(position.z);
+    globalEntity = this;
     ctx.Run(engineIdentifier);
     position.x = xLua->getValue();
     position.y = yLua->getValue();
@@ -142,9 +181,7 @@ void Entity::EditorUI(EditorManager *editor) {
 }
 
 World::World() {
-  long int t = static_cast<long int>(time(NULL));
-
-  id = std::to_string(t);
+  id = std::to_string(Engine::newEngineId());
   name = "Untitled";
 }
 
@@ -168,8 +205,9 @@ Asset::Asset(nlohmann::json data) {
 
 Asset::Asset(std::string _file) {
   file = _file;
-  
-  engineIdentifier = Engine::newEngineId();;
+
+  engineIdentifier = Engine::newEngineId();
+  ;
   id = engineIdentifier;
 }
 

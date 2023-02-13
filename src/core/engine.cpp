@@ -5,7 +5,7 @@
 #include "game.h"
 
 long int Engine::newEngineId() {
-  static std::atomic<int64_t> value(static_cast<long int>(time(NULL)));
+  static std::atomic<long int> value(static_cast<long int>(time(NULL)));
   value += 1;
   return value;
 }

@@ -2,6 +2,10 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "model.h"
 #include "nlohmann/json.hpp"
+#include "soloud.h"
+#include "soloud_speech.h"
+#include "soloud_thread.h"
+#include "soloud_wav.h"
 #include "window_opengl.h"
 #include <LuaCpp.hpp>
 #include <cstddef>
@@ -19,6 +23,7 @@ class Entity {
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> zLua;
   std::shared_ptr<LuaCpp::Engine::LuaTNumber> deltaTimeLua;
   bool running;
+  SoLoud::Soloud soloud;
 
 protected:
   glm::vec3 scale = glm::vec3(1, 1, 1);
@@ -42,6 +47,7 @@ public:
   virtual void EditorUI(EditorManager *editor);
   virtual nlohmann::json JSON();
   virtual std::string type() { return "unknown"; };
+  void play(const char *song);
   glm::mat4 entityMatrix() {
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::scale(modelMatrix, scale);
@@ -56,6 +62,7 @@ public:
 
     return modelMatrix * rotate;
   }
+  virtual ~Entity() { soloud.deinit(); }
 };
 
 class Asset {
