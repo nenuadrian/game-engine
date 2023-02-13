@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "misc/cpp/imgui_stdlib.h"
 
 void ModelEntity::init(bool running_, Window *window) {
   Entity::init(running_, window);
@@ -80,12 +81,16 @@ void ModelEntity::EditorUI(EditorManager *editor) {
   }
 
   if (shader != nullptr) {
-    ImGui::Text("Shaders");
-    if (ImGui::CollapsingHeader("Fragment Shader")) {
-      ImGui::Text("%s", shader->fragmentShaderSource.c_str());
-    }
-    if (ImGui::CollapsingHeader("Vertex Shader")) {
-      ImGui::Text("%s", shader->vertexShaderSource.c_str());
+    if (ImGui::CollapsingHeader("Shaders")) {
+      if (ImGui::CollapsingHeader("Fragment Shader")) {
+        ImGui::InputTextMultiline("Fragment", &shader->fragmentShaderSource);
+      }
+      if (ImGui::CollapsingHeader("Vertex Shader")) {
+        ImGui::InputTextMultiline("Vertex", &shader->vertexShaderSource);
+      }
+      if (ImGui::Button("Compile shaders")) {
+        shader->reload();
+      }
     }
   }
 }

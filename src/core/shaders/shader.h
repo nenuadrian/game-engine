@@ -45,6 +45,7 @@ public:
   Shader(const char *vertexFile, const char *fragmentFile);
   ~Shader();
   void load(const char *vertexSource, const char *fragmentSource);
+  void reload();
   void use() const { glUseProgram(ID); }
   // utility uniform functions
   // ------------------------------------------------------------------------

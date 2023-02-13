@@ -45,6 +45,10 @@ void Shader::load(const char *vertexSource, const char *fragmentSource) {
   fragmentShaderSource = fragmentSource;
 }
 
+void Shader::reload() {
+  load(vertexShaderSource.c_str(), fragmentShaderSource.c_str());
+}
+
 Shader::Shader() {}
 
 // Constructor that build the Shader Program from 2 different shaders
@@ -109,5 +113,5 @@ void Shader::compileErrors(unsigned int shader, const char *type) {
 }
 
 Shader::~Shader() {
-  
+  glDeleteProgram(ID);
 }

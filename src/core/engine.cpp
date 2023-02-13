@@ -20,7 +20,9 @@ void Engine::RunEditor() {
         } else {
           project->LoadJSON(events.data);
         }
+
         editorManager->load(project);
+        editorManager->SelectWorld(project->mainWorldId);
 
         events.data = "";
       }
