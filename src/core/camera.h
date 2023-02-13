@@ -70,4 +70,5 @@ public:
   void ProcessKeyboard(Camera_Movement direction, float deltaTime);
   void ProcessMouseMovement(float xoffset, float yoffset);
   void updateCameraVectors();
+  void scrollCallback(float x, float y);
 };

@@ -8,7 +8,10 @@
 #include <iostream>
 #include <string>
 
-void EditorManager::scrollCallback(double x, double y) {}
+void EditorManager::scrollCallback(double x, double y) {
+
+  camera.scrollCallback(x, y);
+}
 
 void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
   if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -179,7 +182,7 @@ void EditorManager::RenderUI() {
       if (ImGui::CollapsingHeader("Entities")) {
 
         if (ImGui::CollapsingHeader("New Entity")) {
-          Entity *entity;
+          Entity *entity = nullptr;
           if (ImGui::Button("Container")) {
             entity = new Entity();
           }
@@ -199,10 +202,11 @@ void EditorManager::RenderUI() {
             if (loadedWorld->mainCameraEntityId.empty()) {
               loadedWorld->mainCameraEntityId = entity->engineIdentifier;
             }
-            if (entity) {
-              entity->init(false, nullptr);
-              loadedWorld->entities.push_back(entity);
-            }
+          }
+
+          if (entity) {
+            entity->init(false, nullptr);
+            loadedWorld->entities.push_back(entity);
           }
         }
         ImGui::Text("Entities");
@@ -337,18 +341,19 @@ void EditorManager::renderEntitiesUI(Entity *parent) {
     if (entity->parent == parent) {
       ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
 
-        if (ImGui::TreeNodeEx((entity->id +
+      if (ImGui::TreeNodeEx(
+              (entity->id +
                (entity->engineIdentifier == loadedWorld->mainCameraEntityId
                     ? " [main camera]"
                     : "") +
                "##" + entity->engineIdentifier)
-                  .c_str(), flags)) {
-          if (ImGui::IsItemClicked()) {
-            selectedEntity = entity;
-          }
-          ImGui::TreePop();
+                  .c_str(),
+              flags)) {
+        if (ImGui::IsItemClicked()) {
+          selectedEntity = entity;
         }
-      
+        ImGui::TreePop();
+      }
     }
   }
 }

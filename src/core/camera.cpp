@@ -39,6 +39,14 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
   }
 }
 
+void Camera::scrollCallback(float x, float y) {
+  float velocity = 2.5f * 0.1f;
+  if (y > 0) {
+    Position += Front * velocity;
+  } else {
+    Position -= Front * velocity;
+  }
+}
 // processes input received from a mouse input system. Expects the offset
 // value in both the x and y direction.
 void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
@@ -57,5 +65,3 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
   // update Front, Right and Up Vectors using the updated Euler angles
   updateCameraVectors();
 }
-
-
