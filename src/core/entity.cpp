@@ -164,8 +164,7 @@ void World::init(Project *project, Window *w) {
 Asset::Asset(std::string _file) {
   file = _file;
 
-  engineIdentifier = Engine::newEngineId();
-  ;
+  engineIdentifier = std::to_string(Engine::newEngineId());
   id = engineIdentifier;
 }
 

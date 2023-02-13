@@ -10,9 +10,9 @@
 #include <vector>
 namespace Hades {
 class ModelBasic : public ModelComplex {
-  std::string shape;
 
 public:
+  std::string shape;
   std::string path;
   ModelBasic(std::string _shape) : ModelComplex() {
     type = "basic";

@@ -8,8 +8,7 @@ set(JSON_BuildTests
     CACHE INTERNAL "")
 option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" OFF)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set(BUILD_TESTING
-    OFF)
+set(BUILD_TESTING OFF)
 set(BUILD_OPENGL3_DEMOS
     OFF
     CACHE BOOL "Set when you want to build the OpenGL3+ demos")
@@ -41,11 +40,25 @@ set(ASSIMP_BUILD_TESTS
 set(ASSIMP_NO_EXPORT
     ON
     CACHE BOOL "" FORCE)
+
+set(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+
+set(GCC_COVERAGE_LINK_FLAGS "--coverage")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+
+set(CMAKE_EXE_LINKER_FLAGS
+    "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
 # If you won't be accessing Assimp outside of the plugin, build it as static to
 # have the plugin binary self-contained
 set(BUILD_SHARED_LIBS
     OFF
     CACHE BOOL "" FORCE)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+
 option(ASSIMP_BUILD_TESTS
        "If the test suite for Assimp is built in addition to the library." OFF)
 option(BUILD_UNIT_TESTS "Build Unit Tests" OFF)
@@ -155,7 +168,8 @@ add_executable(GAME ${ENGINE-LIBS} ${ENGINE-SRC} src/game.cpp)
 target_compile_features(ENGINE PRIVATE cxx_std_17)
 
 file(GLOB ENGINE-TESTS-SRC tests/*.h tests/*.cpp)
-
+enable_testing()
+add_test(NAME project-tests COMMAND ./build/tests)
 add_executable(tests ${ENGINE-LIBS} ${ENGINE-SRC} ${ENGINE-TESTS-SRC})
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)

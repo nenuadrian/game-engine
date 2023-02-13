@@ -8,12 +8,6 @@
 
 namespace Hades {
   using namespace std;
-  
-long int Engine::newEngineId() {
-  static std::atomic<long int> value(static_cast<long int>(time(NULL)));
-  value += 1;
-  return value;
-}
 
 void Engine::RunEditor() {
   events.RUN_EDITOR = true;

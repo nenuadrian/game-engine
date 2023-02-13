@@ -5,6 +5,7 @@
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
+
 namespace Hades {
 
 class EditorManager : public WindowParent {
@@ -26,10 +27,7 @@ private:
   const unsigned int SCR_WIDTH = 800;
   const unsigned int SCR_HEIGHT = 600;
   Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-  float lastX = SCR_WIDTH / 2.0f;
-  float lastY = SCR_HEIGHT / 2.0f;
-  bool firstMouse = true;
-  bool processCamera = false;
+
 
   void RenderMenuBarUI();
   void renderAssetsUI(Asset *parent);

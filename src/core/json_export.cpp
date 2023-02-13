@@ -44,27 +44,23 @@ std::string JSONExporter::fromProject(Project *project) {
       entityData["rotation"] = vec3JSON(entity->rotation);
       entityData["world"] = world->id;
 
-      /* nlohmann::json JSON() override {
-        nlohmann::json data = nlohmann::json::object();
-        data["type"] = type;
-        data["path"] = path;
-        data["id"] = id;
-        return data;
+      if (entity->type() == "camera") {
+        data["yaw"] = ((CameraEntity *)entity)->camera.Yaw;
+        data["pitch"] = ((CameraEntity *)entity)->camera.Pitch;
+      } else if (entity->type() == "model") {
+        if (((ModelEntity *)entity)->model) {
+          data["model"] = nlohmann::json::object();
+          data["model"]["type"] = ((ModelEntity *)entity)->model->type;
+          if (((ModelEntity *)entity)->model->type == "basic") {
+            data["model"]["shape"] =
+                ((ModelBasic *)((ModelEntity *)entity)->model)->shape;
+          } else {
+            data["model"]["path"] =
+                ((ModelComplex *)((ModelEntity *)entity)->model)->path;
+          }
+        }
+      }
 
-
-nlohmann::json CameraEntity::JSON() {
-  nlohmann::json data = ModelEntity::JSON();
-  data["yaw"] = camera.Yaw;
-  data["pitch"] = camera.Pitch;
-  return data;
-}
- if (model != nullptr) {
-    data["model"] = model->JSON();
-  }
-
-
-      };
-*/
       entitiesVector.push_back(entityData);
     }
   }
@@ -112,11 +108,14 @@ Project *JSONExporter::toProject(std::string json) {
 
     if (entityData["type"] == "model") {
       auto localentity = new ModelEntity();
-      if (data["model"]["type"] == "complex") {
-        localentity->model = new ModelComplex();
-        ((ModelComplex *)localentity->model)->path = data["path"];
-      } else {
-        localentity->model = new ModelBasic(data["model"]["type"]);
+      if (data.contains("model")) {
+
+        if (data["model"]["type"] == "complex") {
+          localentity->model = new ModelComplex();
+          ((ModelComplex *)localentity->model)->path = data["path"];
+        } else {
+          localentity->model = new ModelBasic(data["model"]["type"]);
+        }
       }
 
       entity = localentity;

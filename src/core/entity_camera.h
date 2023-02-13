@@ -3,7 +3,7 @@
 #include "entity.h"
 #include "entity_model.h"
 #include "model.h"
-#include "window_opengl.h"
+#include "window.h"
 #include <cstddef>
 #include <iterator>
 #include <string>
