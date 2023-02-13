@@ -11,6 +11,7 @@ private:
   ModelEntity *axis;
   Entity *selectedEntity = nullptr;
   Asset *selectedAsset = nullptr;
+  Asset *assetDirectory = nullptr;
   Events *events;
   Window *window;
   bool showDebugStats;
@@ -30,6 +31,8 @@ private:
   bool processCamera = false;
 
   void RenderMenuBarUI();
+  void renderAssetsUI(Asset *parent);
+  void renderEntitiesUI(Entity *parent);
 
 public:
   World *loadedWorld = nullptr;

@@ -32,6 +32,8 @@ public:
 
   glm::vec3 position = glm::vec3(1, 1, 1);
 
+  Entity *parent;
+
   Entity();
   Entity(nlohmann::json data);
 
@@ -62,9 +64,12 @@ public:
   std::string engineIdentifier;
   std::string id;
   std::string file;
+  bool directory;
+  Asset *parent;
   Asset(std::string _file);
   Asset(nlohmann::json data);
   void EditorUI(EditorManager *editor);
+  bool isDirectory() { return directory; }
 };
 
 class Project;

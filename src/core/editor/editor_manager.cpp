@@ -206,17 +206,8 @@ void EditorManager::RenderUI() {
         if (loadedWorld->entities.empty()) {
           ImGui::Text("No entities created");
         }
-        for (auto entity : loadedWorld->entities) {
-          if (ImGui::Button(
-                  (entity->id +
-                   (entity->engineIdentifier == loadedWorld->mainCameraEntityId
-                        ? " [main camera]"
-                        : "") +
-                   "##" + entity->engineIdentifier)
-                      .c_str())) {
-            selectedEntity = entity;
-          }
-        }
+
+        renderEntitiesUI(nullptr);
       }
       ImGui::End();
     }
@@ -232,18 +223,23 @@ void EditorManager::RenderUI() {
       if (result == NFD_OKAY) {
         auto asset = new Asset(std::string(outPath));
         free(outPath);
-
+        asset->parent = assetDirectory;
         project->assets.push_back(asset);
 
       } else {
         printf("Error: %s\n", NFD_GetError());
       }
     }
-    for (Asset *asset : project->assets) {
-      if (ImGui::Button(asset->id.c_str())) {
-        selectedAsset = asset;
-      }
+
+    renderAssetsUI(assetDirectory);
+
+    if (ImGui::Button("New directory")) {
+      auto asset = new Asset(std::string("directory"));
+      asset->directory = true;
+      asset->parent = assetDirectory;
+      project->assets.push_back(asset);
     }
+
     ImGui::End();
 
     if (selectedEntity != nullptr) {
@@ -304,6 +300,50 @@ void EditorManager::RenderUI() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void EditorManager::renderAssetsUI(Asset *parent) {
+  if (assetDirectory) {
+    if (ImGui::Button("ROOT")) {
+      assetDirectory = nullptr;
+    }
+  }
+  for (Asset *asset : project->assets) {
+
+    if (asset->parent == parent) {
+      if (asset->isDirectory()) {
+
+        if (ImGui::TreeNodeEx(asset->id.c_str())) {
+          renderAssetsUI(asset);
+          ImGui::TreePop();
+        }
+      } else {
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
+
+        if (ImGui::TreeNodeEx(asset->id.c_str(), flags)) {
+          if (ImGui::IsItemClicked()) {
+            selectedAsset = asset;
+          }
+          ImGui::TreePop();
+        }
+      }
+    }
+  }
+}
+
+void EditorManager::renderEntitiesUI(Entity *parent) {
+  for (auto entity : loadedWorld->entities) {
+    if (entity->parent == parent) {
+      if (ImGui::Button(
+              (entity->id +
+               (entity->engineIdentifier == loadedWorld->mainCameraEntityId
+                    ? " [main camera]"
+                    : "") +
+               "##" + entity->engineIdentifier)
+                  .c_str())) {
+        selectedEntity = entity;
+      }
+    }
+  }
+}
 void EditorManager::draw(float deltaTime) {
   if (axis == nullptr) {
     axis = new ModelEntity();
