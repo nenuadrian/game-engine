@@ -34,6 +34,9 @@ static void CheckOpenGLError(const char *stmt, const char *fname, int line) {
 #define GL_CHECK(stmt) stmt
 #endif
 
+namespace Hades {
+  using namespace std;
+
 class Shader {
 public:
   // Reference ID of the Shader Program
@@ -102,3 +105,5 @@ private:
   // Checks if the different Shaders have compiled properly
   void compileErrors(unsigned int shader, const char *type);
 };
+
+} // namespace Hades

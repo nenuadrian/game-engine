@@ -1,7 +1,7 @@
 #include "core/engine.h"
 
 int main(void) {
-  Engine engine = Engine();
+  auto engine = Hades::Engine();
   engine.RunGame();
   return 0;
 }

@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-
+namespace Hades {
 class ModelComplex : public Model {
 private:
   void loadModel(std::string const &path);
@@ -34,3 +34,5 @@ public:
 
   ~ModelComplex();
 };
+
+} // namespace Hades

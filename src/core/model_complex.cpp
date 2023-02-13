@@ -9,6 +9,7 @@
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h> // Post processing flags
 
+namespace Hades {
 Mesh ModelComplex::processMesh(aiMesh *mesh, const aiScene *scene) {
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
@@ -74,9 +75,9 @@ void ModelComplex::processNode(aiNode *node, const aiScene *scene) {
 void ModelComplex::loadModel(std::string const &path) {
   const aiScene *scene =
       aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-    if (scene == nullptr) {
-      throw std::invalid_argument("Could not load model");
-    }
+  if (scene == nullptr) {
+    throw std::invalid_argument("Could not load model");
+  }
   processNode(scene->mRootNode, scene);
 }
 
@@ -196,5 +197,5 @@ void ModelComplex::draw(GLuint shaderProgram) {
     meshes[i].draw(shaderProgram);
 }
 
-ModelComplex::~ModelComplex() {
-}
+ModelComplex::~ModelComplex() {}
+} // namespace Hades

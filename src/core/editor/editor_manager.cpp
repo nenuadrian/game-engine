@@ -6,42 +6,25 @@
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "nfd.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
-void EditorManager::scrollCallback(double x, double y) {
+namespace Hades {
 
+void EditorManager::scrollCallback(double x, double y) {
   camera.scrollCallback(x, y);
 }
 
 void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
   if (!ImGui::IsAnyItemActive() && button == GLFW_MOUSE_BUTTON_RIGHT) {
-    processCamera = GLFW_PRESS == action;
   }
 }
 
 void EditorManager::mousePosCallback(double x, double y) {
 
-  if (!ImGui::IsAnyItemActive() && processCamera) {
-
-    float xpos = static_cast<float>(x);
-    float ypos = static_cast<float>(y);
-
-    if (firstMouse) {
-      lastX = xpos;
-      lastY = ypos;
-      firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset =
-        lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-    camera.ProcessMouseMovement(xoffset, yoffset);
-  }
+  if (!ImGui::IsAnyItemActive()) {
+ }
 }
 
 EditorManager::EditorManager(Events *_events) { events = _events; }
@@ -408,3 +391,4 @@ EditorManager::~EditorManager() {
   delete project;
   delete window;
 }
+} // namespace Hades

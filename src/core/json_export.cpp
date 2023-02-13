@@ -4,6 +4,7 @@
 #include "entities.h"
 #include "nlohmann/json.hpp"
 
+namespace Hades {
 nlohmann::json vec3JSON(glm::vec3 v) {
   auto json = nlohmann::json::object();
   json["x"] = v.x;
@@ -137,3 +138,5 @@ Project *JSONExporter::toProject(std::string json) {
 
   return project;
 }
+
+} // namespace Hades

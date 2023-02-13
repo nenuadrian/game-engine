@@ -1,5 +1,6 @@
 #include "shader_generator.h"
 
+namespace Hades {
 std::string ShaderGenerator::generateFragmentShader(int textureCount) {
   std::string shader = "#version 330 core\n\n";
   shader += "in vec2 TexCoord;\n\n";
@@ -44,4 +45,5 @@ std::string ShaderGenerator::generateVertexShader(bool hasTexture) {
   shader += "}\n";
 
   return shader;
+}
 }

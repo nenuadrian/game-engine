@@ -2,6 +2,7 @@
 #pragma once
 #include "events.h"
 
+namespace Hades {
 class Engine {
   Events events;
 
@@ -11,3 +12,4 @@ public:
   void RunGame();
   static long int newEngineId();
 };
+} // namespace Hades

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "events.h"
+
+namespace Hades {
 class WindowParent {
 public:
   void virtual draw(float deltaTime) {}
@@ -29,3 +31,5 @@ public:
 
   virtual ~Window() {}
 };
+
+} // namespace Hades

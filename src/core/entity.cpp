@@ -13,6 +13,8 @@
 #include <iostream>
 
 static GLFWwindow *luaWindow;
+
+namespace Hades {
 static Entity *globalEntity;
 
 extern "C" {
@@ -176,3 +178,5 @@ World::~World() {
 void Asset::EditorUI(EditorManager *editor) {
   ImGui::InputText("Identifier", &id);
 }
+
+} // namespace Hades

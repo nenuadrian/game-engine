@@ -9,13 +9,13 @@
 #include <string>
 #include <vector>
 
+namespace Hades {
 class CameraEntity : public ModelEntity {
 
 public:
   Camera camera;
 
   CameraEntity();
-
 
   void EditorUI(EditorManager *editor) override;
 
@@ -30,3 +30,4 @@ public:
 
   std::string type() override { return "camera"; };
 };
+} // namespace Hades

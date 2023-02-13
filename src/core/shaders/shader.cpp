@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
+namespace Hades {
 void Shader::load(const char *vertexSource, const char *fragmentSource) {
   // Create Vertex Shader Object and get its reference
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -112,6 +112,5 @@ void Shader::compileErrors(unsigned int shader, const char *type) {
   }
 }
 
-Shader::~Shader() {
-  glDeleteProgram(ID);
-}
+Shader::~Shader() { glDeleteProgram(ID); }
+} // namespace Hades

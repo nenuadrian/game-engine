@@ -6,6 +6,7 @@
 #include "imgui_impl_opengl3.h"
 #include <iostream>
 
+namespace Hades {
 static void mouse_callback(GLFWwindow *w, double x, double y) {
   WindowParent *handler =
       reinterpret_cast<WindowParent *>(glfwGetWindowUserPointer(w));
@@ -138,3 +139,4 @@ void WindowOpengl::run() {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
+} // namespace Hades

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+namespace Hades {
 class ModelBasic : public ModelComplex {
   std::string shape;
 
@@ -143,3 +143,5 @@ public:
     meshes.push_back(mesh);
   }
 };
+
+} // namespace Hades

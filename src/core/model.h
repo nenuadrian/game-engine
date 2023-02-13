@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-
+namespace Hades {
 struct Vertex {
   glm::vec3 Position;
   glm::vec3 Normal;
@@ -46,5 +46,6 @@ public:
   virtual void init(){};
   virtual void draw(Shader *shader){};
   virtual void draw(GLuint shaderProgram){};
-
 };
+
+} // namespace Hades

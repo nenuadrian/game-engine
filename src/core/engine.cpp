@@ -6,6 +6,9 @@
 #include "json_export.h"
 #include <fstream>
 
+namespace Hades {
+  using namespace std;
+  
 long int Engine::newEngineId() {
   static std::atomic<long int> value(static_cast<long int>(time(NULL)));
   value += 1;
@@ -65,5 +68,6 @@ void Engine::RunGame() {
   game->run();
   delete game;
   delete project;
-
 }
+
+} // namespace Hades

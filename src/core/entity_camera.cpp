@@ -1,10 +1,9 @@
 #include "entity_camera.h"
-#include "shaders/shader_generator.h"
 #include "editor/editor_manager.h"
+#include "shaders/shader_generator.h"
 
-CameraEntity::CameraEntity() : ModelEntity() {
-
-}
+namespace Hades {
+CameraEntity::CameraEntity() : ModelEntity() {}
 
 void CameraEntity::EditorUI(EditorManager *editor) {
   Entity::EditorUI(editor);
@@ -18,3 +17,4 @@ void CameraEntity::EditorUI(EditorManager *editor) {
   ImGui::InputFloat("Pitch", &camera.Pitch);
   camera.Position = position;
 }
+} // namespace Hades

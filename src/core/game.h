@@ -7,12 +7,13 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+#include "core/camera.h"
 #include "events.h"
 #include "project.h"
 #include "window_opengl.h"
 #include <cstddef>
-#include "core/camera.h"
 
+namespace Hades {
 class Game : public WindowParent {
 private:
   Camera *camera;
@@ -32,3 +33,4 @@ public:
   void mouseButtonCallback(int button, int action, int modsy) override;
   void mousePosCallback(double x, double y) override;
 };
+} // namespace Hades

@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+namespace Hades {
 class World;
 class EditorManager;
 
@@ -90,3 +91,5 @@ public:
   void init(Project *project, Window *w);
   ~World();
 };
+
+} // namespace Hades

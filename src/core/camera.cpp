@@ -1,5 +1,6 @@
 #include "camera.h"
 
+namespace Hades {
 void Camera::updateCameraVectors() {
   // calculate the new Front vector
   glm::vec3 front;
@@ -65,3 +66,5 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
   // update Front, Right and Up Vectors using the updated Euler angles
   updateCameraVectors();
 }
+
+} // namespace Hades

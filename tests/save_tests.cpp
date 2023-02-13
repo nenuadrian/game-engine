@@ -7,6 +7,9 @@
 #include "../src/core/json_export.h"
 #include "../src/core/project.h"
 
+using namespace Hades;
+
+
 TEST_CASE("Project should save to JSON", "[save]") {
   Project project = Project();
   std::string s = JSONExporter::fromProject(&project);

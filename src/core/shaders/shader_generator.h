@@ -1,5 +1,6 @@
 #include <string>
 
+namespace Hades {
 class ShaderGenerator {
 
 public:
@@ -8,3 +9,4 @@ public:
   std::string generateFragmentShader(int textureCount);
   std::string generateVertexShader(bool hasTexture);
 };
+} // namespace Hades

@@ -5,8 +5,8 @@
 #include <ctime>
 #include <fstream>
 
+namespace Hades {
 Project::Project() {}
-
 
 std::string Project::NewWorld() {
   World *world = new World();
@@ -24,3 +24,4 @@ Project::~Project() {
     delete asset;
   }
 }
+} // namespace Hades

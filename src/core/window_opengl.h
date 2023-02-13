@@ -2,8 +2,9 @@
 
 #include "imgui_internal.h"
 #include "window.h"
-
 class GLFWwindow;
+
+namespace Hades {
 
 class WindowOpengl : public Window {
 
@@ -17,3 +18,5 @@ public:
   bool keyPressed(int code) override;
   ~WindowOpengl() override;
 };
+
+} // namespace Hades

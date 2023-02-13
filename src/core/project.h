@@ -1,15 +1,15 @@
 #pragma once
+#include "entity.h"
 #include <cstddef>
 #include <string>
 #include <vector>
-#include "entity.h"
 
-
+namespace Hades {
 class Project {
 public:
   std::string name;
   std::string mainWorldId;
-  std::vector<Asset*> assets;
+  std::vector<Asset *> assets;
   std::vector<World *> worlds;
   Project();
 
@@ -19,3 +19,4 @@ public:
 
   ~Project();
 };
+} // namespace Hades

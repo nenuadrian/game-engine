@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+namespace Hades {
 class ModelEntity : public Entity {
 private:
   Shader *shader = nullptr;
@@ -22,3 +23,4 @@ public:
   virtual void init(bool running_, Window *window) override;
   ~ModelEntity();
 };
+} // namespace Hades

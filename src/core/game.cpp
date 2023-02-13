@@ -10,6 +10,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+namespace Hades {
+
 void Game::mouseButtonCallback(int button, int action, int modsy) {}
 
 void Game::mousePosCallback(double x, double y) {}
@@ -67,8 +69,6 @@ void Game::draw(float deltaTime) {
     }
   }
 
-  
-
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Game")) {
       if (ImGui::MenuItem("Stop")) {
@@ -80,7 +80,6 @@ void Game::draw(float deltaTime) {
     }
   }
   ImGui::EndMainMenuBar();
-
 }
 
 void Game::run() {
@@ -96,3 +95,5 @@ void Game::run() {
   delete project;
   delete window;
 }
+
+} // namespace Hades

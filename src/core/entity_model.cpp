@@ -11,8 +11,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include "misc/cpp/imgui_stdlib.h"
 
+namespace Hades {
 void ModelEntity::init(bool running_, Window *window) {
   Entity::init(running_, window);
   ShaderGenerator generator = ShaderGenerator();
@@ -106,3 +106,4 @@ ModelEntity::~ModelEntity() {
   if (shader)
     delete shader;
 }
+} // namespace Hades

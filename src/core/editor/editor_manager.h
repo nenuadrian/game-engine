@@ -5,6 +5,7 @@
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
+namespace Hades {
 
 class EditorManager : public WindowParent {
 private:
@@ -53,3 +54,4 @@ public:
   void mousePosCallback(double x, double y) override;
   ~EditorManager();
 };
+} // namespace Hades
