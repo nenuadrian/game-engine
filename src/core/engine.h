@@ -17,5 +17,5 @@ public:
         std::chrono::system_clock::now().time_since_epoch());
     return ms.count();
   };
-}; // namespace Hades
+}; 
 } // namespace Hades

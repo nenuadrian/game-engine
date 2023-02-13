@@ -125,17 +125,9 @@ public:
                   {nbl, left, glm::vec2(1.0f, 1.0f)},
                   {fbl, left, glm::vec2(0.0f, 0.0f)},
                   {ftl, left, glm::vec2(1.0f, 0.0f)}};
-    } else if (type == "axis") {
-      vertices = {{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-                   glm::vec2(0.0f, 0.0f)},
-                  {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-                   glm::vec2(1.0f, 0.0f)},
-                  {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-                   glm::vec2(1.0f, 1.0f)},
-                  {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-                   glm::vec2(0.0f, 1.0f)}};
+    } else {
+      throw std::invalid_argument("Basic shape not supported " + shape);
     }
-
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
 

@@ -341,11 +341,6 @@ void EditorManager::renderEntitiesUI(Entity *parent) {
   }
 }
 void EditorManager::draw(float deltaTime) {
-  if (axis == nullptr) {
-    axis = new ModelEntity();
-    axis->initBasicModel("axis");
-    axis->init(false, window);
-  }
   if (!ImGui::IsAnyItemActive()) {
     if (window->keyPressed(GLFW_KEY_W))
       camera.ProcessKeyboard(FORWARD, deltaTime);

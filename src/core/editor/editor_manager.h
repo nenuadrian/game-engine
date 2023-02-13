@@ -10,7 +10,6 @@ namespace Hades {
 
 class EditorManager : public WindowParent {
 private:
-  ModelEntity *axis;
   Entity *selectedEntity = nullptr;
   Asset *selectedAsset = nullptr;
   Asset *assetDirectory = nullptr;
