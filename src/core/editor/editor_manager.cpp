@@ -365,7 +365,6 @@ void EditorManager::draw(float deltaTime) {
       100.0f);
 
   glm::mat4 view = camera.GetViewMatrix();
-  axis->draw(deltaTime, view, projection);
   if (loadedWorld != nullptr) {
     for (Entity *entity : loadedWorld->entities) {
       entity->draw(deltaTime, view, projection);
