@@ -38,7 +38,7 @@ public:
   World *loadedWorld = nullptr;
   Project *project = nullptr;
 
-  EditorManager(Engine *engine) : engine(engine) { events = engine->events; };
+  EditorManager(Engine *engine) : engine(engine) { events = &engine->events; };
 
   void run();
   void Open();

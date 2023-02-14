@@ -11,13 +11,14 @@ class Log {
   std::string msg;
   
   Log(std::string msg) : msg(msg) {};
-}
+};
   
 class Engine {
+
+public:
   Events events;
   std::vector<Log> logs;
 
-public:
   Engine(){};
   void RunEditor();
   void RunGame();
