@@ -7,13 +7,15 @@
 #include <chrono>
 
 namespace Hades {
-
+class Engine;
 class EditorManager : public WindowParent {
 private:
   Entity *selectedEntity = nullptr;
   Asset *selectedAsset = nullptr;
   Asset *assetDirectory = nullptr;
-  Events *events;
+  Engine *engine;
+    Events *events;
+
   Window *window;
   bool showDebugStats;
 
@@ -36,7 +38,7 @@ public:
   World *loadedWorld = nullptr;
   Project *project = nullptr;
 
-  EditorManager(Events *events);
+  EditorManager(Engine *engine) : engine(engine) { events = engine->events; };
 
   void run();
   void Open();
