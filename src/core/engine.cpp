@@ -14,7 +14,7 @@ void Engine::RunEditor() {
   while (events.RUN_EDITOR || events.RUN_GAME) {
     if (events.RUN_EDITOR) {
       events.RUN_EDITOR = false;
-      EditorManager *editorManager = new EditorManager(&events);
+      EditorManager *editorManager = new EditorManager(this);
 
       if (!events.data.empty()) {
         Project *project;
