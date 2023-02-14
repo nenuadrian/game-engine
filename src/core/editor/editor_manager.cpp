@@ -27,7 +27,6 @@ void EditorManager::mousePosCallback(double x, double y) {
  }
 }
 
-EditorManager::EditorManager(Events *_events) { events = _events; }
 
 void EditorManager::NewProject() {
   if (project != nullptr) {
