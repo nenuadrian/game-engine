@@ -287,6 +287,15 @@ void EditorManager::RenderUI() {
     }
     ImGui::End();
   }
+  
+   ImGui::Begin("Logs");
+  if (ImGui::Button("Clear All")) {
+    engine->logs.clear();
+  }
+    for (auto log : engine->logs) {
+     ImGui::Text(log.msg); 
+    }
+    ImGui::End();
 }
 
 void EditorManager::renderAssetsUI(Asset *parent) {
