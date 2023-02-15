@@ -151,11 +151,6 @@ void Entity::EditorUI(EditorManager *editor) {
   }
 }
 
-World::World() {
-  id = std::to_string(Engine::newEngineId());
-  name = "Untitled";
-}
-
 CameraEntity *World::defaultCamera() {
   auto cam =
       std::find_if(entities.begin(), entities.end(), [this](Entity *entity) {
@@ -181,11 +176,7 @@ Asset::Asset(std::string _file) {
   id = engineIdentifier;
 }
 
-World::~World() {
-  for (Entity *entity : entities) {
-    delete entity;
-  }
-}
+
 
 void Asset::EditorUI(EditorManager *editor) {
   ImGui::InputText("Identifier", &id);

@@ -48,9 +48,6 @@ set(BUILD_SHARED_LIBS
     OFF
     CACHE BOOL "" FORCE)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
-set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-
 option(ASSIMP_BUILD_TESTS
        "If the test suite for Assimp is built in addition to the library." OFF)
 option(BUILD_UNIT_TESTS "Build Unit Tests" OFF)

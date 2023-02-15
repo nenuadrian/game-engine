@@ -192,7 +192,7 @@ void EditorManager::RenderUI() {
 
           if (entity) {
             entity->init(false, nullptr);
-            loadedWorld->entities.push_back(entity);
+            loadedWorld->addEntity(entity);
           }
         }
         ImGui::Text("Entities");

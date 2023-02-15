@@ -1,5 +1,6 @@
 #pragma once
 #include "entity.h"
+#include "world.h"
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -7,7 +8,7 @@
 namespace Hades {
 class Project {
 public:
-  std::string name;
+  std::string name = "untitled";
   std::string mainWorldId;
   std::vector<Asset *> assets;
   std::vector<World *> worlds;

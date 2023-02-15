@@ -1,4 +1,5 @@
 #include "core/entity.h"
+#include "core/project.h"
 #include <string>
 
 namespace Hades {

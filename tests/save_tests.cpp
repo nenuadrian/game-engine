@@ -6,6 +6,7 @@
 #include <cstdint>
 
 #include "../src/core/json_export.h"
+#include "../src/core/editor/editor_manager.h"
 #include "../src/core/project.h"
 #include "nlohmann/json.hpp"
 
@@ -45,4 +46,16 @@ TEST_CASE("Worlds should save to JSON") {
   std::string json = JSONExporter::fromProject(&project);
   Project *project2 = JSONExporter::toProject(json);
   REQUIRE(project2->worlds.size() == 1);
+}
+
+TEST_CASE("Entities should save to JSON") {
+  Project project = Project();
+  std::string id = project.NewWorld();
+  Engine engine = Engine();
+  EditorManager* manager = new EditorManager(&engine);
+  manager->load(&project);
+
+  manager->SelectWorld(id);
+
+  std::string json = JSONExporter::fromProject(&project);
 }
