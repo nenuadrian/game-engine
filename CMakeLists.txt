@@ -41,10 +41,6 @@ set(ASSIMP_NO_EXPORT
     ON
     CACHE BOOL "" FORCE)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-
-set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 # If you won't be accessing Assimp outside of the plugin, build it as static to
 # have the plugin binary self-contained

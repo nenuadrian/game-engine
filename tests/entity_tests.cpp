@@ -10,12 +10,11 @@
 
 using namespace Hades;
 
-TEST_CASE("Entities are initialised", "[entity]") {
+TEST_CASE("Entities are initialised") {
   Events events;
   WindowOpengl *w = new WindowOpengl(nullptr, &events);
   w->init();
   ModelEntity entity = ModelEntity();
-  // auto json = entity.JSON();
 
-  // REQUIRE(!json.contains("model"));
+  REQUIRE(entity.type() == "model");
 }

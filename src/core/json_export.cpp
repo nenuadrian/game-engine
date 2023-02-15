@@ -5,28 +5,31 @@
 #include "nlohmann/json.hpp"
 
 namespace Hades {
-nlohmann::json vec3JSON(glm::vec3 v) {
-  auto json = nlohmann::json::object();
+  using namespace nlohmann;
+  using namespace std;
+
+json vec3JSON(glm::vec3 v) {
+  auto json = json::object();
   json["x"] = v.x;
   json["y"] = v.y;
   json["z"] = v.z;
   return json;
 }
 
-glm::vec3 JSONvec3(nlohmann::json data) {
+glm::vec3 JSONvec3(json data) {
   return glm::vec3(data["x"], data["y"], data["z"]);
 }
 
-std::string JSONExporter::fromProject(Project *project) {
-  nlohmann::json data = nlohmann::json::object();
+string JSONExporter::fromProject(Project *project) {
+  json data = json::object();
 
   data["name"] = project->name;
   data["mainWorldId"] = project->mainWorldId;
-  std::vector<nlohmann::json> worldsVector = {};
-  std::vector<nlohmann::json> assetsVector = {};
-  std::vector<nlohmann::json> entitiesVector = {};
+  vector<json> worldsVector = {};
+  vector<json> assetsVector = {};
+  vector<json> entitiesVector = {};
   for (World *world : project->worlds) {
-    nlohmann::json worldData = nlohmann::json::object();
+    json worldData = json::object();
     worldData["id"] = world->id;
     worldData["mainCameraEntityId"] = world->mainCameraEntityId;
     worldData["name"] = world->name;
@@ -34,7 +37,7 @@ std::string JSONExporter::fromProject(Project *project) {
 
     for (Entity *entity : world->entities) {
 
-      nlohmann::json entityData = nlohmann::json::object();
+      json entityData = json::object();
       entityData["id"] = entity->id;
       entityData["type"] = entity->type();
       entityData["engineIdentifier"] = entity->engineIdentifier;
@@ -49,7 +52,7 @@ std::string JSONExporter::fromProject(Project *project) {
         data["pitch"] = ((CameraEntity *)entity)->camera.Pitch;
       } else if (entity->type() == "model") {
         if (((ModelEntity *)entity)->model) {
-          data["model"] = nlohmann::json::object();
+          data["model"] = json::object();
           data["model"]["type"] = ((ModelEntity *)entity)->model->type;
           if (((ModelEntity *)entity)->model->type == "basic") {
             data["model"]["shape"] =
@@ -66,7 +69,7 @@ std::string JSONExporter::fromProject(Project *project) {
   }
 
   for (Asset *asset : project->assets) {
-    nlohmann::json assetData = nlohmann::json::object();
+    json assetData = json::object();
     assetData["file"] = asset->file;
     assetData["engineIdentifier"] = asset->engineIdentifier;
     assetData["id"] = asset->id;
@@ -80,9 +83,9 @@ std::string JSONExporter::fromProject(Project *project) {
   return data.dump();
 }
 
-Project *JSONExporter::toProject(std::string json) {
+Project *JSONExporter::toProject(string json) {
   auto project = new Project();
-  auto data = nlohmann::json::parse(json);
+  auto data = json::parse(json);
   project->name = data["name"];
   project->mainWorldId = data["mainWorldId"];
 
