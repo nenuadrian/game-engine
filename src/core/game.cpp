@@ -40,16 +40,11 @@ void Game::LoadWorld(World *newWorld) {
   CameraEntity *defaultCamera = nullptr;
 
   world->init(project, window);
-  auto cam = std::find_if(world->entities.begin(), world->entities.end(),
-                          [newWorld](Entity *entity) {
-                            return entity->engineIdentifier ==
-                                   newWorld->mainCameraEntityId;
-                          });
 
-  if (cam == world->entities.end()) {
+  defaultCamera = world->defaultCamera();
+
+  if (defaultCamera == nullptr) {
     throw std::invalid_argument("Could not find main camera");
-  } else {
-    defaultCamera = (CameraEntity *)*cam;
   }
 
   camera = &defaultCamera->camera;
@@ -72,7 +67,6 @@ void Game::draw(float deltaTime) {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Game")) {
       if (ImGui::MenuItem("Stop")) {
-        events->RUN_EDITOR = true;
         events->CLOSE_WINDOW = true;
       }
 
@@ -83,17 +77,12 @@ void Game::draw(float deltaTime) {
 }
 
 void Game::run() {
-
   window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
-
   window->init();
-
   init();
-
   window->run();
-
-  delete project;
-  delete window;
 }
+
+Game::~Game() { delete window; }
 
 } // namespace Hades

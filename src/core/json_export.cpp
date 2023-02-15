@@ -88,12 +88,12 @@ Project *JSONExporter::toProject(std::string json) {
 
   for (auto worldData : data["worlds"]) {
     World *world =
-        new World(data["id"], data["name"], data["mainCameraEntityId"]);
+        new World(worldData["id"], worldData["name"], worldData["mainCameraEntityId"]);
     project->worlds.push_back(world);
   }
 
   for (auto assetData : data["assets"]) {
-    auto asset = new Asset(data["id"], data["file"], data["engineIdentifier"]);
+    auto asset = new Asset(assetData["id"], assetData["file"], assetData["engineIdentifier"]);
     project->assets.push_back(asset);
   }
 

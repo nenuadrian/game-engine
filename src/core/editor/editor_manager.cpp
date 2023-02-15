@@ -293,7 +293,7 @@ void EditorManager::RenderUI() {
     engine->logs.clear();
   }
     for (auto log : engine->logs) {
-     ImGui::Text(log.msg.c_str()); 
+     ImGui::Text("%s", log.msg.c_str()); 
     }
     ImGui::End();
 }

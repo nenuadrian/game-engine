@@ -2,6 +2,7 @@
 #include "Engine/LuaTNumber.hpp"
 #include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
+#include "core/entity_camera.h"
 #include "engine.h"
 #include "glm/ext.hpp"
 #include "glm/fwd.hpp"
@@ -153,6 +154,18 @@ void Entity::EditorUI(EditorManager *editor) {
 World::World() {
   id = std::to_string(Engine::newEngineId());
   name = "Untitled";
+}
+
+CameraEntity *World::defaultCamera() {
+  auto cam =
+      std::find_if(entities.begin(), entities.end(), [this](Entity *entity) {
+        return entity->engineIdentifier == mainCameraEntityId;
+      });
+  if (cam == entities.end()) {
+    return nullptr;
+  } else {
+    return (CameraEntity *)*cam;
+  }
 }
 
 void World::init(Project *project, Window *w) {

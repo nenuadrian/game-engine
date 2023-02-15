@@ -7,7 +7,7 @@
 #include <fstream>
 
 namespace Hades {
-  using namespace std;
+using namespace std;
 
 void Engine::RunEditor() {
   events.RUN_EDITOR = true;
@@ -42,10 +42,22 @@ void Engine::RunEditor() {
 
     if (events.RUN_GAME) {
       events.RUN_GAME = false;
-      Project *project = JSONExporter::toProject(events.data);
-      Game *game = new Game(project, &events);
-      game->run();
-      delete game;
+      Game *game = nullptr;
+      Project *project = nullptr;
+      try {
+        project = JSONExporter::toProject(events.data);
+        game = new Game(project, &events);
+        game->run();
+      } catch (const std::exception &e) {
+        error(e.what());
+      }
+      if (game) {
+        delete game;
+      }
+      if (project) {
+        delete game;
+      }
+      events.RUN_EDITOR = true;
     }
   }
 }

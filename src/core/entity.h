@@ -15,6 +15,7 @@
 namespace Hades {
 class World;
 class EditorManager;
+class CameraEntity;
 
 class Entity {
   LuaCpp::LuaContext ctx;
@@ -89,6 +90,7 @@ public:
   World(std::string id, std::string name, std::string mainCameraEntityId)
       : id(id), name(name), mainCameraEntityId(mainCameraEntityId){};
   void init(Project *project, Window *w);
+  CameraEntity* defaultCamera();
   ~World();
 };
 
