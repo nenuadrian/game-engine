@@ -2,6 +2,7 @@
 
 #include "core/entities.h"
 #include "core/json_export.h"
+#include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
@@ -293,6 +294,7 @@ void EditorManager::RenderUI() {
     engine->logs.clear();
   }
     for (auto log : engine->logs) {
+     ImGui::Separator();
      ImGui::Text("%s", log.msg.c_str()); 
     }
     ImGui::End();

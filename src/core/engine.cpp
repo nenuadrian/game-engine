@@ -55,7 +55,7 @@ void Engine::RunEditor() {
         delete game;
       }
       if (project) {
-        delete game;
+        delete project;
       }
       events.RUN_EDITOR = true;
     }
