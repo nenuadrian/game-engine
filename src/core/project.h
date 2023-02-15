@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include "core/asset.h"
 
 namespace Hades {
 class Project {

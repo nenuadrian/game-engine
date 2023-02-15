@@ -169,17 +169,4 @@ void World::init(Project *project, Window *w) {
   }
 }
 
-Asset::Asset(std::string _file) {
-  file = _file;
-
-  engineIdentifier = std::to_string(Engine::newEngineId());
-  id = engineIdentifier;
-}
-
-
-
-void Asset::EditorUI(EditorManager *editor) {
-  ImGui::InputText("Identifier", &id);
-}
-
 } // namespace Hades

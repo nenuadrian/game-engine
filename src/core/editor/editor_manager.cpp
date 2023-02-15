@@ -25,9 +25,8 @@ void EditorManager::mouseButtonCallback(int button, int action, int modsy) {
 void EditorManager::mousePosCallback(double x, double y) {
 
   if (!ImGui::IsAnyItemActive()) {
- }
+  }
 }
-
 
 void EditorManager::NewProject() {
   if (project != nullptr) {
@@ -256,7 +255,7 @@ void EditorManager::RenderUI() {
     if (selectedAsset != nullptr) {
       ImGui::Begin("Asset");
 
-      selectedAsset->EditorUI(this);
+      ImGui::InputText("Identifier", &selectedAsset->id);
 
       if (ImGui::Button("Delete")) {
         project->assets.erase(
@@ -288,16 +287,16 @@ void EditorManager::RenderUI() {
     }
     ImGui::End();
   }
-  
-   ImGui::Begin("Logs");
+
+  ImGui::Begin("Logs");
   if (ImGui::Button("Clear All")) {
     engine->logs.clear();
   }
-    for (auto log : engine->logs) {
-     ImGui::Separator();
-     ImGui::Text("%s", log.msg.c_str()); 
-    }
-    ImGui::End();
+  for (auto log : engine->logs) {
+    ImGui::Separator();
+    ImGui::Text("%s", log.msg.c_str());
+  }
+  ImGui::End();
 }
 
 void EditorManager::renderAssetsUI(Asset *parent) {

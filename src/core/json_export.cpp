@@ -3,6 +3,7 @@
 #include "core/model_complex.h"
 #include "entities.h"
 #include "nlohmann/json.hpp"
+#include "core/asset.h"
 
 namespace Hades {
   using namespace nlohmann;

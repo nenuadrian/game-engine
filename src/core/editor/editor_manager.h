@@ -2,6 +2,7 @@
 #include "core/camera.h"
 #include "core/entity_model.h"
 #include "core/events.h"
+#include "core/asset.h"
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
