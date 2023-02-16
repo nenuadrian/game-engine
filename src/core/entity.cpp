@@ -9,7 +9,6 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include "model_complex.h"
 #include "shaders/shader_generator.h"
 #include <iostream>
 
@@ -37,7 +36,7 @@ static int _play(lua_State *L) {
 }
 
 Entity::Entity() {
-  engineIdentifier = Engine::newEngineId();
+  engineIdentifier = std::to_string(Engine::newEngineId());
   id = "untitled" + engineIdentifier;
 }
 
