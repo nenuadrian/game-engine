@@ -1,6 +1,6 @@
 # Hades - Light C++ 3D Game Engine 
 
-Small, farily dumb, C++ game engine. 
+Small, fairly dumb, C++ game engine. 
 
 Available renderers: OpenGL.
 
