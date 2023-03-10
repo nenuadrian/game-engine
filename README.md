@@ -3,7 +3,9 @@
 Small, C++ game engine, capable of 3D graphics, sound, entity management and game mechanics via scritps. 
 
 Available renderers: OpenGL.
+
 Future considered renderers: Vulkan.
+
 Build system: cmake.
 
 ## goals
