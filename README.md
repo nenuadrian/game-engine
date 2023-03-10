@@ -1,8 +1,10 @@
 # Hades - Light C++ 3D Game Engine 
 
-Small, fairly dumb, C++ game engine. 
+Small, C++ game engine, capable of 3D graphics, sound, entity management and game mechanics via scritps. 
 
 Available renderers: OpenGL.
+Future considered renderers: Vulkan.
+Build system: cmake.
 
 ## goals
  * develop C++ software engineering skills
@@ -16,9 +18,25 @@ Available renderers: OpenGL.
  * save / load project from JSON
  * scripting with Lua
  * model loading using assimp and stb
- * sound using soloud
- * tests using catch2
+ * sound 
+ * tests 
  * generating shaders dynamically
+
+## libraries
+
+ * assimp
+ * glad
+ * glew
+ * glfw
+ * glm
+ * imgui
+ * luacpp
+ * nativefiledialog
+ * stb
+ * catch2
+ * soloud
+ * json
+ * entt
 
 ## screennshots
 
