@@ -1,3 +1,3 @@
-cd build
-find . -name "*.gcda" -print0 | xargs -0 rm\n
-make
+mkdir -p build
+
+make 
