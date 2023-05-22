@@ -1,12 +1,6 @@
 # Hades - Light C++ 3D Game Engine 
 
-Small, C++ game engine, capable of 3D graphics, sound, entity management and game mechanics via scritps. 
-
-Available renderers: OpenGL.
-
-Future considered renderers: Vulkan.
-
-Build system: cmake.
+A compact game engine written in C++, which has the ability to handle 3D graphics, sound, entity management, and game mechanics using scripts. It currently supports the OpenGL rendering system, but there are plans to include Vulkan as a renderer in the future. The build system used for this engine is cmake.
 
 ## goals
  * develop C++ software engineering skills
