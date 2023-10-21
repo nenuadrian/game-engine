@@ -6,7 +6,6 @@ A compact game engine written in C++, which has the ability to handle 3D graphic
  * develop C++ software engineering skills
  * understand graphics 2D and 3D rendering pipelines with OpenGL and other frameworks
  * build a usable engine for making a small game 
- * basics of networking in C++ for multiplayer gaming: https://github.com/nenuadrian/cpp-light-game-server-hades
 
 ## features
 
