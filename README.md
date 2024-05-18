@@ -11,7 +11,6 @@ A compact game engine written in C++, which has the ability to handle 3D graphic
 
  * entity management, with camera and model features
  * save / load project from JSON
- * scripting with Lua
  * model loading using assimp and stb
  * sound 
  * tests 
@@ -25,7 +24,6 @@ A compact game engine written in C++, which has the ability to handle 3D graphic
  * glfw
  * glm
  * imgui
- * luacpp
  * nativefiledialog
  * stb
  * catch2

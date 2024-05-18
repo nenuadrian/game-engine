@@ -71,9 +71,7 @@ include_directories(
   "libs/assimp/include"
   "libs/stb-cmake"
   "libs/glad/include"
-  "libs/glad/src"
-  libs/luacpp/Source
-  ${LUA_INCLUDE_DIR})
+  "libs/glad/src")
 
 set(GLFW_BUILD_EXAMPLES
     OFF
@@ -112,7 +110,6 @@ add_subdirectory(libs/Catch2)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/glew/build/cmake)
 add_subdirectory(libs/assimp)
-add_subdirectory(libs/luacpp/Source)
 
 file(
   GLOB
@@ -145,9 +142,7 @@ link_libraries(
   Catch2
   soloud
   glfw
-  luacpp_static
   assimp
-  ${LUA_LIBRARIES}
   ${GLFW_LIBRARIES}
   ${GLEW_LIBRARIES})
 add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC} src/main.cpp)
