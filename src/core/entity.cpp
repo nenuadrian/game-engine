@@ -1,6 +1,4 @@
 #include "entity.h"
-#include "Engine/LuaTNumber.hpp"
-#include "Engine/LuaTUserData.hpp"
 #include "GLFW/glfw3.h"
 #include "core/entity_camera.h"
 #include "engine.h"
@@ -12,28 +10,9 @@
 #include "shaders/shader_generator.h"
 #include <iostream>
 
-static GLFWwindow *luaWindow;
 
 namespace Hades {
-static Entity *globalEntity;
 
-extern "C" {
-static int _keyIsPressed(lua_State *L) {
-  int n = lua_gettop(L); /* number of arguments */
-
-  int key = lua_tointeger(L, 1);
-  bool result = glfwGetKey(luaWindow, key) == GLFW_PRESS;
-  lua_pushboolean(L, result); /* second result */
-  return 1;                   /* number of results */
-}
-
-static int _play(lua_State *L) {
-  int n = lua_gettop(L); /* number of arguments */
-  const char *song = lua_tostring(L, 1);
-  globalEntity->play(song);
-  return 0; /* number of results */
-}
-}
 
 Entity::Entity() {
   engineIdentifier = std::to_string(Engine::newEngineId());
@@ -43,24 +22,7 @@ Entity::Entity() {
 void Entity::init(bool running_, Window *window) {
   if (running_) {
     if (!script.empty()) {
-      ctx = LuaCpp::LuaContext();
-      xLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-      yLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-      zLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-      deltaTimeLua = std::make_shared<LuaCpp::Engine::LuaTNumber>(0);
-
-      ctx.AddGlobalVariable("x", xLua);
-      ctx.AddGlobalVariable("y", yLua);
-      ctx.AddGlobalVariable("z", zLua);
-      ctx.AddGlobalVariable("deltaTime", deltaTimeLua);
-
-      std::shared_ptr<LuaCpp::Registry::LuaLibrary> lib =
-          std::make_shared<LuaCpp::Registry::LuaLibrary>("engine");
-      lib->AddCFunction("isKeyPressed", _keyIsPressed);
-
-      ctx.AddLibrary(lib);
-      luaWindow = ((WindowOpengl *)window)->w;
-      ctx.CompileString(engineIdentifier, script);
+     
     }
   }
 
@@ -100,15 +62,7 @@ void Entity::play(const char *song) {
 
 void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection) {
   if (running && !script.empty()) {
-    deltaTimeLua->setValue(deltaTime);
-    xLua->setValue(position.x);
-    yLua->setValue(position.y);
-    zLua->setValue(position.z);
-    globalEntity = this;
-    ctx.Run(engineIdentifier);
-    position.x = xLua->getValue();
-    position.y = yLua->getValue();
-    position.z = zLua->getValue();
+    
   }
 }
 
@@ -141,8 +95,6 @@ void Entity::EditorUI(EditorManager *editor) {
       scriptError = "";
 
       try {
-        auto ctx = LuaCpp::LuaContext();
-        ctx.CompileString(engineIdentifier, script);
       } catch (std::exception &e) {
         scriptError = e.what();
       }

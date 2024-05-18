@@ -6,7 +6,6 @@
 #include "soloud_thread.h"
 #include "soloud_wav.h"
 #include "window_opengl.h"
-#include <LuaCpp.hpp>
 #include <cstddef>
 #include <iterator>
 #include <string>
@@ -18,11 +17,6 @@ class EditorManager;
 class CameraEntity;
 
 class Entity {
-  LuaCpp::LuaContext ctx;
-  std::shared_ptr<LuaCpp::Engine::LuaTNumber> xLua;
-  std::shared_ptr<LuaCpp::Engine::LuaTNumber> yLua;
-  std::shared_ptr<LuaCpp::Engine::LuaTNumber> zLua;
-  std::shared_ptr<LuaCpp::Engine::LuaTNumber> deltaTimeLua;
   bool running;
   SoLoud::Soloud soloud;
 
