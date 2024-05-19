@@ -68,7 +68,8 @@ void Engine::RunGame() {
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));
   ifs.close();
-  auto project = JSONExporter::toProject(content);
+  // Explicitly specify the type of 'project' variable
+  Project* project = JSONExporter::toProject(content);
 
   Game *game = new Game(project, &events);
   game->run();
