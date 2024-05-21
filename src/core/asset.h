@@ -12,8 +12,10 @@ public:
   std::string engineIdentifier;
   std::string id;
   std::string file;
+  std::string parent_id;
+
   bool directory;
-  Asset *parent;
+
   Asset() {}
   Asset(std::string _file);
   Asset(std::string id, std::string file, std::string engineIdentifier)

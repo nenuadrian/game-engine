@@ -67,7 +67,7 @@ void Game::draw(float deltaTime) {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("Game")) {
       if (ImGui::MenuItem("Stop")) {
-        events->CLOSE_WINDOW = true;
+        events->setEvent(EventType::CLOSE_WINDOW);
       }
 
       ImGui::EndMenu();

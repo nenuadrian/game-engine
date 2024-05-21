@@ -6,75 +6,91 @@
 #include "json_export.h"
 #include <fstream>
 
-namespace Hades {
-using namespace std;
+namespace Hades
+{
+  using namespace std;
 
-void Engine::RunEditor() {
-  events.RUN_EDITOR = true;
-  while (events.RUN_EDITOR || events.RUN_GAME) {
-    if (events.RUN_EDITOR) {
-      events.RUN_EDITOR = false;
-      EditorManager *editorManager = new EditorManager(this);
+  void Engine::RunEditor()
+  {
+    events.setEvent(EventType::RUN_EDITOR);
+    while (events.isEventSet(EventType::RUN_EDITOR) || events.isEventSet(EventType::RUN_GAME))
+    {
+      if (events.isEventSet(EventType::RUN_EDITOR))
+      {
+        events.unsetEvent(EventType::RUN_EDITOR);
 
-      if (!events.data.empty()) {
-        Project *project;
+        EditorManager *editorManager = new EditorManager(this);
 
-        if (events.OPEN_PROJECT) {
-          events.OPEN_PROJECT = false;
-          // from file
-          std::ifstream ifs(events.data);
-          std::string content((std::istreambuf_iterator<char>(ifs)),
-                              (std::istreambuf_iterator<char>()));
-          ifs.close();
-          project = JSONExporter::toProject(content);
-        } else {
-          project = JSONExporter::toProject(events.data);
+        if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
+        {
+          Project *project;
+
+          if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
+          {
+            // from file
+            std::ifstream ifs(events.getEventData(EventType::OPEN_PROJECT_FROM_FILE));
+            std::string content((std::istreambuf_iterator<char>(ifs)),
+                                (std::istreambuf_iterator<char>()));
+            ifs.close();
+            events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
+            project = JSONExporter::toProject(content);
+          }
+          else
+          {
+            project = JSONExporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
+            events.unsetEvent(EventType::OPEN_PROJECT);
+          }
+
+          editorManager->load(project);
+          editorManager->SelectWorld(project->mainWorldId);
         }
+        editorManager->run();
+        delete editorManager;
+      }
 
-        editorManager->load(project);
-        editorManager->SelectWorld(project->mainWorldId);
-
-        events.data = "";
+      if (events.isEventSet(EventType::RUN_GAME))
+      {
+        Game *game = nullptr;
+        Project *project = nullptr;
+        try
+        {
+          project = JSONExporter::toProject(events.getEventData(EventType::RUN_GAME));
+          events.unsetEvent(EventType::RUN_GAME);
+          game = new Game(project, &events);
+          game->run();
+        }
+        catch (const std::exception &e)
+        {
+          error(e.what());
+        }
+        if (game)
+        {
+          delete game;
+        }
+        if (project)
+        {
+          delete project;
+        }
+        events.setEvent(EventType::RUN_EDITOR);
       }
-      editorManager->run();
-      delete editorManager;
-    }
-
-    if (events.RUN_GAME) {
-      events.RUN_GAME = false;
-      Game *game = nullptr;
-      Project *project = nullptr;
-      try {
-        project = JSONExporter::toProject(events.data);
-        game = new Game(project, &events);
-        game->run();
-      } catch (const std::exception &e) {
-        error(e.what());
-      }
-      if (game) {
-        delete game;
-      }
-      if (project) {
-        delete project;
-      }
-      events.RUN_EDITOR = true;
     }
   }
-}
 
-void Engine::RunGame() {
-  events.RUN_GAME = true;
-  std::ifstream ifs("./");
-  std::string content((std::istreambuf_iterator<char>(ifs)),
-                      (std::istreambuf_iterator<char>()));
-  ifs.close();
-  // Explicitly specify the type of 'project' variable
-  Project* project = JSONExporter::toProject(content);
+  void Engine::RunGame()
+  {
+    events.setEvent(EventType::RUN_GAME);
 
-  Game *game = new Game(project, &events);
-  game->run();
-  delete game;
-  delete project;
-}
+    std::ifstream ifs("./");
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+                        (std::istreambuf_iterator<char>()));
+    ifs.close();
+    // Explicitly specify the type of 'project' variable
+    Project *project = JSONExporter::toProject(content);
+
+    Game *game = new Game(project, &events);
+    game->run();
+    delete game;
+    delete project;
+  }
 
 } // namespace Hades
