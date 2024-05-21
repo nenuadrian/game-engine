@@ -5,21 +5,28 @@
 #include <string>
 #include <vector>
 
-namespace Hades {
-class Asset {
+namespace Hades
+{
+  enum class AssetType
+  {
+    MODEL,
+    DIRECTORY,
+    SCRIPT,
+  };
 
-public:
-  std::string engineIdentifier;
-  std::string id;
-  std::string file;
-  std::string parent_id;
+  class Asset
+  {
 
-  bool directory;
+  public:
+    std::string engineIdentifier;
+    std::string id;
+    std::string file;
+    std::string parent_id;
+    AssetType type;
 
-  Asset() {}
-  Asset(std::string _file);
-  Asset(std::string id, std::string file, std::string engineIdentifier)
-      : id(id), file(file), engineIdentifier(engineIdentifier) {}
-  bool isDirectory() { return directory; }
-};
+    Asset(AssetType type) : type(type) {}
+    Asset(AssetType _type, std::string _file);
+    Asset(AssetType type, std::string id, std::string file, std::string engineIdentifier)
+        : type(type), id(id), file(file), engineIdentifier(engineIdentifier) {}
+  };
 } // namespace Hades

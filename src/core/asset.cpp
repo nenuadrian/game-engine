@@ -1,12 +1,15 @@
 #include "asset.h"
 #include "engine.h"
 
-namespace Hades {
+namespace Hades
+{
 
-Asset::Asset(std::string _file) {
-  file = _file;
+  Asset::Asset(AssetType _type, std::string _file)
+  {
+    file = _file;
+    type = _type;
 
-  engineIdentifier = std::to_string(Engine::newEngineId());
-  id = engineIdentifier;
-}
+    engineIdentifier = std::to_string(Engine::newEngineId());
+    id = engineIdentifier;
+  }
 }

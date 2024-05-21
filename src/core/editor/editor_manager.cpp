@@ -285,7 +285,7 @@ namespace Hades
         nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
         if (result == NFD_OKAY)
         {
-          auto asset = new Asset(std::string(outPath));
+          auto asset = new Asset(AssetType::MODEL, std::string(outPath));
           free(outPath);
           if (assetDirectory)
           {
@@ -392,7 +392,7 @@ namespace Hades
     {
       if (parent && asset->parent_id == parent->id || !parent && asset->parent_id.empty())
       {
-        if (asset->isDirectory())
+        if (asset->type == AssetType::DIRECTORY)
         {
           if (ImGui::TreeNodeEx(asset->id.c_str()))
           {
@@ -419,8 +419,7 @@ namespace Hades
 
     if (ImGui::Button(("New directory" + (parent ? "##" + parent->id : "")).c_str()))
     {
-      auto asset = new Asset(std::string("directory"));
-      asset->directory = true;
+      auto asset = new Asset(AssetType::DIRECTORY, std::string("directory"));
       if (parent != nullptr)
       {
         asset->parent_id = parent->id;

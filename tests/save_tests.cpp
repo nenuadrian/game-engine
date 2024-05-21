@@ -24,7 +24,7 @@ TEST_CASE("Project should save to JSON")
 TEST_CASE("Assets should save to JSON")
 {
   Project project = Project("test");
-  auto asset = new Asset();
+  auto asset = new Asset(AssetType::MODEL);
   asset->id = "tesT";
   asset->file = "tesT";
   asset->engineIdentifier = "tesT";

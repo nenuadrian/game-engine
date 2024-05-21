@@ -86,6 +86,7 @@ namespace Hades
     {
       json assetData = json::object();
       assetData["file"] = asset->file;
+      assetData["type"] = asset->type;
       assetData["engineIdentifier"] = asset->engineIdentifier;
       assetData["id"] = asset->id;
       assetsVector.push_back(assetData);
@@ -114,7 +115,7 @@ namespace Hades
 
     for (auto assetData : data["assets"])
     {
-      auto asset = new Asset(assetData["id"], assetData["file"], assetData["engineIdentifier"]);
+      auto asset = new Asset(assetData["type"], assetData["id"], assetData["file"], assetData["engineIdentifier"]);
       project->assets.push_back(asset);
     }
 
