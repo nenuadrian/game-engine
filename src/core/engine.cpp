@@ -28,7 +28,7 @@ namespace Hades
           if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
           {
             // from file
-            std::ifstream ifs(events.getEventData(EventType::OPEN_PROJECT_FROM_FILE));
+            std::ifstream ifs(events.getEventData(EventType::OPEN_PROJECT_FROM_FILE) + "/data.json");
             std::string content((std::istreambuf_iterator<char>(ifs)),
                                 (std::istreambuf_iterator<char>()));
             ifs.close();

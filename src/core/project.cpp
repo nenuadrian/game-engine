@@ -5,23 +5,27 @@
 #include <ctime>
 #include <fstream>
 
-namespace Hades {
-Project::Project() {}
+namespace Hades
+{
 
-std::string Project::NewWorld() {
-  World *world = new World();
-  worlds.push_back(world);
+  std::string Project::NewWorld()
+  {
+    World *world = new World();
+    worlds.push_back(world);
 
-  return world->id;
-}
-
-Project::~Project() {
-  for (auto world : worlds) {
-    delete world;
+    return world->id;
   }
 
-  for (auto asset : assets) {
-    delete asset;
+  Project::~Project()
+  {
+    for (auto world : worlds)
+    {
+      delete world;
+    }
+
+    for (auto asset : assets)
+    {
+      delete asset;
+    }
   }
-}
 } // namespace Hades
