@@ -127,7 +127,7 @@ namespace Hades
           {
             std::string s = JSONExporter::fromProject(project);
             std::ofstream myfile;
-            myfile.open("./data.json");
+            myfile.open(project->directory_path + "/data.json");
             myfile << s;
             myfile.close();
           }
@@ -278,9 +278,19 @@ namespace Hades
       {
         ImGui::Text("No assets imported");
       }
+
+      if (ImGui::Button("New Script"))
+      {
+        auto asset = new Asset(AssetType::SCRIPT);
+        std::ofstream myfile;
+        myfile.open(project->directory_path + "/asset-" + asset->engineIdentifier + ".c");
+        myfile << "test";
+        myfile.close();
+        project->assets.push_back(asset);
+      }
+
       if (ImGui::Button("Import Asset"))
       {
-
         nfdchar_t *outPath = NULL;
         nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
         if (result == NFD_OKAY)
@@ -328,7 +338,10 @@ namespace Hades
       {
         ImGui::Begin("Asset");
 
+        ImGui::LabelText("EngineID", "%s", selectedAsset->engineIdentifier.c_str());
         ImGui::InputText("Identifier", &selectedAsset->id);
+        ImGui::LabelText("Type", "%d", selectedAsset->type);
+        ImGui::LabelText("File", "%s", selectedAsset->file.c_str());
 
         if (ImGui::Button("Delete"))
         {
