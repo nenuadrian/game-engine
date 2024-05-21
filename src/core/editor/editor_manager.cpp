@@ -40,16 +40,35 @@ namespace Hades
     {
       delete project;
     }
-    auto project = new Project();
-    load(project);
-    SelectWorld(project->NewWorld());
-    project->mainWorldId = loadedWorld->id;
+
+    nfdchar_t *outPath = NULL;
+    nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+    if (result == NFD_OKAY)
+    {
+      auto project = new Project(outPath);
+
+      std::string s = JSONExporter::fromProject(project);
+      std::ofstream myfile;
+      myfile.open(std::string(outPath) + "/data.json");
+      myfile << s;
+      myfile.close();
+
+      load(project);
+      SelectWorld(project->NewWorld());
+      project->mainWorldId = loadedWorld->id;
+
+      free(outPath);
+    }
+    else
+    {
+      printf("Error: %s\n", NFD_GetError());
+    }
   }
 
   void EditorManager::Open()
   {
     nfdchar_t *outPath = NULL;
-    nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+    nfdresult_t result = NFD_PickFolder(NULL, &outPath);
     if (result == NFD_OKAY)
     {
       events->setEvent(EventType::OPEN_PROJECT_FROM_FILE, outPath);
@@ -106,7 +125,6 @@ namespace Hades
 
           if (ImGui::MenuItem("Save"))
           {
-
             std::string s = JSONExporter::fromProject(project);
             std::ofstream myfile;
             myfile.open("./data.json");
