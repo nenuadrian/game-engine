@@ -2,6 +2,8 @@
 
 A compact game engine written in C++, which has the ability to handle 3D graphics, sound, entity management, and game mechanics using scripts. It currently supports the OpenGL rendering system, but there are plans to include Vulkan as a renderer in the future. The build system used for this engine is cmake.
 
+![logo](docs/logo.jpg)
+
 ## goals
  * develop C++ software engineering skills
  * understand graphics 2D and 3D rendering pipelines with OpenGL and other frameworks
