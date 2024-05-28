@@ -171,6 +171,51 @@ namespace Hades
 
             ImGui::EndMenu();
           }
+
+          if (ImGui::BeginMenu("Entities"))
+          {
+
+            if (ImGui::BeginMenu("New Entity"))
+            {
+              Entity *entity = nullptr;
+              if (ImGui::MenuItem("Container"))
+              {
+                entity = new Entity();
+              }
+
+              if (ImGui::MenuItem("Model"))
+              {
+                entity = new ModelEntity();
+              }
+
+              if (ImGui::MenuItem("Cube"))
+              {
+                entity = new ModelEntity();
+                ((ModelEntity *)entity)->initBasicModel("cube");
+              }
+
+              if (ImGui::MenuItem("Camera"))
+              {
+                entity = new CameraEntity();
+
+                if (loadedWorld->mainCameraEntityId.empty())
+                {
+                  loadedWorld->mainCameraEntityId = entity->engineIdentifier;
+                }
+              }
+
+              if (entity)
+              {
+                entity->init(false, nullptr);
+                loadedWorld->addEntity(entity);
+              }
+
+              ImGui::EndMenu();
+            }
+
+            ImGui::EndMenu();
+          }
+
           ImGui::EndMenu();
         }
 
@@ -226,42 +271,6 @@ namespace Hades
 
         if (ImGui::CollapsingHeader("Entities"))
         {
-
-          if (ImGui::CollapsingHeader("New Entity"))
-          {
-            Entity *entity = nullptr;
-            if (ImGui::Button("Container"))
-            {
-              entity = new Entity();
-            }
-
-            if (ImGui::Button("Model"))
-            {
-              entity = new ModelEntity();
-            }
-
-            if (ImGui::Button("Cube"))
-            {
-              entity = new ModelEntity();
-              ((ModelEntity *)entity)->initBasicModel("cube");
-            }
-
-            if (ImGui::Button("Camera"))
-            {
-              entity = new CameraEntity();
-
-              if (loadedWorld->mainCameraEntityId.empty())
-              {
-                loadedWorld->mainCameraEntityId = entity->engineIdentifier;
-              }
-            }
-
-            if (entity)
-            {
-              entity->init(false, nullptr);
-              loadedWorld->addEntity(entity);
-            }
-          }
           ImGui::Text("Entities");
           if (loadedWorld->entities.empty())
           {

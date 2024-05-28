@@ -41,7 +41,6 @@ set(ASSIMP_NO_EXPORT
     ON
     CACHE BOOL "" FORCE)
 
-
 # If you won't be accessing Assimp outside of the plugin, build it as static to
 # have the plugin binary self-contained
 set(BUILD_SHARED_LIBS
