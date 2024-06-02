@@ -14,6 +14,7 @@
 #include <memory>
 #include <stdexcept>
 #include <array>
+#include <glm/glm.hpp>
 
 namespace Hades
 {
@@ -51,14 +52,14 @@ namespace Hades
     {
       auto project = new Project();
       project->directory_path = outPath;
+      free(outPath);
 
       project->Save();
 
       load(project);
-      SelectWorld(project->NewWorld());
-      project->mainWorldId = loadedWorld->id;
-
-      free(outPath);
+      auto world = project->NewWorld();
+      project->mainWorldId = world->id;
+      worldManager.SelectWorld(world);
     }
     else
     {
@@ -92,20 +93,7 @@ namespace Hades
     }
     project = newProject;
     scriptManager.Load(project);
-  }
-
-  void EditorManager::SelectWorld(std::string worldId)
-  {
-    selectedEntity = nullptr;
-    for (World *w : project->worlds)
-    {
-      if (w->id == worldId)
-      {
-        loadedWorld = w;
-        w->init(project, window);
-        return;
-      }
-    }
+    worldManager.Load(project);
   }
 
   void EditorManager::RenderMenuBarUI()
@@ -139,82 +127,6 @@ namespace Hades
       }
       if (project != nullptr)
       {
-        if (ImGui::BeginMenu("Editor"))
-        {
-
-          if (ImGui::BeginMenu("Worlds"))
-          {
-            if (ImGui::MenuItem("New World"))
-            {
-              std::string worldId = project->NewWorld();
-              SelectWorld(worldId);
-            }
-            ImGui::Separator();
-
-            for (World *world : project->worlds)
-            {
-              if (ImGui::MenuItem(
-                      (world->name +
-                       (world->id == project->mainWorldId ? " (main)" : "") +
-                       "##" + world->id)
-                          .c_str()))
-              {
-                if (world->id != project->mainWorldId)
-                {
-                  SelectWorld(world->id);
-                }
-              }
-            }
-
-            ImGui::EndMenu();
-          }
-
-          if (ImGui::BeginMenu("Entities"))
-          {
-
-            if (ImGui::BeginMenu("New Entity"))
-            {
-              Entity *entity = nullptr;
-              if (ImGui::MenuItem("Container"))
-              {
-                entity = new Entity();
-              }
-
-              if (ImGui::MenuItem("Model"))
-              {
-                entity = new ModelEntity();
-              }
-
-              if (ImGui::MenuItem("Cube"))
-              {
-                entity = new ModelEntity();
-                ((ModelEntity *)entity)->InitBasicModel("cube");
-              }
-
-              if (ImGui::MenuItem("Camera"))
-              {
-                entity = new CameraEntity();
-
-                if (loadedWorld->mainCameraEntityId.empty())
-                {
-                  loadedWorld->mainCameraEntityId = entity->engineIdentifier;
-                }
-              }
-
-              if (entity)
-              {
-                entity->init(false, nullptr);
-                loadedWorld->addEntity(entity);
-              }
-
-              ImGui::EndMenu();
-            }
-
-            ImGui::EndMenu();
-          }
-
-          ImGui::EndMenu();
-        }
 
         if (ImGui::BeginMenu("Game"))
         {
@@ -242,6 +154,8 @@ namespace Hades
 
         ImGui::EndMenu();
       }
+      scriptManager.RenderMenuBarUI();
+      worldManager.RenderMenuBarUI();
       ImGui::EndMainMenuBar();
     }
   }
@@ -250,88 +164,7 @@ namespace Hades
   {
 
     RenderMenuBarUI();
-
-    if (project != nullptr)
-    {
-      if (loadedWorld != nullptr)
-      {
-        ImGui::Begin("Scene");
-
-        ImGui::InputText("Name", &loadedWorld->name);
-        if (project->mainWorldId != loadedWorld->id)
-        {
-          if (ImGui::Button("Set as Main World"))
-          {
-            project->mainWorldId = loadedWorld->id;
-          }
-        }
-
-        if (ImGui::CollapsingHeader("Entities"))
-        {
-          ImGui::Text("Entities");
-          if (loadedWorld->entities.empty())
-          {
-            ImGui::Text("No entities created");
-          }
-
-          RenderEntitiesUI(nullptr);
-        }
-        ImGui::End();
-      }
-
-      ImGui::Begin("Assets");
-
-      if (ImGui::Button("Import Asset"))
-      {
-        nfdchar_t *outPath = NULL;
-        nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
-        if (result == NFD_OKAY)
-        {
-          auto asset = new Asset(AssetType::MODEL, std::string(outPath));
-          free(outPath);
-          if (assetDirectory)
-          {
-            asset->parent_id = assetDirectory->id;
-          }
-          project->assets.push_back(asset);
-        }
-        else
-        {
-          printf("Error: %s\n", NFD_GetError());
-        }
-      }
-
-      RenderAssetsUI(assetDirectory);
-
-      ImGui::End();
-
-      if (selectedEntity != nullptr)
-      {
-        ImGui::Begin("Entity");
-
-        selectedEntity->EditorUI(this);
-
-        if (ImGui::Button("Delete"))
-        {
-          loadedWorld->entities.erase(
-              std::remove_if(loadedWorld->entities.begin(),
-                             loadedWorld->entities.end(),
-                             [this](Entity *e)
-                             { return e == selectedEntity; }),
-              loadedWorld->entities.end());
-          Entity *toDelete = selectedEntity;
-          selectedEntity = nullptr;
-          delete toDelete;
-        }
-        ImGui::End();
-      }
-
-      if (selectedAsset != nullptr)
-      {
-        RenderAssetUI();
-      }
-    }
-
+    worldManager.RenderUI();
     scriptManager.RenderUI();
 
     if (showDebugStats)
@@ -377,108 +210,6 @@ namespace Hades
     ImGui::End();
   }
 
-  void EditorManager::RenderAssetUI()
-  {
-    ImGui::Begin("Asset");
-
-    ImGui::LabelText("EngineID", "%s", selectedAsset->engineIdentifier.c_str());
-    ImGui::InputText("Identifier", &selectedAsset->id);
-    ImGui::LabelText("Type", "%d", selectedAsset->type);
-    ImGui::LabelText("File", "%s", selectedAsset->file.c_str());
-
-    if (ImGui::Button("Delete"))
-    {
-      project->assets.erase(
-          std::remove_if(project->assets.begin(), project->assets.end(),
-                         [this](Asset *e)
-                         { return e == selectedAsset; }),
-          project->assets.end());
-      selectedAsset = nullptr;
-    }
-
-    ImGui::End();
-  }
-
-  void EditorManager::RenderAssetsUI(Asset *parent)
-  {
-    if (assetDirectory)
-    {
-      if (ImGui::Button("ROOT"))
-      {
-        assetDirectory = nullptr;
-      }
-    }
-    for (Asset *asset : project->assets)
-    {
-      if (asset->type == AssetType::SCRIPT)
-      {
-        continue;
-      }
-
-      if (parent && asset->parent_id == parent->id || !parent && asset->parent_id.empty())
-      {
-        if (asset->type == AssetType::DIRECTORY)
-        {
-          if (ImGui::TreeNodeEx(asset->id.c_str()))
-          {
-            RenderAssetsUI(asset);
-
-            ImGui::TreePop();
-          }
-        }
-        else
-        {
-          ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
-
-          if (ImGui::TreeNodeEx(asset->id.c_str(), flags))
-          {
-            if (ImGui::IsItemClicked())
-            {
-              selectedAsset = asset;
-            }
-            ImGui::TreePop();
-          }
-        }
-      }
-    }
-
-    if (ImGui::Button(("New directory" + (parent ? "##" + parent->id : "")).c_str()))
-    {
-      auto asset = new Asset(AssetType::DIRECTORY, std::string("directory"));
-      if (parent != nullptr)
-      {
-        asset->parent_id = parent->id;
-      }
-      project->assets.push_back(asset);
-    }
-  }
-
-  void EditorManager::RenderEntitiesUI(Entity *parent)
-  {
-    for (auto entity : loadedWorld->entities)
-    {
-      if (entity->parent == parent)
-      {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
-
-        if (ImGui::TreeNodeEx(
-                (entity->id +
-                 (entity->engineIdentifier == loadedWorld->mainCameraEntityId
-                      ? " [main camera]"
-                      : "") +
-                 "##" + entity->engineIdentifier)
-                    .c_str(),
-                flags))
-        {
-          if (ImGui::IsItemClicked())
-          {
-            selectedEntity = entity;
-          }
-          ImGui::TreePop();
-        }
-      }
-    }
-  }
   void EditorManager::draw(float deltaTime)
   {
     if (!ImGui::IsAnyItemActive())
@@ -506,13 +237,9 @@ namespace Hades
         100.0f);
 
     glm::mat4 view = camera.GetViewMatrix();
-    if (loadedWorld != nullptr)
-    {
-      for (Entity *entity : loadedWorld->entities)
-      {
-        entity->draw(deltaTime, view, projection);
-      }
-    }
+
+    worldManager.Draw(deltaTime, view, projection);
+
     RenderUI();
   }
 

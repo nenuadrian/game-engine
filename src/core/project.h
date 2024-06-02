@@ -18,7 +18,7 @@ namespace Hades
     std::vector<World *> worlds;
     Project() : directory_path() {}
 
-    std::string NewWorld();
+    World *NewWorld();
     void Save();
 
     ~Project();

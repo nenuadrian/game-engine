@@ -4,9 +4,11 @@
 #include "core/events.h"
 #include "core/asset.h"
 #include "core/editor/script_manager.h"
+#include "core/editor/world_manager.h"
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
+#include <glm/glm.hpp>
 
 namespace Hades
 {
@@ -14,10 +16,6 @@ namespace Hades
   class EditorManager : public WindowParent
   {
   private:
-    Entity *selectedEntity = nullptr;
-    Asset *selectedAsset = nullptr;
-    Asset *selectedScript = nullptr;
-    Asset *assetDirectory = nullptr;
     Engine *engine;
     Events *events;
     ScriptManager scriptManager;
@@ -36,15 +34,12 @@ namespace Hades
     Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
     void RenderMenuBarUI();
-    void RenderAssetsUI(Asset *parent);
-    void RenderEntitiesUI(Entity *parent);
-    void RenderAssetUI();
 
   public:
-    World *loadedWorld = nullptr;
     Project *project = nullptr;
+    WorldManager worldManager;
 
-    EditorManager(Engine *engine) : engine(engine), scriptManager(ScriptManager(engine))
+    EditorManager(Engine *engine) : engine(engine), scriptManager(ScriptManager(engine)), worldManager(WorldManager(engine, this))
     {
       events = &engine->events;
     };
@@ -54,7 +49,6 @@ namespace Hades
     void load(Project *newProject);
     void NewProject();
     void RenderUI();
-    void SelectWorld(std::string worldId);
 
     void draw(float deltaTime) override;
     void scrollCallback(double x, double y) override;

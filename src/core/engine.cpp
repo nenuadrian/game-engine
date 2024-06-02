@@ -35,7 +35,6 @@ namespace Hades
             events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
             project = Exporter::toProject(content);
             project->directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
-
           }
           else if (events.isEventSet(EventType::OPEN_PROJECT))
           {
@@ -46,7 +45,6 @@ namespace Hades
           if (project)
           {
             editorManager->load(project);
-            editorManager->SelectWorld(project->mainWorldId);
           }
         }
         editorManager->run();

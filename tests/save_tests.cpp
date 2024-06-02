@@ -47,7 +47,7 @@ TEST_CASE("Project should load from JSON")
 TEST_CASE("Worlds should save to JSON")
 {
   Project project = Project();
-  std::string id = project.NewWorld();
+  project.NewWorld();
   std::string json = Exporter::fromProject(&project);
   Project *project2 = Exporter::toProject(json);
   REQUIRE(project2->worlds.size() == 1);
@@ -56,12 +56,12 @@ TEST_CASE("Worlds should save to JSON")
 TEST_CASE("Entities should save to JSON")
 {
   Project project = Project();
-  std::string id = project.NewWorld();
+  auto world = project.NewWorld();
   Engine engine = Engine();
   EditorManager *manager = new EditorManager(&engine);
   manager->load(&project);
 
-  manager->SelectWorld(id);
+  manager->worldManager.SelectWorld(world);
 
   std::string json = Exporter::fromProject(&project);
 }

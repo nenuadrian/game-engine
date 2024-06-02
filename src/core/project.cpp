@@ -9,12 +9,12 @@
 namespace Hades
 {
 
-  std::string Project::NewWorld()
+  World *Project::NewWorld()
   {
     World *world = new World();
     worlds.push_back(world);
 
-    return world->id;
+    return world;
   }
 
   void Project::Save()

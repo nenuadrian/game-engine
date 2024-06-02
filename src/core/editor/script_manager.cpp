@@ -1,12 +1,10 @@
 #include "script_manager.h"
 
 #include "core/entities.h"
-#include "core/json_export.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include "nfd.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -37,6 +35,13 @@ namespace
 namespace Hades
 {
 
+  void ScriptManager::RenderMenuBarUI()
+  {
+  }
+
+  /**
+   * @brief Renders the user interface for managing scripts.
+   */
   void ScriptManager::RenderUI()
   {
     if (!project)

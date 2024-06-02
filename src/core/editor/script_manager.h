@@ -1,16 +1,13 @@
 #pragma once
-#include "core/camera.h"
-#include "core/entity_model.h"
 #include "core/events.h"
 #include "core/asset.h"
 #include "core/project.h"
-#include "core/window_opengl.h"
 #include <chrono>
 
 namespace Hades
 {
   class Engine;
-  class ScriptManager : public WindowParent
+  class ScriptManager
   {
   private:
     Asset *selectedAsset = nullptr;
@@ -21,6 +18,7 @@ namespace Hades
   public:
     ScriptManager(Engine *engine) : engine(engine) { events = &engine->events; };
     void RenderUI();
+    void RenderMenuBarUI();
     void Load(Project *newProject)
     {
       project = newProject;

@@ -8,9 +8,9 @@ CameraEntity::CameraEntity() : ModelEntity() {}
 void CameraEntity::EditorUI(EditorManager *editor) {
   Entity::EditorUI(editor);
   ImGui::Text("Camera");
-  if (editor->loadedWorld->mainCameraEntityId != engineIdentifier) {
+  if (editor->worldManager.loadedWorld->mainCameraEntityId != engineIdentifier) {
     if (ImGui::Button("Set as default camera")) {
-      editor->loadedWorld->mainCameraEntityId = engineIdentifier;
+      editor->worldManager.loadedWorld->mainCameraEntityId = engineIdentifier;
     }
   }
   ImGui::InputFloat("Yaw", &camera.Yaw);
