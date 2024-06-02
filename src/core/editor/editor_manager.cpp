@@ -292,7 +292,7 @@ namespace Hades
             ImGui::Text("No entities created");
           }
 
-          renderEntitiesUI(nullptr);
+          RenderEntitiesUI(nullptr);
         }
         ImGui::End();
       }
@@ -333,7 +333,7 @@ namespace Hades
         }
       }
 
-      renderAssetsUI(assetDirectory);
+      RenderAssetsUI(assetDirectory);
 
       ImGui::End();
 
@@ -358,41 +358,14 @@ namespace Hades
         ImGui::End();
       }
 
+      if (selectedScript != nullptr)
+      {
+        RenderScriptUI();
+      }
+
       if (selectedAsset != nullptr)
       {
-        ImGui::Begin("Asset");
-
-        ImGui::LabelText("EngineID", "%s", selectedAsset->engineIdentifier.c_str());
-        ImGui::InputText("Identifier", &selectedAsset->id);
-        ImGui::LabelText("Type", "%d", selectedAsset->type);
-        ImGui::LabelText("File", "%s", selectedAsset->file.c_str());
-
-        if (ImGui::Button("Delete"))
-        {
-          project->assets.erase(
-              std::remove_if(project->assets.begin(), project->assets.end(),
-                             [this](Asset *e)
-                             { return e == selectedAsset; }),
-              project->assets.end());
-          selectedAsset = nullptr;
-        }
-
-        if (selectedAsset->type == AssetType::SCRIPT)
-        {
-          if (ImGui::Button("Compile Script"))
-          {
-            try
-            {
-              engine->info(exec("g++ -dynamiclib -o libdynamic.dylib dynamic.cpp"));
-            }
-            catch (std::exception &e)
-            {
-              engine->error(e.what());
-            }
-          }
-        }
-
-        ImGui::End();
+        RenderAssetUI();
       }
     }
     if (showDebugStats)
@@ -438,7 +411,61 @@ namespace Hades
     ImGui::End();
   }
 
-  void EditorManager::renderAssetsUI(Asset *parent)
+  void EditorManager::RenderScriptUI()
+  {
+    ImGui::Begin("Script");
+    ImGui::InputText("Identifier", &selectedScript->id);
+
+    if (ImGui::Button("Close"))
+    {
+      selectedScript = nullptr;
+    }
+    ImGui::End();
+  }
+
+  void EditorManager::RenderAssetUI()
+  {
+    ImGui::Begin("Asset");
+
+    ImGui::LabelText("EngineID", "%s", selectedAsset->engineIdentifier.c_str());
+    ImGui::InputText("Identifier", &selectedAsset->id);
+    ImGui::LabelText("Type", "%d", selectedAsset->type);
+    ImGui::LabelText("File", "%s", selectedAsset->file.c_str());
+
+    if (ImGui::Button("Delete"))
+    {
+      project->assets.erase(
+          std::remove_if(project->assets.begin(), project->assets.end(),
+                         [this](Asset *e)
+                         { return e == selectedAsset; }),
+          project->assets.end());
+      selectedAsset = nullptr;
+    }
+
+    if (selectedAsset->type == AssetType::SCRIPT)
+    {
+      if (ImGui::Button("Edit Script"))
+      {
+        selectedScript = selectedAsset;
+      }
+
+      if (ImGui::Button("Compile Script"))
+      {
+        try
+        {
+          engine->info(exec("g++ -dynamiclib -o libdynamic.dylib dynamic.cpp"));
+        }
+        catch (std::exception &e)
+        {
+          engine->error(e.what());
+        }
+      }
+    }
+
+    ImGui::End();
+  }
+
+  void EditorManager::RenderAssetsUI(Asset *parent)
   {
     if (assetDirectory)
     {
@@ -455,7 +482,7 @@ namespace Hades
         {
           if (ImGui::TreeNodeEx(asset->id.c_str()))
           {
-            renderAssetsUI(asset);
+            RenderAssetsUI(asset);
 
             ImGui::TreePop();
           }
@@ -487,7 +514,7 @@ namespace Hades
     }
   }
 
-  void EditorManager::renderEntitiesUI(Entity *parent)
+  void EditorManager::RenderEntitiesUI(Entity *parent)
   {
     for (auto entity : loadedWorld->entities)
     {

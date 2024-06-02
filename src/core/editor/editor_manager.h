@@ -13,6 +13,7 @@ class EditorManager : public WindowParent {
 private:
   Entity *selectedEntity = nullptr;
   Asset *selectedAsset = nullptr;
+  Asset *selectedScript = nullptr;
   Asset *assetDirectory = nullptr;
   Engine *engine;
     Events *events;
@@ -32,8 +33,10 @@ private:
 
 
   void RenderMenuBarUI();
-  void renderAssetsUI(Asset *parent);
-  void renderEntitiesUI(Entity *parent);
+  void RenderAssetsUI(Asset *parent);
+  void RenderEntitiesUI(Entity *parent);
+  void RenderAssetUI();
+  void RenderScriptUI();
 
 public:
   World *loadedWorld = nullptr;
