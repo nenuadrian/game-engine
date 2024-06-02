@@ -14,7 +14,7 @@ using namespace Hades;
 
 TEST_CASE("Project should save to JSON")
 {
-  Project project = Project("test");
+  Project project = Project();
   project.name = "test";
   std::string json = JSONExporter::fromProject(&project);
   auto parsed = nlohmann::json::parse(json);
@@ -23,7 +23,7 @@ TEST_CASE("Project should save to JSON")
 
 TEST_CASE("Assets should save to JSON")
 {
-  Project project = Project("test");
+  Project project = Project();
   auto asset = new Asset(AssetType::MODEL);
   asset->id = "tesT";
   asset->file = "tesT";
@@ -45,7 +45,7 @@ TEST_CASE("Project should load from JSON")
 
 TEST_CASE("Worlds should save to JSON")
 {
-  Project project = Project("test");
+  Project project = Project();
   std::string id = project.NewWorld();
   std::string json = JSONExporter::fromProject(&project);
   Project *project2 = JSONExporter::toProject(json);
@@ -54,7 +54,7 @@ TEST_CASE("Worlds should save to JSON")
 
 TEST_CASE("Entities should save to JSON")
 {
-  Project project = Project("test");
+  Project project = Project();
   std::string id = project.NewWorld();
   Engine engine = Engine();
   EditorManager *manager = new EditorManager(&engine);

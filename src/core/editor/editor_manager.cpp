@@ -68,9 +68,11 @@ namespace Hades
     nfdresult_t result = NFD_PickFolder(NULL, &outPath);
     if (result == NFD_OKAY)
     {
-      auto project = new Project(outPath);
+      auto project = new Project();
 
       std::string s = JSONExporter::fromProject(project);
+      project->directory_path = outPath;
+
       std::ofstream myfile;
       myfile.open(std::string(outPath) + "/data.json");
       myfile << s;
@@ -135,17 +137,16 @@ namespace Hades
     {
       if (ImGui::BeginMenu("File"))
       {
-        if (ImGui::MenuItem("New project"))
+        if (ImGui::MenuItem("New Project"))
         {
           NewProject();
         }
-        if (ImGui::MenuItem("Open project"))
+        if (ImGui::MenuItem("Open Project"))
         {
           Open();
         }
         if (project != nullptr)
         {
-
           if (ImGui::MenuItem("Save"))
           {
             std::string s = JSONExporter::fromProject(project);
@@ -156,7 +157,7 @@ namespace Hades
           }
         }
 
-        if (ImGui::MenuItem("Quit"))
+        if (ImGui::MenuItem("Exit"))
         {
           events->setEvent(EventType::CLOSE_WINDOW);
         }
@@ -419,10 +420,17 @@ namespace Hades
 
       ImGui::Begin("Debug Stats");
       ImGui::Text("%d FPS", last_fps);
+
+      if (project)
+      {
+        ImGui::Text("Project Directory: %s", project->directory_path.c_str());
+      }
+
       if (ImGui::Button("Close"))
       {
         showDebugStats = false;
       }
+
       ImGui::End();
     }
 

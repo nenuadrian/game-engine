@@ -43,7 +43,6 @@ namespace Hades
 
       for (Entity *entity : world->entities)
       {
-
         json entityData = json::object();
         entityData["id"] = entity->id;
         entityData["type"] = entity->type();
@@ -101,7 +100,7 @@ namespace Hades
 
   Project *JSONExporter::toProject(string path)
   {
-    auto project = new Project(path);
+    auto project = new Project();
     auto data = json::parse(path);
     project->name = data["name"];
     project->mainWorldId = data["mainWorldId"];

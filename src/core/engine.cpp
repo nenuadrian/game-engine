@@ -23,7 +23,7 @@ namespace Hades
 
         if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
         {
-          Project *project;
+          Project *project = nullptr;
 
           if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
           {
@@ -34,15 +34,20 @@ namespace Hades
             ifs.close();
             events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
             project = JSONExporter::toProject(content);
+            project->directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
+
           }
-          else
+          else if (events.isEventSet(EventType::OPEN_PROJECT))
           {
             project = JSONExporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
             events.unsetEvent(EventType::OPEN_PROJECT);
           }
 
-          editorManager->load(project);
-          editorManager->SelectWorld(project->mainWorldId);
+          if (project)
+          {
+            editorManager->load(project);
+            editorManager->SelectWorld(project->mainWorldId);
+          }
         }
         editorManager->run();
         delete editorManager;

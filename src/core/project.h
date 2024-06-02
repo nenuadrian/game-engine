@@ -16,11 +16,7 @@ namespace Hades
     std::string mainWorldId;
     std::vector<Asset *> assets;
     std::vector<World *> worlds;
-    Project(std::string directory_path_) : directory_path(directory_path_) {}
-
-    void load(std::string directory);
-
-    void save(std::string directory);
+    Project() : directory_path() {}
 
     std::string NewWorld();
 
