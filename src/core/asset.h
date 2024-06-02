@@ -32,5 +32,8 @@ namespace Hades
     Asset(AssetType _type, std::string _file);
     Asset(AssetType type, std::string id, std::string file, std::string engineIdentifier)
         : type(type), id(id), file(file), engineIdentifier(engineIdentifier) {}
+
+    std::string ReadAssetAsString();
+    void WriteAsset(std::string content);
   };
 } // namespace Hades
