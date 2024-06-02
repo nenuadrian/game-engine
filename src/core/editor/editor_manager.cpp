@@ -15,25 +15,6 @@
 #include <stdexcept>
 #include <array>
 
-namespace
-{
-  std::string exec(const char *cmd)
-  {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe)
-    {
-      throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr)
-    {
-      result += buffer.data();
-    }
-    return result;
-  }
-}
-
 namespace Hades
 {
 
@@ -110,6 +91,7 @@ namespace Hades
       delete project;
     }
     project = newProject;
+    scriptManager.Load(project);
   }
 
   void EditorManager::SelectWorld(std::string worldId)
@@ -298,20 +280,6 @@ namespace Hades
       }
 
       ImGui::Begin("Assets");
-      if (project->assets.empty())
-      {
-        ImGui::Text("No assets imported");
-      }
-
-      if (ImGui::Button("New Script"))
-      {
-        auto asset = new Asset(AssetType::SCRIPT);
-        std::ofstream myfile;
-        myfile.open(project->directory_path + "/asset-" + asset->engineIdentifier + ".c");
-        myfile << "test";
-        myfile.close();
-        project->assets.push_back(asset);
-      }
 
       if (ImGui::Button("Import Asset"))
       {
@@ -358,16 +326,14 @@ namespace Hades
         ImGui::End();
       }
 
-      if (selectedScript != nullptr)
-      {
-        RenderScriptUI();
-      }
-
       if (selectedAsset != nullptr)
       {
         RenderAssetUI();
       }
     }
+
+    scriptManager.RenderUI();
+
     if (showDebugStats)
     {
       ++frame_count;
@@ -411,18 +377,6 @@ namespace Hades
     ImGui::End();
   }
 
-  void EditorManager::RenderScriptUI()
-  {
-    ImGui::Begin("Script");
-    ImGui::InputText("Identifier", &selectedScript->id);
-
-    if (ImGui::Button("Close"))
-    {
-      selectedScript = nullptr;
-    }
-    ImGui::End();
-  }
-
   void EditorManager::RenderAssetUI()
   {
     ImGui::Begin("Asset");
@@ -442,26 +396,6 @@ namespace Hades
       selectedAsset = nullptr;
     }
 
-    if (selectedAsset->type == AssetType::SCRIPT)
-    {
-      if (ImGui::Button("Edit Script"))
-      {
-        selectedScript = selectedAsset;
-      }
-
-      if (ImGui::Button("Compile Script"))
-      {
-        try
-        {
-          engine->info(exec("g++ -dynamiclib -o libdynamic.dylib dynamic.cpp"));
-        }
-        catch (std::exception &e)
-        {
-          engine->error(e.what());
-        }
-      }
-    }
-
     ImGui::End();
   }
 
@@ -476,6 +410,11 @@ namespace Hades
     }
     for (Asset *asset : project->assets)
     {
+      if (asset->type == AssetType::SCRIPT)
+      {
+        continue;
+      }
+
       if (parent && asset->parent_id == parent->id || !parent && asset->parent_id.empty())
       {
         if (asset->type == AssetType::DIRECTORY)
