@@ -19,6 +19,7 @@ namespace Hades
     Project() : directory_path() {}
 
     std::string NewWorld();
+    void Save();
 
     ~Project();
   };

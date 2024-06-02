@@ -4,6 +4,7 @@
 #include "model_complex.h"
 #include <ctime>
 #include <fstream>
+#include "core/json_export.h"
 
 namespace Hades
 {
@@ -14,6 +15,15 @@ namespace Hades
     worlds.push_back(world);
 
     return world->id;
+  }
+
+  void Project::Save()
+  {
+    std::ofstream myfile;
+    myfile.open(std::string(directory_path) + "/data.json");
+    std::string s = Exporter::fromProject(this);
+    myfile << s;
+    myfile.close();
   }
 
   Project::~Project()

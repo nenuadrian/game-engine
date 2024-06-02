@@ -3,7 +3,7 @@
 #include <string>
 
 namespace Hades {
-class JSONExporter {
+class Exporter {
 public:
   static std::string fromProject(Project *project);
   static Project *toProject(std::string json);

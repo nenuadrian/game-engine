@@ -69,14 +69,9 @@ namespace Hades
     if (result == NFD_OKAY)
     {
       auto project = new Project();
-
-      std::string s = JSONExporter::fromProject(project);
       project->directory_path = outPath;
 
-      std::ofstream myfile;
-      myfile.open(std::string(outPath) + "/data.json");
-      myfile << s;
-      myfile.close();
+      project->Save();
 
       load(project);
       SelectWorld(project->NewWorld());
@@ -149,11 +144,7 @@ namespace Hades
         {
           if (ImGui::MenuItem("Save"))
           {
-            std::string s = JSONExporter::fromProject(project);
-            std::ofstream myfile;
-            myfile.open(project->directory_path + "/data.json");
-            myfile << s;
-            myfile.close();
+            project->Save();
           }
         }
 
@@ -248,7 +239,7 @@ namespace Hades
           if (ImGui::MenuItem("Play", __null, false,
                               !project->mainWorldId.empty()))
           {
-            events->setEvent(EventType::RUN_GAME, JSONExporter::fromProject(project));
+            events->setEvent(EventType::RUN_GAME, Exporter::fromProject(project));
             events->setEvent(EventType::CLOSE_WINDOW);
           }
           ImGui::EndMenu();

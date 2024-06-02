@@ -24,7 +24,7 @@ namespace Hades
     return glm::vec3(data["x"], data["y"], data["z"]);
   }
 
-  string JSONExporter::fromProject(Project *project)
+  string Exporter::fromProject(Project *project)
   {
     json data = json::object();
 
@@ -98,7 +98,7 @@ namespace Hades
     return data.dump();
   }
 
-  Project *JSONExporter::toProject(string path)
+  Project *Exporter::toProject(string path)
   {
     auto project = new Project();
     auto data = json::parse(path);

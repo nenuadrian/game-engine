@@ -33,13 +33,13 @@ namespace Hades
                                 (std::istreambuf_iterator<char>()));
             ifs.close();
             events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
-            project = JSONExporter::toProject(content);
+            project = Exporter::toProject(content);
             project->directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
 
           }
           else if (events.isEventSet(EventType::OPEN_PROJECT))
           {
-            project = JSONExporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
+            project = Exporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
             events.unsetEvent(EventType::OPEN_PROJECT);
           }
 
@@ -59,7 +59,7 @@ namespace Hades
         Project *project = nullptr;
         try
         {
-          project = JSONExporter::toProject(events.getEventData(EventType::RUN_GAME));
+          project = Exporter::toProject(events.getEventData(EventType::RUN_GAME));
           events.unsetEvent(EventType::RUN_GAME);
           game = new Game(project, &events);
           game->run();
@@ -90,7 +90,7 @@ namespace Hades
                         (std::istreambuf_iterator<char>()));
     ifs.close();
     // Explicitly specify the type of 'project' variable
-    Project *project = JSONExporter::toProject(content);
+    Project *project = Exporter::toProject(content);
 
     Game *game = new Game(project, &events);
     game->run();
