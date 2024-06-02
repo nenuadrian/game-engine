@@ -16,7 +16,7 @@ public:
   Model *model = nullptr;
 
   ModelEntity();
-  void initBasicModel(std::string shape);
+  void InitBasicModel(std::string shape);
   std::string type() override { return "model"; };
   void EditorUI(EditorManager *editor) override;
   void draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;

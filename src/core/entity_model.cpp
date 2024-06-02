@@ -96,7 +96,7 @@ void ModelEntity::EditorUI(EditorManager *editor) {
 
 ModelEntity::ModelEntity() : Entity() {}
 
-void ModelEntity::initBasicModel(std::string shape) {
+void ModelEntity::InitBasicModel(std::string shape) {
   model = new ModelBasic(shape);
 }
 

@@ -206,7 +206,7 @@ namespace Hades
               if (ImGui::MenuItem("Cube"))
               {
                 entity = new ModelEntity();
-                ((ModelEntity *)entity)->initBasicModel("cube");
+                ((ModelEntity *)entity)->InitBasicModel("cube");
               }
 
               if (ImGui::MenuItem("Camera"))

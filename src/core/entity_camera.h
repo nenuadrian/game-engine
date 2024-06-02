@@ -21,7 +21,7 @@ public:
 
   virtual void init(bool running_, Window *window) override {
     if (!running_) {
-      initBasicModel("camera");
+      InitBasicModel("camera");
     }
     ModelEntity::init(running_, window);
     camera.Position = position;
