@@ -17,7 +17,6 @@ namespace Hades
   {
   private:
     Engine *engine;
-    Events *events;
     ScriptManager scriptManager;
 
     const unsigned int SCR_WIDTH = 800;
@@ -35,16 +34,13 @@ namespace Hades
     std::chrono::time_point<std::chrono::steady_clock> m_one_second =
         m_start + std::chrono::seconds(1);
 
-    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+    Camera m_editor_camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
   public:
     Project *project = nullptr;
-    WorldManager worldManager;
+    WorldManager m_world_manager;
 
-    EditorManager(Engine *engine) : engine(engine), scriptManager(ScriptManager(engine)), worldManager(WorldManager(engine, this))
-    {
-      events = &engine->events;
-    };
+    EditorManager(Engine *engine) : engine(engine), scriptManager(ScriptManager(engine)), m_world_manager(WorldManager(engine, this)){};
 
   private:
     void RenderMenuBarUI();

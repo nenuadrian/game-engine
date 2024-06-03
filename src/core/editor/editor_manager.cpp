@@ -21,7 +21,7 @@ namespace Hades
 
   void EditorManager::scrollCallback(double x, double y)
   {
-    camera.scrollCallback(x, y);
+    m_editor_camera.scrollCallback(x, y);
   }
 
   void EditorManager::mouseButtonCallback(int button, int action, int modsy)
@@ -59,7 +59,7 @@ namespace Hades
       load(project);
       auto world = project->NewWorld();
       project->mainWorldId = world->id;
-      worldManager.SelectWorld(world);
+      m_world_manager.SelectWorld(world);
     }
     else
     {
@@ -73,9 +73,9 @@ namespace Hades
     nfdresult_t result = NFD_PickFolder(NULL, &outPath);
     if (result == NFD_OKAY)
     {
-      events->setEvent(EventType::OPEN_PROJECT_FROM_FILE, outPath);
-      events->setEvent(EventType::CLOSE_WINDOW);
-      events->setEvent(EventType::RUN_EDITOR);
+      engine->events.setEvent(EventType::OPEN_PROJECT_FROM_FILE, outPath);
+      engine->events.setEvent(EventType::CLOSE_WINDOW);
+      engine->events.setEvent(EventType::RUN_EDITOR);
 
       free(outPath);
     }
@@ -93,7 +93,7 @@ namespace Hades
     }
     project = newProject;
     scriptManager.Load(project);
-    worldManager.Load(project);
+    m_world_manager.Load(project);
   }
 
   void EditorManager::RenderMenuBarUI()
@@ -120,7 +120,7 @@ namespace Hades
 
         if (ImGui::MenuItem("Exit"))
         {
-          events->setEvent(EventType::CLOSE_WINDOW);
+          engine->events.setEvent(EventType::CLOSE_WINDOW);
         }
 
         ImGui::EndMenu();
@@ -133,15 +133,15 @@ namespace Hades
           if (ImGui::MenuItem("Play", __null, false,
                               !project->mainWorldId.empty()))
           {
-            events->setEvent(EventType::RUN_GAME, Exporter::fromProject(project));
-            events->setEvent(EventType::CLOSE_WINDOW);
+            engine->events.setEvent(EventType::RUN_GAME, Exporter::fromProject(project));
+            engine->events.setEvent(EventType::CLOSE_WINDOW);
           }
           ImGui::EndMenu();
         }
       }
 
       scriptManager.RenderMenuBarUI();
-      worldManager.RenderMenuBarUI();
+      m_world_manager.RenderMenuBarUI();
 
       if (ImGui::BeginMenu("Help"))
       {
@@ -165,7 +165,7 @@ namespace Hades
   {
 
     RenderMenuBarUI();
-    worldManager.RenderUI();
+    m_world_manager.RenderUI();
     scriptManager.RenderUI();
 
     if (m_show_debug_stats)
@@ -221,37 +221,37 @@ namespace Hades
     if (!ImGui::IsAnyItemActive())
     {
       if (window->keyPressed(GLFW_KEY_W))
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        m_editor_camera.ProcessKeyboard(FORWARD, deltaTime);
       if (window->keyPressed(GLFW_KEY_S))
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        m_editor_camera.ProcessKeyboard(BACKWARD, deltaTime);
       if (window->keyPressed(GLFW_KEY_A))
-        camera.ProcessKeyboard(LEFTA, deltaTime);
+        m_editor_camera.ProcessKeyboard(LEFTA, deltaTime);
       if (window->keyPressed(GLFW_KEY_D))
-        camera.ProcessKeyboard(RIGHTD, deltaTime);
+        m_editor_camera.ProcessKeyboard(RIGHTD, deltaTime);
       if (window->keyPressed(GLFW_KEY_UP))
-        camera.ProcessKeyboard(UP, deltaTime);
+        m_editor_camera.ProcessKeyboard(UP, deltaTime);
       if (window->keyPressed(GLFW_KEY_DOWN))
-        camera.ProcessKeyboard(DOWN, deltaTime);
+        m_editor_camera.ProcessKeyboard(DOWN, deltaTime);
       if (window->keyPressed(GLFW_KEY_LEFT))
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        m_editor_camera.ProcessKeyboard(LEFT, deltaTime);
       if (window->keyPressed(GLFW_KEY_RIGHT))
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        m_editor_camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 
     glm::mat4 projection = glm::perspective(
         glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
         100.0f);
 
-    glm::mat4 view = camera.GetViewMatrix();
+    glm::mat4 view = m_editor_camera.GetViewMatrix();
 
-    worldManager.Draw(deltaTime, view, projection);
+    m_world_manager.Draw(deltaTime, view, projection);
 
     RenderUI();
   }
 
   void EditorManager::run()
   {
-    window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
+    window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), &engine->events);
 
     window->init();
 
