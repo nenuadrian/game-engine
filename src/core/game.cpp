@@ -25,17 +25,8 @@ namespace Hades
 
   void Game::init()
   {
-    World *world;
-    for (World *w : project->worlds)
-    {
-      if (w->id == project->mainWorldId)
-      {
-        world = w;
-        break;
-      }
-    }
+    World *world = project->worlds[project->mainWorldId];
     assert(world != nullptr);
-
     LoadWorld(world);
   }
 

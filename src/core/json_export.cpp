@@ -33,15 +33,15 @@ namespace Hades
     vector<json> worldsVector = {};
     vector<json> assetsVector = {};
     vector<json> entitiesVector = {};
-    for (World *world : project->worlds)
+    for (auto world : project->worlds)
     {
       json worldData = json::object();
-      worldData["id"] = world->id;
-      worldData["mainCameraEntityId"] = world->mainCameraEntityId;
-      worldData["name"] = world->name;
+      worldData["id"] = world.second->id;
+      worldData["mainCameraEntityId"] = world.second->mainCameraEntityId;
+      worldData["name"] = world.second->name;
       worldsVector.push_back(worldData);
 
-      for (Entity *entity : world->entities)
+      for (Entity *entity : world.second->entities)
       {
         json entityData = json::object();
         entityData["id"] = entity->id;
@@ -50,7 +50,7 @@ namespace Hades
         entityData["position"] = vec3JSON(entity->position);
         entityData["scale"] = vec3JSON(entity->scale);
         entityData["rotation"] = vec3JSON(entity->rotation);
-        entityData["world"] = world->id;
+        entityData["world"] = world.second->id;
         entityData["attachedScriptId"] = entity->attachedScriptId;
 
         if (entity->type() == "camera")
@@ -109,7 +109,7 @@ namespace Hades
     {
       World *world =
           new World(worldData["id"], worldData["name"], worldData["mainCameraEntityId"]);
-      project->worlds.push_back(world);
+      project->worlds[world->id] = world;
     }
 
     for (auto assetData : data["assets"])
@@ -156,11 +156,11 @@ namespace Hades
         entity = camera;
       }
 
-      for (World *w : project->worlds)
+      for (auto world : project->worlds)
       {
-        if (w->id == entityData["world"])
+        if (world.first == entityData["world"])
         {
-          w->entities.push_back(entity);
+          world.second->entities.push_back(entity);
         }
       }
     }

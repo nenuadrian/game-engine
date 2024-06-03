@@ -12,8 +12,7 @@ namespace Hades
   World *Project::NewWorld()
   {
     World *world = new World();
-    worlds.push_back(world);
-
+    worlds[world->id] = world;
     return world;
   }
 
@@ -30,7 +29,7 @@ namespace Hades
   {
     for (auto world : worlds)
     {
-      delete world;
+      delete world.second;
     }
 
     for (auto asset : assets)

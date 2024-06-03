@@ -2,6 +2,7 @@
 #include "entity.h"
 #include "world.h"
 #include <cstddef>
+#include <map>
 #include <string>
 #include <vector>
 #include "core/asset.h"
@@ -15,7 +16,7 @@ namespace Hades
     std::string directory_path;
     std::string mainWorldId;
     std::vector<Asset *> assets;
-    std::vector<World *> worlds;
+    std::map<std::string, World *> worlds;
     Project() : directory_path() {}
 
     World *NewWorld();

@@ -241,17 +241,17 @@ namespace Hades
       }
       ImGui::Separator();
 
-      for (World *world : project->worlds)
+      for (auto world : project->worlds)
       {
         if (ImGui::MenuItem(
-                (world->name +
-                 (world->id == project->mainWorldId ? " (main)" : "") +
-                 "##" + world->id)
+                (world.second->name +
+                 (world.second->id == project->mainWorldId ? " (main)" : "") +
+                 "##" + world.second->id)
                     .c_str()))
         {
-          if (world->id != project->mainWorldId)
+          if (world.second->id != project->mainWorldId)
           {
-            SelectWorld(world);
+            SelectWorld(world.second);
           }
         }
       }
