@@ -211,7 +211,6 @@ namespace Hades
       else
       {
         ImGui::Text("No logs generated.");
-      }
     }
 
     ImGui::End();
