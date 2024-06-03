@@ -28,8 +28,7 @@ namespace Hades
 
     std::string engineIdentifier;
     std::string id;
-    std::string script;
-    std::string scriptError = "";
+    std::string attachedScriptId;
 
     glm::vec3 position = glm::vec3(1, 1, 1);
 

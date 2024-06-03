@@ -94,6 +94,11 @@ namespace Hades
         selectedEntity = nullptr;
         delete toDelete;
       }
+
+      if (ImGui::Button("Dismiss"))
+      {
+        selectedEntity = nullptr;
+      }
       ImGui::End();
     }
 
@@ -162,6 +167,7 @@ namespace Hades
             {
               selectedAsset = asset;
             }
+
             ImGui::TreePop();
           }
         }
@@ -211,6 +217,9 @@ namespace Hades
           {
             selectedEntity = entity;
           }
+
+          RenderEntitiesUI(entity);
+
           ImGui::TreePop();
         }
       }

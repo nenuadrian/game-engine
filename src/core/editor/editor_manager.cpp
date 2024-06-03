@@ -211,57 +211,56 @@ namespace Hades
       else
       {
         ImGui::Text("No logs generated.");
+      }
+      ImGui::End();
+    }
+  }
+
+  void EditorManager::draw(float deltaTime)
+  {
+    if (!ImGui::IsAnyItemActive())
+    {
+      if (window->keyPressed(GLFW_KEY_W))
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+      if (window->keyPressed(GLFW_KEY_S))
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+      if (window->keyPressed(GLFW_KEY_A))
+        camera.ProcessKeyboard(LEFTA, deltaTime);
+      if (window->keyPressed(GLFW_KEY_D))
+        camera.ProcessKeyboard(RIGHTD, deltaTime);
+      if (window->keyPressed(GLFW_KEY_UP))
+        camera.ProcessKeyboard(UP, deltaTime);
+      if (window->keyPressed(GLFW_KEY_DOWN))
+        camera.ProcessKeyboard(DOWN, deltaTime);
+      if (window->keyPressed(GLFW_KEY_LEFT))
+        camera.ProcessKeyboard(LEFT, deltaTime);
+      if (window->keyPressed(GLFW_KEY_RIGHT))
+        camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 
-    ImGui::End();
-  }
-}
+    glm::mat4 projection = glm::perspective(
+        glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
+        100.0f);
 
-void EditorManager::draw(float deltaTime)
-{
-  if (!ImGui::IsAnyItemActive())
+    glm::mat4 view = camera.GetViewMatrix();
+
+    worldManager.Draw(deltaTime, view, projection);
+
+    RenderUI();
+  }
+
+  void EditorManager::run()
   {
-    if (window->keyPressed(GLFW_KEY_W))
-      camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (window->keyPressed(GLFW_KEY_S))
-      camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (window->keyPressed(GLFW_KEY_A))
-      camera.ProcessKeyboard(LEFTA, deltaTime);
-    if (window->keyPressed(GLFW_KEY_D))
-      camera.ProcessKeyboard(RIGHTD, deltaTime);
-    if (window->keyPressed(GLFW_KEY_UP))
-      camera.ProcessKeyboard(UP, deltaTime);
-    if (window->keyPressed(GLFW_KEY_DOWN))
-      camera.ProcessKeyboard(DOWN, deltaTime);
-    if (window->keyPressed(GLFW_KEY_LEFT))
-      camera.ProcessKeyboard(LEFT, deltaTime);
-    if (window->keyPressed(GLFW_KEY_RIGHT))
-      camera.ProcessKeyboard(RIGHT, deltaTime);
+    window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
+
+    window->init();
+
+    window->run();
   }
 
-  glm::mat4 projection = glm::perspective(
-      glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
-      100.0f);
-
-  glm::mat4 view = camera.GetViewMatrix();
-
-  worldManager.Draw(deltaTime, view, projection);
-
-  RenderUI();
-}
-
-void EditorManager::run()
-{
-  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
-
-  window->init();
-
-  window->run();
-}
-
-EditorManager::~EditorManager()
-{
-  delete project;
-  delete window;
-}
+  EditorManager::~EditorManager()
+  {
+    delete project;
+    delete window;
+  }
 } // namespace Hades

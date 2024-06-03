@@ -89,6 +89,11 @@ namespace Hades
       ImGui::InputFloat("Y##rotatey", &rotation.y);
       ImGui::InputFloat("Z##rotatez", &rotation.z);
     }
+
+    if (ImGui::CollapsingHeader("Script"))
+    {
+      ImGui::Text("attachedScriptId %s", attachedScriptId.c_str());
+    }
   }
 
   CameraEntity *World::defaultCamera()
