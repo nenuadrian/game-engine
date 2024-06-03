@@ -5,47 +5,52 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-namespace Hades {
-struct Vertex {
-  glm::vec3 Position;
-  glm::vec3 Normal;
-  glm::vec2 TexCoords;
-};
+namespace Hades
+{
+  struct Vertex
+  {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+  };
 
-struct Texture {
-  unsigned int id;
-  std::string type;
-  std::string path;
-};
+  struct Texture
+  {
+    unsigned int id;
+    std::string type;
+    std::string path;
+  };
 
-class Mesh {
-public:
-  std::vector<Vertex> vertices;
-  std::vector<unsigned int> indices;
-  std::vector<Texture> textures;
+  class Mesh
+  {
+  public:
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
 
-  Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-       std::vector<Texture> textures);
-  void draw(Shader *shader);
-  void draw(int shaderProgram);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+         std::vector<Texture> textures);
+    void draw(Shader *shader);
+    void draw(int shaderProgram);
 
-private:
-  unsigned int VAO, VBO, EBO;
+  private:
+    unsigned int VAO, VBO, EBO;
 
-  void setupMesh();
-};
+    void setupMesh();
+  };
 
-class Model {
-protected:
-  std::vector<Mesh> meshes;
+  class Model
+  {
+  protected:
+    std::vector<Mesh> meshes;
 
-public:
-  std::string id;
-  std::string type;
-  Model() { id = "model" + std::to_string(Engine::newEngineId()); }
-  virtual void init(){};
-  virtual void draw(Shader *shader){};
-  virtual void draw(GLuint shaderProgram){};
-};
+  public:
+    std::string id;
+    std::string type;
+    Model() { id = "model" + std::to_string(Engine::newEngineId()); }
+    virtual void init() {};
+    virtual void draw(Shader *shader) {};
+    virtual void draw(GLuint shaderProgram) {};
+  };
 
 } // namespace Hades

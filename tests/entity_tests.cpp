@@ -10,7 +10,8 @@
 
 using namespace Hades;
 
-TEST_CASE("Entities are initialised") {
+TEST_CASE("Entities are initialised")
+{
   Events events;
   WindowOpengl *w = new WindowOpengl(nullptr, &events);
   w->init();

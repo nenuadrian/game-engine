@@ -13,25 +13,27 @@
 #include "window_opengl.h"
 #include <cstddef>
 
-namespace Hades {
-class Game : public WindowParent {
-private:
-  Camera *camera;
-  World *world;
-  Project *project;
-  Events *events;
-  Window *window;
+namespace Hades
+{
+  class Game : public WindowParent
+  {
+  private:
+    Camera *camera;
+    World *world;
+    Project *project;
+    Events *events;
+    Window *window;
 
-public:
-  Game(Project *project, Events *_events);
-  void init();
-  void LoadWorld(World *newWorld);
-  void run();
+  public:
+    Game(Project *project, Events *_events);
+    void init();
+    void LoadWorld(World *newWorld);
+    void run();
 
-  void draw(float deltaTime) override;
-  void scrollCallback(double x, double y) override {}
-  void mouseButtonCallback(int button, int action, int modsy) override;
-  void mousePosCallback(double x, double y) override;
-  ~Game();
-};
+    void draw(float deltaTime) override;
+    void scrollCallback(double x, double y) override {}
+    void mouseButtonCallback(int button, int action, int modsy) override;
+    void mousePosCallback(double x, double y) override;
+    ~Game();
+  };
 } // namespace Hades

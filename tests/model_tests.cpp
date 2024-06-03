@@ -9,7 +9,8 @@
 
 using namespace Hades;
 
-TEST_CASE("Models are loaded using Assimp from .obj", "[obj]") {
+TEST_CASE("Models are loaded using Assimp from .obj", "[obj]")
+{
   Events events;
   WindowOpengl *w = new WindowOpengl(nullptr, &events);
   w->init();

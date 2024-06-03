@@ -6,33 +6,37 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-namespace Hades {
-class ModelComplex : public Model {
-private:
-  void loadModel(std::string const &path);
-  void processNode(aiNode *node, const aiScene *scene);
-  Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-  std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
-                                            std::string typeName);
-  GLint textureFromFile(const char *filename);
+namespace Hades
+{
+  class ModelComplex : public Model
+  {
+  private:
+    void loadModel(std::string const &path);
+    void processNode(aiNode *node, const aiScene *scene);
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+                                              std::string typeName);
+    GLint textureFromFile(const char *filename);
 
-public:
-  std::string path;
-  ModelComplex() : Model() { type = "complex"; }
+  public:
+    std::string path;
+    ModelComplex() : Model() { type = "complex"; }
 
-  ModelComplex(const char *path) : ModelComplex() { this->path = path; }
+    ModelComplex(const char *path) : ModelComplex() { this->path = path; }
 
-  virtual void init() override {
-    if (!path.empty()) {
-      loadModel(path);
+    virtual void init() override
+    {
+      if (!path.empty())
+      {
+        loadModel(path);
+      }
     }
-  }
 
-  ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
-  void draw(GLuint shaderProgram) override;
-  void draw(Shader *shader) override;
+    ModelComplex(std::string path) : ModelComplex(path.c_str()) {}
+    void draw(GLuint shaderProgram) override;
+    void draw(Shader *shader) override;
 
-  ~ModelComplex();
-};
+    ~ModelComplex();
+  };
 
 } // namespace Hades

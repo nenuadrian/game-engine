@@ -43,9 +43,10 @@ namespace Hades
       events[static_cast<size_t>(event)].data = eventData;
     }
 
-    void unsetEvent(EventType event) {
-        events[static_cast<size_t>(event)].isSet = false;
-        events[static_cast<size_t>(event)].data.clear();
+    void unsetEvent(EventType event)
+    {
+      events[static_cast<size_t>(event)].isSet = false;
+      events[static_cast<size_t>(event)].data.clear();
     }
 
     std::string getEventData(EventType event) const

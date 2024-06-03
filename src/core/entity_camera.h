@@ -9,25 +9,29 @@
 #include <string>
 #include <vector>
 
-namespace Hades {
-class CameraEntity : public ModelEntity {
+namespace Hades
+{
+  class CameraEntity : public ModelEntity
+  {
 
-public:
-  Camera camera;
+  public:
+    Camera camera;
 
-  CameraEntity();
+    CameraEntity();
 
-  void EditorUI(EditorManager *editor) override;
+    void EditorUI(EditorManager *editor) override;
 
-  virtual void init(bool running_, Window *window) override {
-    if (!running_) {
-      InitBasicModel("camera");
+    virtual void init(bool running_, Window *window) override
+    {
+      if (!running_)
+      {
+        InitBasicModel("camera");
+      }
+      ModelEntity::init(running_, window);
+      camera.Position = position;
+      camera.updateCameraVectors();
     }
-    ModelEntity::init(running_, window);
-    camera.Position = position;
-    camera.updateCameraVectors();
-  }
 
-  std::string type() override { return "camera"; };
-};
+    std::string type() override { return "camera"; };
+  };
 } // namespace Hades
