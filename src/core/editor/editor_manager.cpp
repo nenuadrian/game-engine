@@ -139,23 +139,24 @@ namespace Hades
           ImGui::EndMenu();
         }
       }
+
+      scriptManager.RenderMenuBarUI();
+      worldManager.RenderMenuBarUI();
+
       if (ImGui::BeginMenu("Help"))
       {
-        if (ImGui::MenuItem("Debug Stats"))
+        if (ImGui::MenuItem("Toggle Debug Stats"))
         {
           showDebugStats = !showDebugStats;
         }
-        if (ImGui::MenuItem("Docs"))
+        if (ImGui::MenuItem("Toggle Logs"))
         {
-        }
-        if (ImGui::MenuItem("About"))
-        {
+          showLogs = !showLogs;
         }
 
         ImGui::EndMenu();
       }
-      scriptManager.RenderMenuBarUI();
-      worldManager.RenderMenuBarUI();
+
       ImGui::EndMainMenuBar();
     }
   }
@@ -189,72 +190,79 @@ namespace Hades
         ImGui::Text("Project Directory: %s", project->directory_path.c_str());
       }
 
-      if (ImGui::Button("Close"))
-      {
-        showDebugStats = false;
-      }
-
       ImGui::End();
     }
 
-    ImGui::Begin("Logs");
-    if (ImGui::Button("Clear All"))
+    if (showLogs)
     {
-      engine->logs.clear();
+      ImGui::Begin("Logs");
+      if (!engine->logs.empty())
+      {
+        if (ImGui::Button("Clear All Logs"))
+        {
+          engine->logs.clear();
+        }
+        for (auto log : engine->logs)
+        {
+          ImGui::Separator();
+          ImGui::Text("%s", log.msg.c_str());
+        }
+      }
+      else
+      {
+        ImGui::Text("No logs generated.");
+      }
     }
-    for (auto log : engine->logs)
-    {
-      ImGui::Separator();
-      ImGui::Text("%s", log.msg.c_str());
-    }
+
     ImGui::End();
   }
+}
 
-  void EditorManager::draw(float deltaTime)
+void EditorManager::draw(float deltaTime)
+{
+  if (!ImGui::IsAnyItemActive())
   {
-    if (!ImGui::IsAnyItemActive())
-    {
-      if (window->keyPressed(GLFW_KEY_W))
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-      if (window->keyPressed(GLFW_KEY_S))
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-      if (window->keyPressed(GLFW_KEY_A))
-        camera.ProcessKeyboard(LEFTA, deltaTime);
-      if (window->keyPressed(GLFW_KEY_D))
-        camera.ProcessKeyboard(RIGHTD, deltaTime);
-      if (window->keyPressed(GLFW_KEY_UP))
-        camera.ProcessKeyboard(UP, deltaTime);
-      if (window->keyPressed(GLFW_KEY_DOWN))
-        camera.ProcessKeyboard(DOWN, deltaTime);
-      if (window->keyPressed(GLFW_KEY_LEFT))
-        camera.ProcessKeyboard(LEFT, deltaTime);
-      if (window->keyPressed(GLFW_KEY_RIGHT))
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-    }
-
-    glm::mat4 projection = glm::perspective(
-        glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
-        100.0f);
-
-    glm::mat4 view = camera.GetViewMatrix();
-
-    worldManager.Draw(deltaTime, view, projection);
-
-    RenderUI();
+    if (window->keyPressed(GLFW_KEY_W))
+      camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_S))
+      camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_A))
+      camera.ProcessKeyboard(LEFTA, deltaTime);
+    if (window->keyPressed(GLFW_KEY_D))
+      camera.ProcessKeyboard(RIGHTD, deltaTime);
+    if (window->keyPressed(GLFW_KEY_UP))
+      camera.ProcessKeyboard(UP, deltaTime);
+    if (window->keyPressed(GLFW_KEY_DOWN))
+      camera.ProcessKeyboard(DOWN, deltaTime);
+    if (window->keyPressed(GLFW_KEY_LEFT))
+      camera.ProcessKeyboard(LEFT, deltaTime);
+    if (window->keyPressed(GLFW_KEY_RIGHT))
+      camera.ProcessKeyboard(RIGHT, deltaTime);
   }
 
-  void EditorManager::run()
-  {
-    window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
+  glm::mat4 projection = glm::perspective(
+      glm::radians(45.0f), (float)window->width / (float)window->height, 0.1f,
+      100.0f);
 
-    window->init();
+  glm::mat4 view = camera.GetViewMatrix();
 
-    window->run();
-  }
+  worldManager.Draw(deltaTime, view, projection);
 
-  EditorManager::~EditorManager()
-  {
-    delete project;
-    delete window;
-  }
+  RenderUI();
+}
+
+void EditorManager::run()
+{
+  window = new WindowOpengl(reinterpret_cast<WindowParent *>(this), events);
+
+  window->init();
+
+  window->run();
+}
+
+EditorManager::~EditorManager()
+{
+  delete project;
+  delete window;
+}
 } // namespace Hades

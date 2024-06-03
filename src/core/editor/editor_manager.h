@@ -22,6 +22,7 @@ namespace Hades
 
     Window *window;
     bool showDebugStats;
+    bool showLogs;
 
     std::chrono::time_point<std::chrono::steady_clock> t_start =
         std::chrono::high_resolution_clock::now();
