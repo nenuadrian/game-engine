@@ -23,9 +23,6 @@ namespace Hades
   {
     if (running_)
     {
-      if (!script.empty())
-      {
-      }
     }
 
     running = running_;
@@ -65,7 +62,7 @@ namespace Hades
 
   void Entity::draw(float deltaTime, glm::mat4 view, glm::mat4 projection)
   {
-    if (running && !script.empty())
+    if (running)
     {
     }
   }

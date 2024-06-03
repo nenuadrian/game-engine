@@ -48,10 +48,10 @@ namespace Hades
         entityData["type"] = entity->type();
         entityData["engineIdentifier"] = entity->engineIdentifier;
         entityData["position"] = vec3JSON(entity->position);
-        entityData["script"] = entity->script;
         entityData["scale"] = vec3JSON(entity->scale);
         entityData["rotation"] = vec3JSON(entity->rotation);
         entityData["world"] = world->id;
+        entityData["attachedScriptId"] = entity->attachedScriptId;
 
         if (entity->type() == "camera")
         {
@@ -122,11 +122,11 @@ namespace Hades
     {
       Entity *entity = nullptr;
       entity->id = entityData["id"];
-      entity->script = entityData["script"];
       entity->engineIdentifier = entityData["engineIdentifier"];
       entity->position = JSONvec3(entityData["position"]);
       entity->scale = JSONvec3(entityData["scale"]);
       entity->rotation = JSONvec3(entityData["rotation"]);
+      entity->attachedScriptId = entityData["attachedScriptId"];
 
       if (entityData["type"] == "model")
       {

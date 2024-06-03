@@ -147,11 +147,11 @@ namespace Hades
       {
         if (ImGui::MenuItem("Toggle Debug Stats"))
         {
-          showDebugStats = !showDebugStats;
+          m_show_debug_stats = !m_show_debug_stats;
         }
         if (ImGui::MenuItem("Toggle Logs"))
         {
-          showLogs = !showLogs;
+          m_show_logs = !m_show_logs;
         }
 
         ImGui::EndMenu();
@@ -168,22 +168,22 @@ namespace Hades
     worldManager.RenderUI();
     scriptManager.RenderUI();
 
-    if (showDebugStats)
+    if (m_show_debug_stats)
     {
-      ++frame_count;
+      ++m_frame_count;
 
       auto t_current = std::chrono::high_resolution_clock::now();
-      if (t_current >= t_one_second)
+      if (t_current >= m_one_second)
       {
-        last_fps = frame_count;
+        m_last_fps = m_frame_count;
         // Reset the frame count and start time
-        frame_count = 0;
-        t_start = t_current;
-        t_one_second = t_start + std::chrono::seconds(1);
+        m_frame_count = 0;
+        m_start = t_current;
+        m_one_second = m_start + std::chrono::seconds(1);
       }
 
       ImGui::Begin("Debug Stats");
-      ImGui::Text("%d FPS", last_fps);
+      ImGui::Text("%d FPS", m_last_fps);
 
       if (project)
       {
@@ -193,7 +193,7 @@ namespace Hades
       ImGui::End();
     }
 
-    if (showLogs)
+    if (m_show_logs)
     {
       ImGui::Begin("Logs");
       if (!engine->logs.empty())

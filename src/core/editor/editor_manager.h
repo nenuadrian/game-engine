@@ -20,21 +20,22 @@ namespace Hades
     Events *events;
     ScriptManager scriptManager;
 
-    Window *window;
-    bool showDebugStats;
-    bool showLogs;
-
-    std::chrono::time_point<std::chrono::steady_clock> t_start =
-        std::chrono::high_resolution_clock::now();
-    int last_fps = 0;
-    int frame_count = 0;
-    std::chrono::time_point<std::chrono::steady_clock> t_one_second =
-        t_start + std::chrono::seconds(1);
     const unsigned int SCR_WIDTH = 800;
     const unsigned int SCR_HEIGHT = 600;
-    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+    Window *window;
 
-    void RenderMenuBarUI();
+    bool m_show_debug_stats = false;
+    bool m_show_logs = false;
+    int m_last_fps = 0;
+    int m_frame_count = 0;
+
+    std::chrono::time_point<std::chrono::steady_clock> m_start =
+        std::chrono::high_resolution_clock::now();
+
+    std::chrono::time_point<std::chrono::steady_clock> m_one_second =
+        m_start + std::chrono::seconds(1);
+
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
   public:
     Project *project = nullptr;
@@ -45,6 +46,10 @@ namespace Hades
       events = &engine->events;
     };
 
+  private:
+    void RenderMenuBarUI();
+
+  public:
     void run();
     void Open();
     void load(Project *newProject);
@@ -55,6 +60,7 @@ namespace Hades
     void scrollCallback(double x, double y) override;
     void mouseButtonCallback(int button, int action, int modsy) override;
     void mousePosCallback(double x, double y) override;
+
     ~EditorManager();
   };
 } // namespace Hades
