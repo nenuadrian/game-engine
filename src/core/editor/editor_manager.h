@@ -5,6 +5,7 @@
 #include "core/asset.h"
 #include "core/editor/script_manager.h"
 #include "core/editor/world_manager.h"
+#include "core/editor/asset_manager.h"
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
@@ -39,8 +40,9 @@ namespace Hades
   public:
     Project *project = nullptr;
     WorldManager m_world_manager;
+    AssetManager m_asset_manager;
 
-    EditorManager(Engine *engine) : engine(engine), scriptManager(ScriptManager(engine)), m_world_manager(WorldManager(engine, this)){};
+    EditorManager(Engine *engine) : engine(engine), m_asset_manager(AssetManager(engine, this)), scriptManager(ScriptManager(engine)), m_world_manager(WorldManager(engine, this)){};
 
   private:
     void RenderMenuBarUI();
