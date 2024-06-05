@@ -1,5 +1,8 @@
 #include "engine.h"
 
+#include "core/editor/asset_editor_plugin.h"
+#include "core/editor/world_editor_plugin.h"
+#include "core/editor/script_editor_plugin.h"
 #include "editor/editor_manager.h"
 #include "entity.h"
 #include "game.h"
@@ -20,6 +23,9 @@ namespace Hades
         events.unsetEvent(EventType::RUN_EDITOR);
 
         EditorManager *editorManager = new EditorManager(this);
+        editorManager->AddPlugin(new WorldEditorPlugin(this, editorManager));
+        editorManager->AddPlugin(new AssetEditorPlugin(this, editorManager));
+        editorManager->AddPlugin(new ScriptEditorPlugin(this));
 
         if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
         {

@@ -1,11 +1,11 @@
-#pragma once
+#ifndef HADES_EDITOR_MANAGER_H
+#define HADES_EDITOR_MANAGER_H
+
 #include "core/camera.h"
 #include "core/entity_model.h"
 #include "core/events.h"
+#include "core/editor/plugin.h"
 #include "core/asset.h"
-#include "core/editor/script_manager.h"
-#include "core/editor/world_manager.h"
-#include "core/editor/asset_manager.h"
 #include "core/project.h"
 #include "core/window_opengl.h"
 #include <chrono>
@@ -17,8 +17,8 @@ namespace Hades
   class EditorManager : public WindowParent
   {
   private:
+    std::vector<Plugin*> plugins;
     Engine *engine;
-    ScriptManager scriptManager;
 
     const unsigned int SCR_WIDTH = 800;
     const unsigned int SCR_HEIGHT = 600;
@@ -39,10 +39,8 @@ namespace Hades
 
   public:
     Project *project = nullptr;
-    WorldManager m_world_manager;
-    AssetManager m_asset_manager;
 
-    EditorManager(Engine *engine) : engine(engine), m_asset_manager(AssetManager(engine, this)), scriptManager(ScriptManager(engine)), m_world_manager(WorldManager(engine, this)){};
+    EditorManager(Engine *engine) : engine(engine){};
 
   private:
     void RenderMenuBarUI();
@@ -53,6 +51,7 @@ namespace Hades
     void load(Project *newProject);
     void NewProject();
     void RenderUI();
+    void AddPlugin(Plugin* plugin);
 
     void draw(float deltaTime) override;
     void scrollCallback(double x, double y) override;
@@ -62,3 +61,5 @@ namespace Hades
     ~EditorManager();
   };
 } // namespace Hades
+
+#endif // HADES_EDITOR_MANAGER_H

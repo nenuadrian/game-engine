@@ -61,8 +61,6 @@ TEST_CASE("Entities should save to JSON")
   EditorManager *manager = new EditorManager(&engine);
   manager->load(&project);
 
-  manager->m_world_manager.SelectWorld(world);
-
   std::string json = Exporter::fromProject(&project);
 }
 

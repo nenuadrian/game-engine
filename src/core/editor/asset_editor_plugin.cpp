@@ -1,4 +1,4 @@
-#include "asset_manager.h"
+#include "asset_editor_plugin.h"
 
 #include "core/entities.h"
 #include "imgui.h"
@@ -17,7 +17,7 @@
 
 namespace Hades
 {
-  void AssetManager::RenderUI()
+  void AssetEditorPlugin::RenderUI()
   {
     if (!project)
     {
@@ -56,7 +56,7 @@ namespace Hades
     }
   }
 
-  void AssetManager::RenderAssetUI()
+  void AssetEditorPlugin::RenderAssetUI()
   {
     ImGui::Begin("Asset");
 
@@ -78,7 +78,7 @@ namespace Hades
     ImGui::End();
   }
 
-  void AssetManager::RenderAssetsUI(Asset *parent)
+  void AssetEditorPlugin::RenderAssetsUI(Asset *parent)
   {
     if (assetDirectory)
     {
@@ -133,11 +133,11 @@ namespace Hades
     }
   }
 
-  void AssetManager::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection)
+  void AssetEditorPlugin::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection)
   {
   }
 
-  void AssetManager::RenderMenuBarUI()
+  void AssetEditorPlugin::RenderMenuBarUI()
   {
     if (!project)
     {
@@ -145,7 +145,7 @@ namespace Hades
     }
   }
 
-  AssetManager::~AssetManager()
+  AssetEditorPlugin::~AssetEditorPlugin()
   {
   }
 
