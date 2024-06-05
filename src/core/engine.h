@@ -24,7 +24,7 @@ namespace Hades
 
     Engine(){};
     void RunEditor();
-    void RunGame();
+    void RunGame(std::string from_path);
     static long int newEngineId()
     {
       return std::chrono::system_clock::now().time_since_epoch().count();

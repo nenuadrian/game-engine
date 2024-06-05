@@ -1,5 +1,7 @@
 #include "core/engine.h"
 
+#include "nfd.h"
+
 /**
  * @brief The main function of the program.
  *
@@ -9,7 +11,12 @@
  */
 int main(void)
 {
-  Hades::Engine engine = Hades::Engine();
-  engine.RunGame();
+  nfdchar_t *output_path = NULL;
+  nfdresult_t result = NFD_PickFolder(NULL, &output_path);
+  if (result == NFD_OKAY)
+  {
+    Hades::Engine engine = Hades::Engine();
+    engine.RunGame(output_path);
+  }
   return 0;
 }

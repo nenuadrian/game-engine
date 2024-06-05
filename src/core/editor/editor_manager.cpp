@@ -51,13 +51,13 @@ namespace Hades
       delete project;
     }
 
-    nfdchar_t *outPath = NULL;
-    nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+    nfdchar_t *output_path = NULL;
+    nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
       auto project = new Project();
-      project->directory_path = outPath;
-      free(outPath);
+      project->directory_path = output_path;
+      free(output_path);
 
       project->Save();
 
@@ -78,15 +78,15 @@ namespace Hades
 
   void EditorManager::Open()
   {
-    nfdchar_t *outPath = NULL;
-    nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+    nfdchar_t *output_path = NULL;
+    nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
-      engine->events.setEvent(EventType::OPEN_PROJECT_FROM_FILE, outPath);
+      engine->events.setEvent(EventType::OPEN_PROJECT_FROM_FILE, output_path);
       engine->events.setEvent(EventType::CLOSE_WINDOW);
       engine->events.setEvent(EventType::RUN_EDITOR);
 
-      free(outPath);
+      free(output_path);
     }
     else
     {

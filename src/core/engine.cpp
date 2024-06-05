@@ -35,12 +35,9 @@ namespace Hades
       if (events.isEventSet(EventType::RUN_EDITOR))
       {
         events.unsetEvent(EventType::RUN_EDITOR);
-        auto editorManager = initEditor(this);
 
         if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
         {
-          Project *project = nullptr;
-
           if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
           {
             // from file
@@ -49,21 +46,26 @@ namespace Hades
                                 (std::istreambuf_iterator<char>()));
             ifs.close();
             events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
-            project = Exporter::toProject(content);
+            Project *project = project = Exporter::toProject(content);
             project->directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
+            auto editorManager = initEditor(this);
+            editorManager->load(project);
+            editorManager->run();
           }
           else if (events.isEventSet(EventType::OPEN_PROJECT))
           {
-            project = Exporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
+            Project *project = project = Exporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
             events.unsetEvent(EventType::OPEN_PROJECT);
-          }
-
-          if (project)
-          {
+            auto editorManager = initEditor(this);
             editorManager->load(project);
+            editorManager->run();
           }
         }
-        editorManager->run();
+        else
+        {
+          auto editorManager = initEditor(this);
+          editorManager->run();
+        }
       }
 
       if (events.isEventSet(EventType::RUN_GAME))
@@ -89,11 +91,11 @@ namespace Hades
     }
   }
 
-  void Engine::RunGame()
+  void Engine::RunGame(std::string from_path)
   {
     events.setEvent(EventType::RUN_GAME);
 
-    std::ifstream ifs("./");
+    std::ifstream ifs(from_path);
     std::string content((std::istreambuf_iterator<char>(ifs)),
                         (std::istreambuf_iterator<char>()));
     ifs.close();
@@ -102,6 +104,7 @@ namespace Hades
 
     auto game = std::make_unique<Game>(project, &events);
     game->run();
+
     delete project;
   }
 
