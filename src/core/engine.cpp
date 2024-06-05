@@ -17,7 +17,7 @@ namespace
     std::shared_ptr<Hades::EditorManager> editorManager = std::make_shared<Hades::EditorManager>(engine);
     editorManager->AddPlugin(new Hades::WorldEditorPlugin(engine, editorManager.get()));
     editorManager->AddPlugin(new Hades::AssetEditorPlugin(engine, editorManager.get()));
-    editorManager->AddPlugin(new Hades::ScriptEditorPlugin(engine));
+    editorManager->AddPlugin(new Hades::ScriptEditorPlugin(engine, editorManager.get()));
 
     return std::move(editorManager);
   }

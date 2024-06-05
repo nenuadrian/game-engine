@@ -14,30 +14,18 @@ namespace Hades
   class WorldEditorPlugin : public Plugin
   {
   private:
-    EditorManager *editorManager;
-    Project *project = nullptr;
-    Engine *engine = nullptr;
-    Events *events;
     Entity *selectedEntity = nullptr;
 
     void RenderEntitiesUI(Entity *parent);
 
   public:
-    World *loadedWorld = nullptr;
+  
 
-    WorldEditorPlugin(Engine *engine, EditorManager *editorManager) : engine(engine), editorManager(editorManager) { events = &engine->events; };
+    WorldEditorPlugin(Engine *engine, EditorManager *editorManager) : Plugin(engine, editorManager){};
 
     void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
     void RenderUI() override;
     void RenderMenuBarUI() override;
-    void Load(Project *newProject) override
-    {
-      project = newProject;
-    }
-    void SelectWorld(World *world) override
-    {
-      loadedWorld = world;
-    }
 
     ~WorldEditorPlugin();
   };

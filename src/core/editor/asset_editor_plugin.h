@@ -15,9 +15,6 @@ namespace Hades
   class AssetEditorPlugin : public Plugin
   {
   private:
-    EditorManager *editorManager;
-    Project *project = nullptr;
-    Engine *engine = nullptr;
     Asset *selectedAsset = nullptr;
     Asset *assetDirectory = nullptr;
 
@@ -27,16 +24,11 @@ namespace Hades
   public:
     World *loadedWorld = nullptr;
 
-    AssetEditorPlugin(Engine *engine, EditorManager *editorManager) : engine(engine), editorManager(editorManager){};
+    AssetEditorPlugin(Engine *engine, EditorManager *editorManager) : Plugin(engine, editorManager){};
 
-    void SelectWorld(World *world) override {}
     void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override;
     void RenderUI() override;
     void RenderMenuBarUI() override;
-    void Load(Project *newProject) override
-    {
-      project = newProject;
-    }
 
     ~AssetEditorPlugin();
   };
