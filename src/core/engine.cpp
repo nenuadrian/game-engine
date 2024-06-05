@@ -8,6 +8,20 @@
 #include "game.h"
 #include "json_export.h"
 #include <fstream>
+#include <memory>
+
+namespace
+{
+  std::shared_ptr<Hades::EditorManager> initEditor(Hades::Engine *engine)
+  {
+    std::shared_ptr<Hades::EditorManager> editorManager = std::make_shared<Hades::EditorManager>(engine);
+    editorManager->AddPlugin(new Hades::WorldEditorPlugin(engine, editorManager.get()));
+    editorManager->AddPlugin(new Hades::AssetEditorPlugin(engine, editorManager.get()));
+    editorManager->AddPlugin(new Hades::ScriptEditorPlugin(engine));
+
+    return std::move(editorManager);
+  }
+}
 
 namespace Hades
 {
@@ -21,11 +35,7 @@ namespace Hades
       if (events.isEventSet(EventType::RUN_EDITOR))
       {
         events.unsetEvent(EventType::RUN_EDITOR);
-
-        EditorManager *editorManager = new EditorManager(this);
-        editorManager->AddPlugin(new WorldEditorPlugin(this, editorManager));
-        editorManager->AddPlugin(new AssetEditorPlugin(this, editorManager));
-        editorManager->AddPlugin(new ScriptEditorPlugin(this));
+        auto editorManager = initEditor(this);
 
         if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
         {
@@ -54,27 +64,21 @@ namespace Hades
           }
         }
         editorManager->run();
-        delete editorManager;
       }
 
       if (events.isEventSet(EventType::RUN_GAME))
       {
-        Game *game = nullptr;
         Project *project = nullptr;
         try
         {
           project = Exporter::toProject(events.getEventData(EventType::RUN_GAME));
           events.unsetEvent(EventType::RUN_GAME);
-          game = new Game(project, &events);
+          auto game = std::make_shared<Game>(project, &events);
           game->run();
         }
         catch (const std::exception &e)
         {
           error(e.what());
-        }
-        if (game)
-        {
-          delete game;
         }
         if (project)
         {
@@ -96,9 +100,8 @@ namespace Hades
     // Explicitly specify the type of 'project' variable
     Project *project = Exporter::toProject(content);
 
-    Game *game = new Game(project, &events);
+    auto game = std::make_unique<Game>(project, &events);
     game->run();
-    delete game;
     delete project;
   }
 

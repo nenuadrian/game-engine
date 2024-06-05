@@ -19,11 +19,6 @@ namespace Hades
 {
   void WorldEditorPlugin::RenderUI()
   {
-    if (!project)
-    {
-      return;
-    }
-
     if (loadedWorld != nullptr)
     {
       ImGui::Begin("Scene");
@@ -119,11 +114,7 @@ namespace Hades
 
   void WorldEditorPlugin::RenderMenuBarUI()
   {
-    if (!project)
-    {
-      return;
-    }
-    if (ImGui::BeginMenu("Worlds"))
+    if (project && ImGui::BeginMenu("Worlds"))
     {
       if (ImGui::MenuItem("New World"))
       {
@@ -150,7 +141,7 @@ namespace Hades
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu("Entities"))
+    if (loadedWorld && ImGui::BeginMenu("Entities"))
     {
 
       if (ImGui::BeginMenu("New Entity"))
