@@ -39,6 +39,11 @@ namespace Hades
     }
   }
 
+  void EditorManager::AddPlugin(Plugin *plugin)
+  {
+    plugins.push_back(plugin);
+  }
+
   void EditorManager::NewProject()
   {
     if (project != nullptr)
@@ -59,7 +64,11 @@ namespace Hades
       load(project);
       auto world = project->NewWorld();
       project->mainWorldId = world->id;
-      m_world_manager.SelectWorld(world);
+
+      for (auto plugin : plugins)
+      {
+        plugin->SelectWorld(world);
+      }
     }
     else
     {
@@ -92,9 +101,10 @@ namespace Hades
       delete project;
     }
     project = newProject;
-    scriptManager.Load(project);
-    m_world_manager.Load(project);
-    m_asset_manager.Load(project);
+    for (auto plugin : plugins)
+    {
+      plugin->Load(project);
+    }
   }
 
   void EditorManager::RenderMenuBarUI()
@@ -141,9 +151,10 @@ namespace Hades
         }
       }
 
-      scriptManager.RenderMenuBarUI();
-      m_world_manager.RenderMenuBarUI();
-      m_asset_manager.RenderMenuBarUI();
+      for (auto plugin : plugins)
+      {
+        plugin->RenderMenuBarUI();
+      }
 
       if (ImGui::BeginMenu("Help"))
       {
@@ -167,9 +178,11 @@ namespace Hades
   {
 
     RenderMenuBarUI();
-    m_asset_manager.RenderUI();
-    m_world_manager.RenderUI();
-    scriptManager.RenderUI();
+
+    for (auto plugin : plugins)
+    {
+      plugin->RenderUI();
+    }
 
     if (m_show_debug_stats)
     {
@@ -247,8 +260,10 @@ namespace Hades
 
     glm::mat4 view = m_editor_camera.GetViewMatrix();
 
-    m_world_manager.Draw(deltaTime, view, projection);
-    m_asset_manager.Draw(deltaTime, view, projection);
+    for (auto plugin : plugins)
+    {
+      plugin->Draw(deltaTime, view, projection);
+    }
 
     RenderUI();
   }
@@ -264,6 +279,10 @@ namespace Hades
 
   EditorManager::~EditorManager()
   {
+    for (auto plugin : plugins)
+    {
+      delete plugin;
+    }
     delete project;
     delete window;
   }

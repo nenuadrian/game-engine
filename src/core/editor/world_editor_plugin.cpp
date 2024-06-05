@@ -1,4 +1,4 @@
-#include "world_manager.h"
+#include "world_editor_plugin.h"
 
 #include "core/entities.h"
 #include "imgui.h"
@@ -17,7 +17,7 @@
 
 namespace Hades
 {
-  void WorldManager::RenderUI()
+  void WorldEditorPlugin::RenderUI()
   {
     if (!project)
     {
@@ -76,7 +76,7 @@ namespace Hades
       ImGui::End();
     }
   }
-  void WorldManager::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection)
+  void WorldEditorPlugin::Draw(float deltaTime, glm::mat4 view, glm::mat4 projection)
   {
     if (loadedWorld != nullptr)
     {
@@ -87,7 +87,7 @@ namespace Hades
     }
   }
 
-  void WorldManager::RenderEntitiesUI(Entity *parent)
+  void WorldEditorPlugin::RenderEntitiesUI(Entity *parent)
   {
     for (auto entity : loadedWorld->entities)
     {
@@ -117,7 +117,7 @@ namespace Hades
     }
   }
 
-  void WorldManager::RenderMenuBarUI()
+  void WorldEditorPlugin::RenderMenuBarUI()
   {
     if (!project)
     {
@@ -195,7 +195,7 @@ namespace Hades
     }
   }
 
-  WorldManager::~WorldManager()
+  WorldEditorPlugin::~WorldEditorPlugin()
   {
   }
 

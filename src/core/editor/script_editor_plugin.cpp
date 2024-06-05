@@ -1,4 +1,4 @@
-#include "script_manager.h"
+#include "script_editor_plugin.h"
 
 #include "core/entities.h"
 #include "imgui.h"
@@ -35,14 +35,14 @@ namespace
 namespace Hades
 {
 
-  void ScriptManager::RenderMenuBarUI()
+  void ScriptEditorPlugin::RenderMenuBarUI()
   {
   }
 
   /**
    * @brief Renders the user interface for managing scripts.
    */
-  void ScriptManager::RenderUI()
+  void ScriptEditorPlugin::RenderUI()
   {
     if (!project)
     {
@@ -111,7 +111,7 @@ namespace Hades
     }
   }
 
-  ScriptManager::~ScriptManager()
+  ScriptEditorPlugin::~ScriptEditorPlugin()
   {
   }
 
