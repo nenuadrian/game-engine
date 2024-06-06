@@ -6,7 +6,7 @@
 #include "editor/editor_manager.h"
 #include "entity.h"
 #include "game.h"
-#include "json_export.h"
+#include "core/serialization/importer.h"
 #include <fstream>
 #include <memory>
 
@@ -46,7 +46,7 @@ namespace Hades
                                 (std::istreambuf_iterator<char>()));
             ifs.close();
             events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
-            Project *project = project = Exporter::toProject(content);
+            Project *project = project = Importer::Unserialize(content);
             project->directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
             auto editorManager = initEditor(this);
             editorManager->load(project);
@@ -54,7 +54,7 @@ namespace Hades
           }
           else if (events.isEventSet(EventType::OPEN_PROJECT))
           {
-            Project *project = project = Exporter::toProject(events.getEventData(EventType::OPEN_PROJECT));
+            Project *project = project = Importer::Unserialize(events.getEventData(EventType::OPEN_PROJECT));
             events.unsetEvent(EventType::OPEN_PROJECT);
             auto editorManager = initEditor(this);
             editorManager->load(project);
@@ -73,7 +73,7 @@ namespace Hades
         Project *project = nullptr;
         try
         {
-          project = Exporter::toProject(events.getEventData(EventType::RUN_GAME));
+          project = Importer::Unserialize(events.getEventData(EventType::RUN_GAME));
           events.unsetEvent(EventType::RUN_GAME);
           auto game = std::make_shared<Game>(project, &events);
           game->run();
@@ -100,7 +100,7 @@ namespace Hades
                         (std::istreambuf_iterator<char>()));
     ifs.close();
     // Explicitly specify the type of 'project' variable
-    Project *project = Exporter::toProject(content);
+    Project *project = Importer::Unserialize(content);
 
     auto game = std::make_unique<Game>(project, &events);
     game->run();

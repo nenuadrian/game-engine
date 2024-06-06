@@ -7,7 +7,7 @@ namespace Hades
   class Exporter
   {
   public:
-    static std::string fromProject(Project *project);
-    static Project *toProject(std::string json);
+    static std::string Serialize(Project *project);
+    static std::string SerializeToFile(Project *project, std::string file_path);
   };
 } // namespace Hades

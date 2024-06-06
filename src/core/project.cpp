@@ -4,7 +4,7 @@
 #include "model_complex.h"
 #include <ctime>
 #include <fstream>
-#include "core/json_export.h"
+#include "core/serialization/exporter.h"
 
 namespace Hades
 {
@@ -20,7 +20,7 @@ namespace Hades
   {
     std::ofstream myfile;
     myfile.open(std::string(directory_path) + "/data.json");
-    std::string s = Exporter::fromProject(this);
+    std::string s = Exporter::Serialize(this);
     myfile << s;
     myfile.close();
   }

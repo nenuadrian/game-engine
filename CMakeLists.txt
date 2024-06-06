@@ -133,7 +133,7 @@ file(
   libs/imgui/backends/imgui_impl_opengl3.h
   libs/imgui/backends/imgui_impl_opengl3.cpp
   libs/glad/src/glad.c)
-file(GLOB ENGINE-SRC src/core/* src/core/shaders/* src/core/editor/*)
+file(GLOB ENGINE-SRC src/core/* src/core/shaders/* src/core/editor/* src/core/serialization/* src/core/utils/*)
 
 link_libraries(
   glew_s

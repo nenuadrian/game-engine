@@ -1,7 +1,7 @@
 #include "editor_manager.h"
 
 #include "core/entities.h"
-#include "core/json_export.h"
+#include "core/serialization/exporter.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -144,7 +144,7 @@ namespace Hades
           if (ImGui::MenuItem("Play", __null, false,
                               !project->mainWorldId.empty()))
           {
-            engine->events.setEvent(EventType::RUN_GAME, Exporter::fromProject(project));
+            engine->events.setEvent(EventType::RUN_GAME, Exporter::Serialize(project));
             engine->events.setEvent(EventType::CLOSE_WINDOW);
           }
           ImGui::EndMenu();
