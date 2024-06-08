@@ -73,7 +73,7 @@ namespace Hades
     if (modelSelectionWindowOpen)
     {
       ImGui::Begin("Select Model");
-      for (Asset *asset : editor->project->assets)
+      for (Asset *asset : editor->project.assets)
       {
         if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
                            engineIdentifier + "asset" + asset->id)

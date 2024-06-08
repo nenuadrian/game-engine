@@ -19,11 +19,6 @@ namespace Hades
 {
   void AssetEditorPlugin::RenderUI()
   {
-    if (!project)
-    {
-      return;
-    }
-
     ImGui::Begin("Assets");
 
     if (ImGui::Button("Import Asset"))
@@ -38,7 +33,7 @@ namespace Hades
         {
           asset->parent_id = assetDirectory->id;
         }
-        project->assets.push_back(asset);
+        project.assets.push_back(asset);
       }
       else
       {
@@ -67,11 +62,11 @@ namespace Hades
 
     if (ImGui::Button("Delete"))
     {
-      project->assets.erase(
-          std::remove_if(project->assets.begin(), project->assets.end(),
+      project.assets.erase(
+          std::remove_if(project.assets.begin(), project.assets.end(),
                          [this](Asset *e)
                          { return e == selectedAsset; }),
-          project->assets.end());
+          project.assets.end());
       selectedAsset = nullptr;
     }
 
@@ -87,7 +82,7 @@ namespace Hades
         assetDirectory = nullptr;
       }
     }
-    for (Asset *asset : project->assets)
+    for (Asset *asset : project.assets)
     {
       if (asset->type == AssetType::SCRIPT)
       {
@@ -129,7 +124,7 @@ namespace Hades
       {
         asset->parent_id = parent->id;
       }
-      project->assets.push_back(asset);
+      project.assets.push_back(asset);
     }
   }
 
@@ -139,10 +134,6 @@ namespace Hades
 
   void AssetEditorPlugin::RenderMenuBarUI()
   {
-    if (!project)
-    {
-      return;
-    }
   }
 
   AssetEditorPlugin::~AssetEditorPlugin()

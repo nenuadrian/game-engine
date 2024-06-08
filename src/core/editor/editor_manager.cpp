@@ -46,24 +46,19 @@ namespace Hades
 
   void EditorManager::NewProject()
   {
-    if (project != nullptr)
-    {
-      delete project;
-    }
-
     nfdchar_t *output_path = NULL;
     nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
-      auto project = new Project();
-      project->directory_path = output_path;
+      auto project = Project();
+      project.directory_path = output_path;
       free(output_path);
 
-      project->Save();
+      project.Save();
 
       load(project);
-      auto world = project->NewWorld();
-      project->mainWorldId = world->id;
+      auto world = project.NewWorld();
+      project.mainWorldId = world->id;
 
       for (auto plugin : plugins)
       {
@@ -94,12 +89,8 @@ namespace Hades
     }
   }
 
-  void EditorManager::load(Project *newProject)
+  void EditorManager::load(Project& newProject)
   {
-    if (project != nullptr)
-    {
-      delete project;
-    }
     project = newProject;
     for (auto plugin : plugins)
     {
@@ -121,12 +112,9 @@ namespace Hades
         {
           Open();
         }
-        if (project != nullptr)
+        if (ImGui::MenuItem("Save"))
         {
-          if (ImGui::MenuItem("Save"))
-          {
-            project->Save();
-          }
+          project.Save();
         }
 
         if (ImGui::MenuItem("Exit"))
@@ -136,19 +124,16 @@ namespace Hades
 
         ImGui::EndMenu();
       }
-      if (project != nullptr)
-      {
 
-        if (ImGui::BeginMenu("Game"))
+      if (ImGui::BeginMenu("Game"))
+      {
+        if (ImGui::MenuItem("Play", __null, false,
+                            !project.mainWorldId.empty()))
         {
-          if (ImGui::MenuItem("Play", __null, false,
-                              !project->mainWorldId.empty()))
-          {
-            engine->events.setEvent(EventType::RUN_GAME, Exporter::Serialize(project));
-            engine->events.setEvent(EventType::CLOSE_WINDOW);
-          }
-          ImGui::EndMenu();
+          engine->events.setEvent(EventType::RUN_GAME, Exporter::Serialize(&project));
+          engine->events.setEvent(EventType::CLOSE_WINDOW);
         }
+        ImGui::EndMenu();
       }
 
       for (auto plugin : plugins)
@@ -201,10 +186,7 @@ namespace Hades
       ImGui::Begin("Debug Stats");
       ImGui::Text("%d FPS", m_last_fps);
 
-      if (project)
-      {
-        ImGui::Text("Project Directory: %s", project->directory_path.c_str());
-      }
+      ImGui::Text("Project Directory: %s", project.directory_path.c_str());
 
       ImGui::End();
     }
@@ -283,7 +265,6 @@ namespace Hades
     {
       delete plugin;
     }
-    delete project;
     delete window;
   }
 } // namespace Hades

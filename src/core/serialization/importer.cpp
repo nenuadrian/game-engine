@@ -20,31 +20,29 @@ namespace Hades
   using namespace nlohmann;
   using namespace std;
 
-  Project *Importer::UnserializeFile(string file_path)
+  Project Importer::UnserializeFile(string file_path)
   {
-    auto project = new Project();
-
-    return project;
+    return Project();
   }
 
-  Project *Importer::Unserialize(string serialized_data)
+  Project Importer::Unserialize(string serialized_data)
   {
     auto data = json::parse(serialized_data);
-    auto project = new Project();
-    project->name = data["name"];
-    project->mainWorldId = data["mainWorldId"];
+    auto project = Project();
+    project.name = data["name"];
+    project.mainWorldId = data["mainWorldId"];
 
     for (auto worldData : data["worlds"])
     {
       World *world =
           new World(worldData["id"], worldData["name"], worldData["mainCameraEntityId"]);
-      project->worlds[world->id] = world;
+      project.worlds[world->id] = world;
     }
 
     for (auto assetData : data["assets"])
     {
       auto asset = new Asset(assetData["type"], assetData["id"], assetData["file"], assetData["engineIdentifier"]);
-      project->assets.push_back(asset);
+      project.assets.push_back(asset);
     }
 
     for (auto entityData : data["entities"])
@@ -85,7 +83,7 @@ namespace Hades
         entity = camera;
       }
 
-      for (auto world : project->worlds)
+      for (auto world : project.worlds)
       {
         if (world.first == entityData["world"])
         {

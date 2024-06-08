@@ -24,11 +24,11 @@ namespace Hades
       ImGui::Begin("Scene");
 
       ImGui::InputText("Name", &loadedWorld->name);
-      if (project->mainWorldId != loadedWorld->id)
+      if (project.mainWorldId != loadedWorld->id)
       {
         if (ImGui::Button("Set as Main World"))
         {
-          project->mainWorldId = loadedWorld->id;
+          project.mainWorldId = loadedWorld->id;
         }
       }
 
@@ -114,24 +114,24 @@ namespace Hades
 
   void WorldEditorPlugin::RenderMenuBarUI()
   {
-    if (project && ImGui::BeginMenu("Worlds"))
+    if (ImGui::BeginMenu("Worlds"))
     {
       if (ImGui::MenuItem("New World"))
       {
-        World *world = project->NewWorld();
+        World *world = project.NewWorld();
         SelectWorld(world);
       }
       ImGui::Separator();
 
-      for (auto world : project->worlds)
+      for (auto world : project.worlds)
       {
         if (ImGui::MenuItem(
                 (world.second->name +
-                 (world.second->id == project->mainWorldId ? " (main)" : "") +
+                 (world.second->id == project.mainWorldId ? " (main)" : "") +
                  "##" + world.second->id)
                     .c_str()))
         {
-          if (world.second->id != project->mainWorldId)
+          if (world.second->id != project.mainWorldId)
           {
             SelectWorld(world.second);
           }

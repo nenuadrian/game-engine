@@ -18,7 +18,7 @@ namespace Hades
     World();
     World(std::string id, std::string name, std::string mainCameraEntityId)
         : id(id), name(name), mainCameraEntityId(mainCameraEntityId){};
-    void init(Project *project, Window *w);
+    void init(Project &project, Window *w);
     CameraEntity *defaultCamera();
     void addEntity(Entity *);
     ~World();

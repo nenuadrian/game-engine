@@ -7,7 +7,7 @@ namespace Hades
   class Importer
   {
   public:
-    static Project *Unserialize(std::string serialized_data);
-    static Project *UnserializeFile(std::string file_path);
+    static Project Unserialize(std::string serialized_data);
+    static Project UnserializeFile(std::string file_path);
   };
 } // namespace Hades

@@ -38,7 +38,7 @@ namespace Hades
     Camera m_editor_camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
   public:
-    Project *project = nullptr;
+    Project project;
 
     EditorManager(Engine *engine) : engine(engine){};
 
@@ -48,7 +48,7 @@ namespace Hades
   public:
     void run();
     void Open();
-    void load(Project *newProject);
+    void load(Project& newProject);
     void NewProject();
     void RenderUI();
     void AddPlugin(Plugin* plugin);
