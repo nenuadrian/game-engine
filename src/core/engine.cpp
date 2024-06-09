@@ -32,10 +32,8 @@ namespace Hades
     events.setEvent(EventType::RUN_EDITOR);
     while (events.isEventSet(EventType::RUN_EDITOR) || events.isEventSet(EventType::RUN_GAME))
     {
-      if (events.isEventSet(EventType::RUN_EDITOR))
+      if (events.isEventSetAndUnset(EventType::RUN_EDITOR))
       {
-        events.unsetEvent(EventType::RUN_EDITOR);
-
         if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
         {
           if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
