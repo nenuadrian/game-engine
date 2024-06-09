@@ -20,12 +20,12 @@ namespace Hades
   private:
     Camera *camera;
     World *world;
-    Project *project;
+    Project &project;
     Events *events;
     Window *window;
 
   public:
-    Game(Project *project, Events *_events);
+    Game(Project &project, Events *_events) : project(project), events(_events){};
     void init();
     void LoadWorld(World *newWorld);
     void run();

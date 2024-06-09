@@ -108,7 +108,7 @@ namespace Hades
     }
   }
 
-  void World::init(Project *project, Window *w)
+  void World::init(Project& project, Window *w)
   {
     for (Entity *entity : entities)
     {

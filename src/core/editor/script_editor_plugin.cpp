@@ -44,25 +44,20 @@ namespace Hades
    */
   void ScriptEditorPlugin::RenderUI()
   {
-    if (!project)
-    {
-      return;
-    }
-
     ImGui::Begin("Scripts");
 
     if (ImGui::Button("New Script"))
     {
       auto asset = new Asset(AssetType::SCRIPT);
       std::ofstream myfile;
-      myfile.open(project->directory_path + "/script-" + asset->engineIdentifier + ".c");
+      myfile.open(project.directory_path + "/script-" + asset->engineIdentifier + ".c");
       myfile << "test";
       myfile.close();
-      project->assets.push_back(asset);
+      project.assets.push_back(asset);
       selectedAsset = asset;
     }
 
-    for (Asset *asset : project->assets)
+    for (Asset *asset : project.assets)
     {
       if (asset->type != AssetType::SCRIPT)
       {
@@ -95,11 +90,11 @@ namespace Hades
 
       if (ImGui::Button("Delete"))
       {
-        project->assets.erase(
-            std::remove_if(project->assets.begin(), project->assets.end(),
+        project.assets.erase(
+            std::remove_if(project.assets.begin(), project.assets.end(),
                            [this](Asset *e)
                            { return e == selectedAsset; }),
-            project->assets.end());
+            project.assets.end());
         selectedAsset = nullptr;
       }
 

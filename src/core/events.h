@@ -37,6 +37,16 @@ namespace Hades
       return events[static_cast<size_t>(event)].isSet;
     }
 
+    bool isEventSetAndUnset(EventType event)
+    {
+      bool isSet = events[static_cast<size_t>(event)].isSet;
+      if (isSet)
+      {
+        unsetEvent(event);
+      }
+      return isSet;
+    }
+
     void setEvent(EventType event, const std::string &eventData = "")
     {
       events[static_cast<size_t>(event)].isSet = true;

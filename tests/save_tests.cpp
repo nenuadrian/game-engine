@@ -39,10 +39,9 @@ TEST_CASE("Assets should save to JSON")
 
 TEST_CASE("Project should load from JSON")
 {
-  Project *project =
+  Project project =
       Importer::Unserialize(R"({"name": "project", "mainWorldId": ""})");
-  REQUIRE(project->name == "project");
-  delete project;
+  REQUIRE(project.name == "project");
 }
 
 TEST_CASE("Worlds should save to JSON")
@@ -50,8 +49,8 @@ TEST_CASE("Worlds should save to JSON")
   Project project = Project();
   project.NewWorld();
   std::string json = Exporter::Serialize(&project);
-  Project *project2 = Importer::Unserialize(json);
-  REQUIRE(project2->worlds.size() == 1);
+  Project project2 = Importer::Unserialize(json);
+  REQUIRE(project2.worlds.size() == 1);
 }
 
 TEST_CASE("Entities should save to JSON")
@@ -60,7 +59,7 @@ TEST_CASE("Entities should save to JSON")
   auto world = project.NewWorld();
   Engine engine = Engine();
   EditorManager *manager = new EditorManager(&engine);
-  manager->load(&project);
+  manager->load(project);
 
   std::string json = Exporter::Serialize(&project);
 }

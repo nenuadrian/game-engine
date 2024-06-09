@@ -17,15 +17,9 @@ namespace Hades
 
   void Game::mousePosCallback(double x, double y) {}
 
-  Game::Game(Project *project_, Events *events_)
-  {
-    project = project_;
-    events = events_;
-  }
-
   void Game::init()
   {
-    World *world = project->worlds[project->mainWorldId];
+    World *world = project.worlds[project.mainWorldId];
     assert(world != nullptr);
     LoadWorld(world);
   }
