@@ -17,7 +17,7 @@ namespace Hades
   class EditorManager : public WindowParent
   {
   private:
-    std::vector<Plugin*> plugins;
+    std::vector<Plugin *> plugins;
     Engine *engine;
 
     const unsigned int SCR_WIDTH = 800;
@@ -38,9 +38,9 @@ namespace Hades
     Camera m_editor_camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
   public:
-    Project project;
+    Project &project;
 
-    EditorManager(Engine *engine) : engine(engine){};
+    EditorManager(Engine *engine, Project &project) : engine(engine), project(project){};
 
   private:
     void RenderMenuBarUI();
@@ -48,10 +48,10 @@ namespace Hades
   public:
     void run();
     void Open();
-    void load(Project& newProject);
+    void load(Project &newProject);
     void NewProject();
     void RenderUI();
-    void AddPlugin(Plugin* plugin);
+    void AddPlugin(Plugin *plugin);
 
     void draw(float deltaTime) override;
     void scrollCallback(double x, double y) override;

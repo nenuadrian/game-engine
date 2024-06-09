@@ -41,6 +41,7 @@ namespace Hades
 
   void EditorManager::AddPlugin(Plugin *plugin)
   {
+    plugin->Load(project);
     plugins.push_back(plugin);
   }
 
@@ -89,7 +90,7 @@ namespace Hades
     }
   }
 
-  void EditorManager::load(Project& newProject)
+  void EditorManager::load(Project &newProject)
   {
     project = newProject;
     for (auto plugin : plugins)
