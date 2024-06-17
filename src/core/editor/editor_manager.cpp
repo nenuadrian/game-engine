@@ -52,7 +52,7 @@ namespace Hades
     if (result == NFD_OKAY)
     {
       auto project = Project();
-      project.directory_path = output_path;
+      project.absolute_path = output_path;
       free(output_path);
 
       project.Save();
@@ -78,7 +78,7 @@ namespace Hades
     nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
-      engine->events.setEvent(EventType::OPEN_PROJECT_FROM_FILE, output_path);
+      engine->events.setEvent(EventType::OPEN_PROJECT_FROM_DIRECTORY, output_path);
       engine->events.setEvent(EventType::CLOSE_WINDOW);
       engine->events.setEvent(EventType::RUN_EDITOR);
 
@@ -113,11 +113,13 @@ namespace Hades
         {
           Open();
         }
-        if (ImGui::MenuItem("Save"))
+        if (!project.name.empty())
         {
-          project.Save();
+          if (ImGui::MenuItem("Save"))
+          {
+            project.Save();
+          }
         }
-
         if (ImGui::MenuItem("Exit"))
         {
           engine->events.setEvent(EventType::CLOSE_WINDOW);
@@ -126,20 +128,24 @@ namespace Hades
         ImGui::EndMenu();
       }
 
-      if (ImGui::BeginMenu("Game"))
+      if (!project.name.empty())
       {
-        if (ImGui::MenuItem("Play", __null, false,
-                            !project.mainWorldId.empty()))
-        {
-          engine->events.setEvent(EventType::RUN_GAME, Exporter::Serialize(&project));
-          engine->events.setEvent(EventType::CLOSE_WINDOW);
-        }
-        ImGui::EndMenu();
-      }
 
-      for (auto plugin : plugins)
-      {
-        plugin->RenderMenuBarUI();
+        if (ImGui::BeginMenu("Game"))
+        {
+          if (ImGui::MenuItem("Play", __null, false,
+                              !project.mainWorldId.empty()))
+          {
+            engine->events.setEvent(EventType::RUN_GAME, Exporter::Serialize(&project));
+            engine->events.setEvent(EventType::CLOSE_WINDOW);
+          }
+          ImGui::EndMenu();
+        }
+
+        for (auto plugin : plugins)
+        {
+          plugin->RenderMenuBarUI();
+        }
       }
 
       if (ImGui::BeginMenu("Help"))
@@ -187,7 +193,7 @@ namespace Hades
       ImGui::Begin("Debug Stats");
       ImGui::Text("%d FPS", m_last_fps);
 
-      ImGui::Text("Project Directory: %s", project.directory_path.c_str());
+      ImGui::Text("Project Directory: %s", project.absolute_path.c_str());
 
       ImGui::End();
     }

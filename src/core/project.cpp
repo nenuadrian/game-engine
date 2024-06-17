@@ -18,9 +18,10 @@ namespace Hades
 
   void Project::Save()
   {
-    std::ofstream myfile;
-    myfile.open(std::string(directory_path) + "/data.json");
     std::string s = Exporter::Serialize(this);
+
+    std::ofstream myfile;
+    myfile.open(absolute_path / "data.json");
     myfile << s;
     myfile.close();
   }

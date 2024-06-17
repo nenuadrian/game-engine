@@ -55,10 +55,11 @@ namespace Hades
   {
     ImGui::Begin("Asset");
 
-    ImGui::LabelText("EngineID", "%s", selectedAsset->engineIdentifier.c_str());
+    ImGui::LabelText("EngineID", "%s", selectedAsset->engine_identifier.c_str());
     ImGui::InputText("Identifier", &selectedAsset->id);
     ImGui::LabelText("Type", "%d", selectedAsset->type);
-    ImGui::LabelText("File", "%s", selectedAsset->file.c_str());
+    ImGui::LabelText("Relative Path", "%s", selectedAsset->relative_path.c_str());
+    ImGui::LabelText("File", "%s", selectedAsset->filename.c_str());
 
     if (ImGui::Button("Delete"))
     {

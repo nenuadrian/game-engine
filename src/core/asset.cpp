@@ -9,25 +9,23 @@ namespace Hades
 
   Asset::Asset(AssetType _type, std::string _file)
   {
-    file = _file;
-    type = _type;
-
-    engineIdentifier = std::to_string(Engine::newEngineId());
-    id = engineIdentifier;
+    // TODO: fix
   }
 
+  // TODO: fix
   std::string Asset::ReadAssetAsString()
   {
-    std::ifstream ifs("./" + file);
+    std::ifstream ifs("./");
     std::string content((std::istreambuf_iterator<char>(ifs)),
                         (std::istreambuf_iterator<char>()));
     ifs.close();
     return content;
   }
 
+  // TODO: fix
   void Asset::WriteAsset(std::string content)
   {
-    std::ofstream ofs("./" + file);
+    std::ofstream ofs("./");
     ofs << content;
     ofs.close();
   }

@@ -27,9 +27,9 @@ TEST_CASE("Assets should save to JSON")
 {
   Project project = Project();
   auto asset = new Asset(AssetType::MODEL);
-  asset->id = "tesT";
-  asset->file = "tesT";
-  asset->engineIdentifier = "tesT";
+  asset->id = "test-id";
+  asset->filename = "test.m";
+  asset->engine_identifier = "test-engine-id";
   project.assets.push_back(asset);
 
   std::string json = Exporter::Serialize(&project);
@@ -58,7 +58,7 @@ TEST_CASE("Entities should save to JSON")
   Project project = Project();
   auto world = project.NewWorld();
   Engine engine = Engine();
-  EditorManager *manager = new EditorManager(&engine);
+  EditorManager *manager = new EditorManager(&engine, project);
   manager->load(project);
 
   std::string json = Exporter::Serialize(&project);
@@ -68,6 +68,6 @@ TEST_CASE("Saving and loading project from directory")
 {
   auto tempDir = std::__fs::filesystem::temp_directory_path();
   Project project = Project();
-  project.directory_path = tempDir.string();
+  project.absolute_path = tempDir.string();
   project.Save();
 }

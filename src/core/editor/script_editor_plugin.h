@@ -12,17 +12,17 @@ namespace Hades
   class ScriptEditorPlugin : public Plugin
   {
   private:
-    Asset *selectedAsset = nullptr;
+    Asset *selected_script = nullptr;
 
   public:
-    ScriptEditorPlugin(Engine *engine, EditorManager *editorManager) : Plugin(engine, editorManager){};
+    ScriptEditorPlugin(Engine *engine, EditorManager *editor_manager) : Plugin(engine, editor_manager){};
     void RenderUI() override;
     void RenderMenuBarUI() override;
-    void Draw(float deltaTime, glm::mat4 view, glm::mat4 projection) override {}
+    void Draw(float delta_time, glm::mat4 view, glm::mat4 projection) override {}
 
     void SelectScript(Asset *asset)
     {
-      selectedAsset = asset;
+      selected_script = asset;
     }
 
     ~ScriptEditorPlugin();

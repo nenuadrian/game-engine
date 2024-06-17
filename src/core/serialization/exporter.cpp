@@ -84,9 +84,10 @@ namespace Hades
     for (Asset *asset : project->assets)
     {
       json assetData = json::object();
-      assetData["file"] = asset->file;
+      assetData["relative_path"] = asset->relative_path;
+      assetData["filename"] = asset->filename;
       assetData["type"] = asset->type;
-      assetData["engineIdentifier"] = asset->engineIdentifier;
+      assetData["engine_identifier"] = asset->engine_identifier;
       assetData["id"] = asset->id;
       assetsVector.push_back(assetData);
     }

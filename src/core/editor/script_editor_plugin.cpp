@@ -37,6 +37,10 @@ namespace Hades
 
   void ScriptEditorPlugin::RenderMenuBarUI()
   {
+    if (false && ImGui::BeginMenu("Scripts"))
+    {
+      ImGui::EndMenu();
+    }
   }
 
   /**
@@ -48,13 +52,24 @@ namespace Hades
 
     if (ImGui::Button("New Script"))
     {
-      auto asset = new Asset(AssetType::SCRIPT);
+      std::__fs::filesystem::create_directories(project.absolute_path / "assets/scripts");
+      auto asset = new Asset(AssetType::SCRIPT, "id", "script-test.cpp", "assets/scripts");
       std::ofstream myfile;
-      myfile.open(project.directory_path + "/script-" + asset->engineIdentifier + ".c");
-      myfile << "test";
+      myfile.open(project.absolute_path / asset->relative_path / asset->filename);
+      myfile << R"(
+        #include <iostream>
+
+        extern "C"
+        {
+          void sayHello()
+          {
+            std::cout << "Hello from the dynamically loaded library updated!" << std::endl;
+          }
+        }
+      )";
       myfile.close();
       project.assets.push_back(asset);
-      selectedAsset = asset;
+      selected_script = asset;
     }
 
     for (Asset *asset : project.assets)
@@ -71,16 +86,24 @@ namespace Hades
 
     ImGui::End();
 
-    if (selectedAsset != nullptr)
+    if (selected_script != nullptr)
     {
       ImGui::Begin("Script");
-      ImGui::InputText("Identifier", &selectedAsset->id);
+      ImGui::InputText("Identifier", &selected_script->id);
+      ImGui::LabelText("Relative Path", "%s", selected_script->relative_path.c_str());
+      ImGui::LabelText("File", "%s", selected_script->filename.c_str());
 
-      if (ImGui::Button("Compile Script"))
+      if (ImGui::Button("Compile"))
       {
         try
         {
-          engine->info(exec("g++ -dynamiclib -o libdynamic.dylib dynamic.cpp"));
+          // selected_script->Compile();
+          std::__fs::filesystem::create_directories(project.absolute_path / "build");
+          auto lib_path = std::string(project.absolute_path / "build" / selected_script->filename) + ".dylib";
+          std::string command = "g++ -dynamiclib -o " + lib_path + " " + std::string(project.absolute_path / selected_script->relative_path / selected_script->filename);
+          engine->info(exec(command.c_str()));
+
+          selected_script->build_handle = dlopen(lib_path.c_str(), RTLD_NOW);
         }
         catch (std::exception &e)
         {
@@ -93,14 +116,14 @@ namespace Hades
         project.assets.erase(
             std::remove_if(project.assets.begin(), project.assets.end(),
                            [this](Asset *e)
-                           { return e == selectedAsset; }),
+                           { return e == selected_script; }),
             project.assets.end());
-        selectedAsset = nullptr;
+        selected_script = nullptr;
       }
 
       if (ImGui::Button("Close"))
       {
-        selectedAsset = nullptr;
+        selected_script = nullptr;
       }
       ImGui::End();
     }

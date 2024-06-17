@@ -105,6 +105,8 @@ namespace Hades
     ImGui_ImplOpenGL3_Init();
     ImGui_ImplGlfw_InitForOpenGL(w, true);
 
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(0.5f, 0.5f)); // Center align title
+
     if (parent != nullptr)
     {
       glfwSetWindowUserPointer(w, reinterpret_cast<void *>(parent));

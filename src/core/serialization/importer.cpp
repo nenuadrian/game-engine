@@ -41,7 +41,7 @@ namespace Hades
 
     for (auto assetData : data["assets"])
     {
-      auto asset = new Asset(assetData["type"], assetData["id"], assetData["file"], assetData["engineIdentifier"]);
+      auto asset = new Asset(assetData["type"], assetData["id"], assetData["filename"], assetData["engine_identifier"]);
       project.assets.push_back(asset);
     }
 

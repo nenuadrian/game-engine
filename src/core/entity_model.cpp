@@ -75,13 +75,13 @@ namespace Hades
       ImGui::Begin("Select Model");
       for (Asset *asset : editor->project.assets)
       {
-        if (ImGui::Button((asset->id + " | " + asset->file + "##ent" +
+        if (ImGui::Button((asset->id + " | " + "##ent" +
                            engineIdentifier + "asset" + asset->id)
                               .c_str()))
         {
           modelSelectionWindowOpen = false;
           delete model;
-          model = new ModelComplex(asset->file);
+          model = new ModelComplex(asset->filename);
           model->init();
         }
       }

@@ -13,8 +13,7 @@ namespace Hades
     RUN_GAME,
     RUN_EDITOR,
     CLOSE_WINDOW,
-    OPEN_PROJECT,
-    OPEN_PROJECT_FROM_FILE,
+    OPEN_PROJECT_FROM_DIRECTORY,
     EVENT_COUNT // Helper to get the number of events
   };
 

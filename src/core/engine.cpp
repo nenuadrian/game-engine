@@ -3,22 +3,27 @@
 #include "core/editor/asset_editor_plugin.h"
 #include "core/editor/world_editor_plugin.h"
 #include "core/editor/script_editor_plugin.h"
+#include "core/project.h"
 #include "editor/editor_manager.h"
 #include "entity.h"
 #include "game.h"
 #include "core/serialization/importer.h"
 #include <fstream>
 #include <memory>
+#include <filesystem>
 
 namespace
 {
-  std::shared_ptr<Hades::EditorManager> initEditor(Hades::Engine *engine)
+  std::shared_ptr<Hades::EditorManager> initEditor(Hades::Engine *engine, Hades::Project &project)
   {
-    std::shared_ptr<Hades::EditorManager> editorManager = std::make_shared<Hades::EditorManager>(engine);
-    editorManager->AddPlugin(new Hades::WorldEditorPlugin(engine, editorManager.get()));
-    editorManager->AddPlugin(new Hades::AssetEditorPlugin(engine, editorManager.get()));
-    editorManager->AddPlugin(new Hades::ScriptEditorPlugin(engine, editorManager.get()));
+    std::shared_ptr<Hades::EditorManager> editorManager = std::make_shared<Hades::EditorManager>(engine, project);
 
+    if (!project.name.empty())
+    {
+      editorManager->AddPlugin(new Hades::WorldEditorPlugin(engine, editorManager.get()));
+      editorManager->AddPlugin(new Hades::AssetEditorPlugin(engine, editorManager.get()));
+      editorManager->AddPlugin(new Hades::ScriptEditorPlugin(engine, editorManager.get()));
+    }
     return std::move(editorManager);
   }
 }
@@ -34,34 +39,28 @@ namespace Hades
     {
       if (events.isEventSetAndUnset(EventType::RUN_EDITOR))
       {
-        if (events.isEventSet(EventType::OPEN_PROJECT) || events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
+        if (events.isEventSet(EventType::OPEN_PROJECT_FROM_DIRECTORY))
         {
-          if (events.isEventSet(EventType::OPEN_PROJECT_FROM_FILE))
+          if (events.isEventSet(EventType::OPEN_PROJECT_FROM_DIRECTORY))
           {
             // from file
-            std::ifstream ifs(events.getEventData(EventType::OPEN_PROJECT_FROM_FILE) + "/data.json");
+            std::__fs::filesystem::path absolute_path = events.getEventData(EventType::OPEN_PROJECT_FROM_DIRECTORY);
+            std::ifstream ifs(absolute_path / "data.json");
             std::string content((std::istreambuf_iterator<char>(ifs)),
                                 (std::istreambuf_iterator<char>()));
             ifs.close();
-            events.unsetEvent(EventType::OPEN_PROJECT_FROM_FILE);
+            events.unsetEvent(EventType::OPEN_PROJECT_FROM_DIRECTORY);
             Project project = Importer::Unserialize(content);
-            project.directory_path = events.getEventData(EventType::OPEN_PROJECT_FROM_FILE);
-            auto editorManager = initEditor(this);
-            editorManager->load(project);
-            editorManager->run();
-          }
-          else if (events.isEventSet(EventType::OPEN_PROJECT))
-          {
-            Project project = Importer::Unserialize(events.getEventData(EventType::OPEN_PROJECT));
-            events.unsetEvent(EventType::OPEN_PROJECT);
-            auto editorManager = initEditor(this);
+            project.absolute_path = absolute_path;
+            auto editorManager = initEditor(this, project);
             editorManager->load(project);
             editorManager->run();
           }
         }
         else
         {
-          auto editorManager = initEditor(this);
+          Project project;
+          auto editorManager = initEditor(this, project);
           editorManager->run();
         }
       }
