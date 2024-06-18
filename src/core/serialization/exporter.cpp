@@ -30,6 +30,8 @@ namespace Hades
 
     data["name"] = project->name;
     data["mainWorldId"] = project->mainWorldId;
+    data["absolute_path"] = project->absolute_path;
+
     vector<json> worldsVector = {};
     vector<json> assetsVector = {};
     vector<json> entitiesVector = {};

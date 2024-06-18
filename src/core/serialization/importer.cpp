@@ -31,6 +31,7 @@ namespace Hades
     auto project = Project();
     project.name = data["name"];
     project.mainWorldId = data["mainWorldId"];
+    project.absolute_path = data["absolute_path"];
 
     for (auto worldData : data["worlds"])
     {
