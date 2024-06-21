@@ -156,11 +156,20 @@ BIN_INSTALL_DIR:STRING=bin
 //Whether to link against boost statically or dynamically.
 BOOST_LINK_STATIC:STRING=auto
 
+//If enabled, compile the benchmarks.
+BUILD_BENCHMARKS:BOOL=OFF
+
+//If enabled, compile tests that are known to be broken.
+BUILD_BROKEN_TESTS:BOOL=OFF
+
 //Set when you want to build the OpenGL3+ demos
 BUILD_CPU_DEMOS:BOOL=OFF
 
 // libsonly
 BUILD_EXAMPLES:BOOL=OFF
+
+//If enabled, compile tests that are known to hang.
+BUILD_HANGING_TESTS:BOOL=OFF
 
 //Set when you want to build the OpenGL3+ demos
 BUILD_OPENGL3_DEMOS:BOOL=OFF
@@ -170,53 +179,71 @@ BUILD_OPENGL3_DEMOS:BOOL=OFF
 // ABI.
 BUILD_SHARED_LIBS:BOOL=OFF
 
+//If enabled, compile tests that take a while to run in debug mode.
+BUILD_SLOW_TESTS:BOOL=OFF
+
+//If enabled, compile the tests.
+BUILD_TESTS:BOOL=OFF
+
 //Build Unit Tests
 BUILD_UNIT_TESTS:BOOL=OFF
 
 //utilities
 BUILD_UTILS:BOOL=ON
 
+//Path to a file.
+BZIP2_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+BZIP2_LIBRARY_DEBUG:FILEPATH=BZIP2_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+BZIP2_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libbz2.so
+
+//Header providing backtrace(3) facility
+Backtrace_HEADER:STRING=execinfo.h
+
+//Path to a file.
+Backtrace_INCLUDE_DIR:PATH=/usr/include
+
+//Library providing backtrace(3), empty for default set of libraries
+Backtrace_LIBRARY:FILEPATH=
+
 //Boost context library (debug)
 Boost_CONTEXT_LIBRARY_DEBUG:FILEPATH=Boost_CONTEXT_LIBRARY_DEBUG-NOTFOUND
 
-//Boost context library (release)
-Boost_CONTEXT_LIBRARY_RELEASE:FILEPATH=Boost_CONTEXT_LIBRARY_RELEASE-NOTFOUND
+Boost_CONTEXT_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_context.so.1.74.0
 
 //The directory containing a CMake configuration file for Boost.
-Boost_DIR:PATH=Boost_DIR-NOTFOUND
+Boost_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0
 
 //Boost filesystem library (debug)
 Boost_FILESYSTEM_LIBRARY_DEBUG:FILEPATH=Boost_FILESYSTEM_LIBRARY_DEBUG-NOTFOUND
 
-//Boost filesystem library (release)
-Boost_FILESYSTEM_LIBRARY_RELEASE:FILEPATH=Boost_FILESYSTEM_LIBRARY_RELEASE-NOTFOUND
+Boost_FILESYSTEM_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.74.0
 
 //Path to a file.
-Boost_INCLUDE_DIR:PATH=Boost_INCLUDE_DIR-NOTFOUND
+Boost_INCLUDE_DIR:PATH=/usr/include
 
 //Boost program_options library (debug)
 Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG:FILEPATH=Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG-NOTFOUND
 
-//Boost program_options library (release)
-Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE:FILEPATH=Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE-NOTFOUND
+Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.74.0
 
 //Boost regex library (debug)
 Boost_REGEX_LIBRARY_DEBUG:FILEPATH=Boost_REGEX_LIBRARY_DEBUG-NOTFOUND
 
-//Boost regex library (release)
-Boost_REGEX_LIBRARY_RELEASE:FILEPATH=Boost_REGEX_LIBRARY_RELEASE-NOTFOUND
+Boost_REGEX_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_regex.so.1.74.0
 
 //Boost system library (debug)
 Boost_SYSTEM_LIBRARY_DEBUG:FILEPATH=Boost_SYSTEM_LIBRARY_DEBUG-NOTFOUND
 
-//Boost system library (release)
-Boost_SYSTEM_LIBRARY_RELEASE:FILEPATH=Boost_SYSTEM_LIBRARY_RELEASE-NOTFOUND
+Boost_SYSTEM_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
 
 //Boost thread library (debug)
 Boost_THREAD_LIBRARY_DEBUG:FILEPATH=Boost_THREAD_LIBRARY_DEBUG-NOTFOUND
 
-//Boost thread library (release)
-Boost_THREAD_LIBRARY_RELEASE:FILEPATH=Boost_THREAD_LIBRARY_RELEASE-NOTFOUND
+Boost_THREAD_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0
 
 //Read docs/configuration.md for details
 CATCH_CONFIG_ANDROID_LOGWRITE:BOOL=OFF
@@ -407,7 +434,7 @@ CMAKE_ASM_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Debug
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -678,6 +705,12 @@ Catch2_IS_TOP_LEVEL:STATIC=OFF
 //Value Computed by CMake
 Catch2_SOURCE_DIR:STATIC=/home/nenuadrian/game-engine/libs/Catch2
 
+//Path to a file.
+DOUBLE_CONVERSION_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+DOUBLE_CONVERSION_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libdouble-conversion.so
+
 //Value Computed by CMake
 ENGINE_BINARY_DIR:STATIC=/home/nenuadrian/game-engine
 
@@ -717,6 +750,9 @@ EnTT_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 EnTT_SOURCE_DIR:STATIC=/home/nenuadrian/game-engine/libs/entt
+
+//Build folly with Address Sanitizer enabled.
+FOLLY_LIBRARY_SANITIZE_ADDRESS:BOOL=OFF
 
 //OSMesa mode
 GLEW_OSMESA:BOOL=OFF
@@ -758,6 +794,15 @@ GLFW_LIBRARY_TYPE:STRING=
 //Value Computed by CMake
 GLFW_SOURCE_DIR:STATIC=/home/nenuadrian/game-engine/libs/glfw
 
+//Path to a file.
+GLOG_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+GLOG_LIBRARY_DEBUG:FILEPATH=GLOG_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GLOG_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libglog.so
+
 //The subdirectory where header files should be installed
 INCLUDE_INSTALL_DIR:STRING=include
 
@@ -788,14 +833,92 @@ JSON_MultipleHeaders:BOOL=ON
 //Include as system headers (skip for clang-tidy).
 JSON_SystemInclude:BOOL=OFF
 
+//Path to a file.
+LIBAIO_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LIBAIO_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libaio.so
+
+//Path to a file.
+LIBDWARF_INCLUDE_DIR:PATH=/usr/include/libdwarf
+
+//Path to a library.
+LIBDWARF_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libdwarf.so
+
+//Path to a file.
+LIBEVENT_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LIBEVENT_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libevent.so
+
+//Path to a file.
+LIBFMT_INCLUDE_DIR:PATH=LIBFMT_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBFMT_LIBRARY:FILEPATH=LIBFMT_LIBRARY-NOTFOUND
+
+//Path to a file.
+LIBGFLAGS_INCLUDE_DIR:PATH=LIBGFLAGS_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBGFLAGS_LIBRARY_DEBUG:FILEPATH=LIBGFLAGS_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+LIBGFLAGS_LIBRARY_RELEASE:FILEPATH=LIBGFLAGS_LIBRARY_RELEASE-NOTFOUND
+
+//Path to a file.
+LIBIBERTY_INCLUDE_DIR:PATH=/usr/include/libiberty
+
+//Path to a library.
+LIBIBERTY_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libiberty.a
+
+//Path to a file.
+LIBLZMA_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LIBLZMA_LIBRARY_DEBUG:FILEPATH=LIBLZMA_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+LIBLZMA_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/liblzma.so
+
 //Path to a library.
 LIBRT:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.a
+
+//Path to a file.
+LIBSODIUM_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LIBSODIUM_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libsodium.so
+
+//Path to a file.
+LIBUNWIND_INCLUDE_DIR:PATH=/usr/include/x86_64-linux-gnu
+
+//Path to a library.
+LIBUNWIND_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libunwind.so
+
+//Path to a file.
+LIBURING_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LIBURING_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/liburing.so
 
 //The subdirectory where libraries should be installed
 LIB_INSTALL_DIR:STRING=lib
 
 //suffix for 32/64 dir placement
 LIB_POSTFIX:STRING=64
+
+//Path to a file.
+LZ4_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+LZ4_LIBRARY_DEBUG:FILEPATH=LZ4_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+LZ4_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/liblz4.so
+
+//The directory containing a CMake configuration file for Libevent.
+Libevent_DIR:PATH=Libevent_DIR-NOTFOUND
 
 //Path to a library.
 MATH_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libm.so
@@ -827,11 +950,23 @@ OPENGL_opengl_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libOpenGL.so
 //Path to a file.
 OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
 
+//Path to a library.
+OPENSSL_CRYPTO_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
+
+//Path to a file.
+OPENSSL_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+OPENSSL_SSL_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libssl.so
+
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
+
+//Build Python Bindings for Folly, requires Cython and (BUILD_SHARED_LIBS=ON)
+PYTHON_EXTENSIONS:BOOL=OFF
 
 //Path to a library.
 RT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.a
@@ -844,6 +979,15 @@ SDL2_INCLUDE_DIR:PATH=/usr/local/include/SDL2
 
 //Where the SDL2 Library can be found
 SDL2_LIBRARY:STRING=/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so
+
+//Path to a file.
+SNAPPY_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+SNAPPY_LIBRARY_DEBUG:FILEPATH=SNAPPY_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+SNAPPY_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libsnappy.so
 
 //Set to ON for building ALSA backend
 SOLOUD_BACKEND_ALSA:BOOL=OFF
@@ -1156,7 +1300,22 @@ ZLIB_INCLUDE_DIR:PATH=/usr/include
 ZLIB_LIBRARY_DBG:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.a
 
 //Path to a library.
+ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
 ZLIB_LIBRARY_REL:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.a
+
+//Path to a library.
+ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.so
+
+//Path to a file.
+ZSTD_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+ZSTD_LIBRARY_DEBUG:FILEPATH=ZSTD_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+ZSTD_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libzstd.so
 
 //Value Computed by CMake
 absl_BINARY_DIR:STATIC=/home/nenuadrian/game-engine/libs/abseil-cpp
@@ -1398,6 +1557,33 @@ absl_vlog_config_internal_LIB_DEPENDS:STATIC=general;absl::base;general;absl::lo
 //Dependencies for the target
 assimp_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libz.a;debug;/usr/lib/x86_64-linux-gnu/libz.a;general;/usr/lib/x86_64-linux-gnu/librt.a;
 
+//The directory containing a CMake configuration file for boost_atomic.
+boost_atomic_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0
+
+//The directory containing a CMake configuration file for boost_context.
+boost_context_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_context-1.74.0
+
+//The directory containing a CMake configuration file for boost_filesystem.
+boost_filesystem_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0
+
+//The directory containing a CMake configuration file for boost_headers.
+boost_headers_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.74.0
+
+//The directory containing a CMake configuration file for boost_program_options.
+boost_program_options_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_program_options-1.74.0
+
+//The directory containing a CMake configuration file for boost_regex.
+boost_regex_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_regex-1.74.0
+
+//The directory containing a CMake configuration file for boost_system.
+boost_system_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0
+
+//The directory containing a CMake configuration file for boost_thread.
+boost_thread_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0
+
+//The directory containing a CMake configuration file for fmt.
+fmt_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/fmt
+
 //Value Computed by CMake
 folly_BINARY_DIR:STATIC=/home/nenuadrian/game-engine/libs/folly
 
@@ -1406,6 +1592,24 @@ folly_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 folly_SOURCE_DIR:STATIC=/home/nenuadrian/game-engine/libs/folly
+
+//Dependencies for the target
+folly_exception_counter_LIB_DEPENDS:STATIC=general;folly_exception_tracer;
+
+//Dependencies for the target
+folly_exception_tracer_LIB_DEPENDS:STATIC=general;folly_exception_tracer_base;
+
+//Dependencies for the target
+folly_exception_tracer_base_LIB_DEPENDS:STATIC=general;folly;
+
+//Dependencies for the target
+folly_test_util_LIB_DEPENDS:STATIC=general;folly;
+
+//Dependencies for the target
+follybenchmark_LIB_DEPENDS:STATIC=general;folly;
+
+//The directory containing a CMake configuration file for gflags.
+gflags_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/gflags
 
 //Value Computed by CMake
 glew_BINARY_DIR:STATIC=/home/nenuadrian/game-engine/libs/glew/build/cmake
@@ -1430,6 +1634,9 @@ glm_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 glm_SOURCE_DIR:STATIC=/home/nenuadrian/game-engine/libs/glm
+
+//Dependencies for the target
+logging_example_lib_LIB_DEPENDS:STATIC=general;folly;
 
 //Value Computed by CMake
 nlohmann_json_BINARY_DIR:STATIC=/home/nenuadrian/game-engine/libs/json
@@ -1458,6 +1665,20 @@ ASSIMP_BUILD_ARCHITECTURE-ADVANCED:INTERNAL=1
 ASSIMP_BUILD_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BUILD_SHARED_LIBS
 BUILD_SHARED_LIBS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_INCLUDE_DIR
+BZIP2_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_LIBRARY_DEBUG
+BZIP2_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_LIBRARY_RELEASE
+BZIP2_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//Have symbol BZ2_bzCompressInit
+BZIP2_NEED_PREFIX:INTERNAL=1
+//ADVANCED property for variable: Backtrace_HEADER
+Backtrace_HEADER-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Backtrace_INCLUDE_DIR
+Backtrace_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Backtrace_LIBRARY
+Backtrace_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_CONTEXT_LIBRARY_DEBUG
 Boost_CONTEXT_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_CONTEXT_LIBRARY_RELEASE
@@ -1555,6 +1776,8 @@ CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
+//Whether to issue deprecation errors for macros and functions.
+CMAKE_ERROR_DEPRECATED:INTERNAL=FALSE
 //Executable file format
 CMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS
@@ -1643,7 +1866,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=37
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=40
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -1682,32 +1905,236 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STRIP
 CMAKE_STRIP-ADVANCED:INTERNAL=1
+//Suppress errors that are meant for the author of the CMakeLists.txt
+// files.
+CMAKE_SUPPRESS_DEVELOPER_ERRORS:INTERNAL=TRUE
+//Suppress Warnings that are meant for the author of the CMakeLists.txt
+// files.
+CMAKE_SUPPRESS_DEVELOPER_WARNINGS:INTERNAL=TRUE
 //uname command
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Whether to issue warnings for deprecated functionality.
+CMAKE_WARN_DEPRECATED:INTERNAL=FALSE
+//Test COMPILER_HAS_F_ALIGNED_NEW
+COMPILER_HAS_F_ALIGNED_NEW:INTERNAL=1
+//Test COMPILER_HAS_F_COROUTINES
+COMPILER_HAS_F_COROUTINES:INTERNAL=1
+//Test COMPILER_HAS_F_OPENMP
+COMPILER_HAS_F_OPENMP:INTERNAL=1
+//Test COMPILER_HAS_M_PCLMUL
+COMPILER_HAS_M_PCLMUL:INTERNAL=1
+//Test COMPILER_HAS_UNKNOWN_WARNING_OPTION
+COMPILER_HAS_UNKNOWN_WARNING_OPTION:INTERNAL=
+//Test COMPILER_HAS_W_INCONSISTENT_MISSING_OVERRIDE
+COMPILER_HAS_W_INCONSISTENT_MISSING_OVERRIDE:INTERNAL=
+//Test COMPILER_HAS_W_NOEXCEPT_TYPE
+COMPILER_HAS_W_NOEXCEPT_TYPE:INTERNAL=1
+//Test COMPILER_HAS_W_NULLABILITY_COMPLETENESS
+COMPILER_HAS_W_NULLABILITY_COMPLETENESS:INTERNAL=
+//Test COMPILER_HAS_W_SHADOW_COMPATIBLE_LOCAL
+COMPILER_HAS_W_SHADOW_COMPATIBLE_LOCAL:INTERNAL=1
+//Test COMPILER_HAS_W_SHADOW_LOCAL
+COMPILER_HAS_W_SHADOW_LOCAL:INTERNAL=1
 //Project GUID
 Catch2WithMain_GUID_CMAKE:INTERNAL=8bd3552a-2cfb-4a59-ab15-2031b97ada1e
 //Project GUID
 Catch2_GUID_CMAKE:INTERNAL=8d538cbe-01bf-4a2e-a98a-6c368fdf13d7
+//ADVANCED property for variable: DOUBLE_CONVERSION_INCLUDE_DIR
+DOUBLE_CONVERSION_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DOUBLE_CONVERSION_LIBRARY
+DOUBLE_CONVERSION_LIBRARY-ADVANCED:INTERNAL=1
+//Details about finding BZip2
+FIND_PACKAGE_MESSAGE_DETAILS_BZip2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libbz2.so][/usr/include][v1.0.8()]
+//Details about finding Backtrace
+FIND_PACKAGE_MESSAGE_DETAILS_Backtrace:INTERNAL=[/usr/include][v()]
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake][cfound components: context filesystem program_options regex system thread ][v1.74.0(1.51.0)]
+//Details about finding DoubleConversion
+FIND_PACKAGE_MESSAGE_DETAILS_DoubleConversion:INTERNAL=[/usr/lib/x86_64-linux-gnu/libdouble-conversion.so][/usr/include][v()]
+//Details about finding Glog
+FIND_PACKAGE_MESSAGE_DETAILS_Glog:INTERNAL=[/usr/lib/x86_64-linux-gnu/libglog.so][/usr/include][v()]
+//Details about finding LIBAIO
+FIND_PACKAGE_MESSAGE_DETAILS_LIBAIO:INTERNAL=[/usr/lib/x86_64-linux-gnu/libaio.so][/usr/include][v()]
+//Details about finding LIBDWARF
+FIND_PACKAGE_MESSAGE_DETAILS_LIBDWARF:INTERNAL=[/usr/lib/x86_64-linux-gnu/libdwarf.so][/usr/include/libdwarf][v()]
+//Details about finding LIBIBERTY
+FIND_PACKAGE_MESSAGE_DETAILS_LIBIBERTY:INTERNAL=[/usr/lib/x86_64-linux-gnu/libiberty.a][/usr/include/libiberty][v()]
+//Details about finding LIBSODIUM
+FIND_PACKAGE_MESSAGE_DETAILS_LIBSODIUM:INTERNAL=[/usr/lib/x86_64-linux-gnu/libsodium.so][/usr/include][v()]
+//Details about finding LIBUNWIND
+FIND_PACKAGE_MESSAGE_DETAILS_LIBUNWIND:INTERNAL=[/usr/lib/x86_64-linux-gnu/libunwind.so][/usr/include/x86_64-linux-gnu][v()]
+//Details about finding LIBURING
+FIND_PACKAGE_MESSAGE_DETAILS_LIBURING:INTERNAL=[/usr/lib/x86_64-linux-gnu/liburing.so][/usr/include][v()]
+//Details about finding LZ4
+FIND_PACKAGE_MESSAGE_DETAILS_LZ4:INTERNAL=[/usr/lib/x86_64-linux-gnu/liblz4.so][/usr/include][v()]
+//Details about finding LibLZMA
+FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/x86_64-linux-gnu/liblzma.so][/usr/include][1][1][1][v5.4.1()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libOpenGL.so][/usr/lib/x86_64-linux-gnu/libGLX.so][/usr/include][c ][v()]
+//Details about finding OpenSSL
+FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libcrypto.so][/usr/include][c ][v3.0.11(1.1.1)]
 //Details about finding SDL2
 FIND_PACKAGE_MESSAGE_DETAILS_SDL2:INTERNAL=[/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so][/usr/local/include/SDL2][v()]
+//Details about finding SNAPPY
+FIND_PACKAGE_MESSAGE_DETAILS_SNAPPY:INTERNAL=[/usr/lib/x86_64-linux-gnu/libsnappy.so][/usr/include][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding X11
 FIND_PACKAGE_MESSAGE_DETAILS_X11:INTERNAL=[/usr/include][/usr/lib/x86_64-linux-gnu/libX11.so][c ][v()]
+//Details about finding ZLIB
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][v1.2.13()]
+//Details about finding ZSTD
+FIND_PACKAGE_MESSAGE_DETAILS_ZSTD:INTERNAL=[/usr/lib/x86_64-linux-gnu/libzstd.so][/usr/include][v()]
+//Test FOLLY_CPP_ATOMIC_BUILTIN
+FOLLY_CPP_ATOMIC_BUILTIN:INTERNAL=1
+//Have symbol accept4
+FOLLY_HAVE_ACCEPT4:INTERNAL=1
+//Have symbol clock_gettime
+FOLLY_HAVE_CLOCK_GETTIME:INTERNAL=1
+//Have include elf.h
+FOLLY_HAVE_ELF:INTERNAL=1
+//Test FOLLY_HAVE_EXTRANDOM_SFMT19937
+FOLLY_HAVE_EXTRANDOM_SFMT19937:INTERNAL=1
+//Have symbol getrandom
+FOLLY_HAVE_GETRANDOM:INTERNAL=1
+//Test FOLLY_HAVE_IFUNC
+FOLLY_HAVE_IFUNC:INTERNAL=1
+//Test FOLLY_HAVE_LINUX_VDSO
+FOLLY_HAVE_LINUX_VDSO:INTERNAL=1
+//Result of TRY_COMPILE
+FOLLY_HAVE_LINUX_VDSO_COMPILED:INTERNAL=TRUE
+//Result of try_run()
+FOLLY_HAVE_LINUX_VDSO_EXITCODE:INTERNAL=0
+//Have function malloc_usable_size
+FOLLY_HAVE_MALLOC_USABLE_SIZE:INTERNAL=1
+//Have symbol pipe2
+FOLLY_HAVE_PIPE2:INTERNAL=1
+//Have symbol preadv
+FOLLY_HAVE_PREADV:INTERNAL=1
+//Have symbol pthread_atfork
+FOLLY_HAVE_PTHREAD_ATFORK:INTERNAL=1
+//Have symbol pwritev
+FOLLY_HAVE_PWRITEV:INTERNAL=1
+//Have symbol recvmmsg
+FOLLY_HAVE_RECVMMSG:INTERNAL=1
+//Have symbol sendmmsg
+FOLLY_HAVE_SENDMMSG:INTERNAL=1
+//Have symbol swapcontext
+FOLLY_HAVE_SWAPCONTEXT:INTERNAL=1
+//Test FOLLY_HAVE_UNALIGNED_ACCESS
+FOLLY_HAVE_UNALIGNED_ACCESS:INTERNAL=1
+//Result of TRY_COMPILE
+FOLLY_HAVE_UNALIGNED_ACCESS_COMPILED:INTERNAL=TRUE
+//Result of try_run()
+FOLLY_HAVE_UNALIGNED_ACCESS_EXITCODE:INTERNAL=0
+//Test FOLLY_HAVE_VLA
+FOLLY_HAVE_VLA:INTERNAL=1
+//Test FOLLY_HAVE_WCHAR_SUPPORT
+FOLLY_HAVE_WCHAR_SUPPORT:INTERNAL=1
+//Result of TRY_COMPILE
+FOLLY_HAVE_WCHAR_SUPPORT_COMPILED:INTERNAL=TRUE
+//Result of try_run()
+FOLLY_HAVE_WCHAR_SUPPORT_EXITCODE:INTERNAL=0
+//Test FOLLY_HAVE_WEAK_SYMBOLS
+FOLLY_HAVE_WEAK_SYMBOLS:INTERNAL=1
+//Result of TRY_COMPILE
+FOLLY_HAVE_WEAK_SYMBOLS_COMPILED:INTERNAL=TRUE
+//Result of try_run()
+FOLLY_HAVE_WEAK_SYMBOLS_EXITCODE:INTERNAL=0
+//Test FOLLY_STDLIB_LIBCPP
+FOLLY_STDLIB_LIBCPP:INTERNAL=
+//Test FOLLY_STDLIB_LIBCXX
+FOLLY_STDLIB_LIBCXX:INTERNAL=
+//Test FOLLY_STDLIB_LIBCXX_GE_9
+FOLLY_STDLIB_LIBCXX_GE_9:INTERNAL=
+//Test FOLLY_STDLIB_LIBSTDCXX
+FOLLY_STDLIB_LIBSTDCXX:INTERNAL=1
+//Test FOLLY_STDLIB_LIBSTDCXX_GE_9
+FOLLY_STDLIB_LIBSTDCXX_GE_9:INTERNAL=1
+//Have include jemalloc/jemalloc.h
+FOLLY_USE_JEMALLOC:INTERNAL=
+//Test GFLAGS_NAMESPACE_IS_GFLAGS
+GFLAGS_NAMESPACE_IS_GFLAGS:INTERNAL=1
 //GLFW pkg-config Libs.private
 GLFW_PKG_CONFIG_LIBS_PRIVATE:INTERNAL= -lrt -lm -ldl
 //GLFW pkg-config Requires.private
 GLFW_PKG_CONFIG_REQUIRES_PRIVATE:INTERNAL=
+//ADVANCED property for variable: GLOG_INCLUDE_DIR
+GLOG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLOG_LIBRARY_DEBUG
+GLOG_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLOG_LIBRARY_RELEASE
+GLOG_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //Test HAVE_FLAG__ffile_prefix_map__home_nenuadrian_game_engine_libs_Catch2__
 HAVE_FLAG__ffile_prefix_map__home_nenuadrian_game_engine_libs_Catch2__:INTERNAL=1
+//Test HAVE_VSNPRINTF_ERRORS
+HAVE_VSNPRINTF_ERRORS:INTERNAL=1
+//Result of TRY_COMPILE
+HAVE_VSNPRINTF_ERRORS_COMPILED:INTERNAL=TRUE
+//Result of try_run()
+HAVE_VSNPRINTF_ERRORS_EXITCODE:INTERNAL=0
 //Build the unit tests when BUILD_TESTING is enabled.
 JSON_BuildTests:INTERNAL=OFF
+//ADVANCED property for variable: LIBAIO_INCLUDE_DIR
+LIBAIO_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBAIO_LIBRARY
+LIBAIO_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDWARF_INCLUDE_DIR
+LIBDWARF_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDWARF_LIBRARY
+LIBDWARF_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBEVENT_INCLUDE_DIR
+LIBEVENT_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBEVENT_LIB
+LIBEVENT_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBFMT_INCLUDE_DIR
+LIBFMT_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBFMT_LIBRARY
+LIBFMT_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBGFLAGS_INCLUDE_DIR
+LIBGFLAGS_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBGFLAGS_LIBRARY_DEBUG
+LIBGFLAGS_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBGFLAGS_LIBRARY_RELEASE
+LIBGFLAGS_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBIBERTY_INCLUDE_DIR
+LIBIBERTY_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBIBERTY_LIBRARY
+LIBIBERTY_LIBRARY-ADVANCED:INTERNAL=1
+//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
+LIBLZMA_HAS_AUTO_DECODER:INTERNAL=1
+//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
+LIBLZMA_HAS_EASY_ENCODER:INTERNAL=1
+//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
+LIBLZMA_HAS_LZMA_PRESET:INTERNAL=1
+//ADVANCED property for variable: LIBLZMA_INCLUDE_DIR
+LIBLZMA_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBLZMA_LIBRARY_DEBUG
+LIBLZMA_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBLZMA_LIBRARY_RELEASE
+LIBLZMA_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBSODIUM_INCLUDE_DIR
+LIBSODIUM_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBSODIUM_LIBRARY
+LIBSODIUM_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBUNWIND_INCLUDE_DIR
+LIBUNWIND_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBUNWIND_LIBRARY
+LIBUNWIND_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBURING_INCLUDE_DIR
+LIBURING_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBURING_LIBRARY
+LIBURING_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LIB_POSTFIX
 LIB_POSTFIX-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LZ4_INCLUDE_DIR
+LZ4_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LZ4_LIBRARY_DEBUG
+LZ4_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LZ4_LIBRARY_RELEASE
+LZ4_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MATH_LIBRARY
 MATH_LIBRARY-ADVANCED:INTERNAL=1
 NLOHMANN_JSON_CONFIG_INSTALL_DIR:INTERNAL=share/cmake/nlohmann_json
@@ -1729,13 +2156,25 @@ OPENGL_glx_LIBRARY-ADVANCED:INTERNAL=1
 OPENGL_opengl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_xmesa_INCLUDE_DIR
 OPENGL_xmesa_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENSSL_CRYPTO_LIBRARY
+OPENSSL_CRYPTO_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENSSL_INCLUDE_DIR
+OPENSSL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENSSL_SSL_LIBRARY
+OPENSSL_SSL_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_ARGN
 PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: RT_LIBRARY
 RT_LIBRARY-ADVANCED:INTERNAL=1
-SDL2_LIBRARY_TEMP:INTERNAL=/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so
+SDL2_LIBRARY_TEMP:INTERNAL=/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so
+//ADVANCED property for variable: SNAPPY_INCLUDE_DIR
+SNAPPY_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SNAPPY_LIBRARY_DEBUG
+SNAPPY_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SNAPPY_LIBRARY_RELEASE
+SNAPPY_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: USE_STATIC_DEPS_ON_UNIX
 USE_STATIC_DEPS_ON_UNIX-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: X11_ICE_INCLUDE_PATH
@@ -1910,12 +2349,62 @@ X11_xkbfile_LIB-ADVANCED:INTERNAL=1
 ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY_DBG
 ZLIB_LIBRARY_DBG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_DEBUG
+ZLIB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY_REL
 ZLIB_LIBRARY_REL-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_RELEASE
+ZLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //x
 ZLIB_PREFIX_PATH_INT_CHECK:INTERNAL=
+//ADVANCED property for variable: ZSTD_INCLUDE_DIR
+ZSTD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZSTD_LIBRARY_DEBUG
+ZSTD_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZSTD_LIBRARY_RELEASE
+ZSTD_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//Have symbol backtrace
+_Backtrace_SYM_FOUND:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
+_OPENSSL_CFLAGS:INTERNAL=
+_OPENSSL_CFLAGS_I:INTERNAL=
+_OPENSSL_CFLAGS_OTHER:INTERNAL=
+_OPENSSL_FOUND:INTERNAL=
+_OPENSSL_INCLUDEDIR:INTERNAL=
+_OPENSSL_LIBDIR:INTERNAL=
+_OPENSSL_LIBS:INTERNAL=
+_OPENSSL_LIBS_L:INTERNAL=
+_OPENSSL_LIBS_OTHER:INTERNAL=
+_OPENSSL_LIBS_PATHS:INTERNAL=
+_OPENSSL_MODULE_NAME:INTERNAL=
+_OPENSSL_PREFIX:INTERNAL=
+_OPENSSL_STATIC_CFLAGS:INTERNAL=
+_OPENSSL_STATIC_CFLAGS_I:INTERNAL=
+_OPENSSL_STATIC_CFLAGS_OTHER:INTERNAL=
+_OPENSSL_STATIC_LIBDIR:INTERNAL=
+_OPENSSL_STATIC_LIBS:INTERNAL=
+_OPENSSL_STATIC_LIBS_L:INTERNAL=
+_OPENSSL_STATIC_LIBS_OTHER:INTERNAL=
+_OPENSSL_STATIC_LIBS_PATHS:INTERNAL=
+_OPENSSL_VERSION:INTERNAL=
+__pkg_config_checked__OPENSSL:INTERNAL=1
+//ADVANCED property for variable: boost_atomic_DIR
+boost_atomic_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_context_DIR
+boost_context_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_filesystem_DIR
+boost_filesystem_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_headers_DIR
+boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_program_options_DIR
+boost_program_options_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_regex_DIR
+boost_regex_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_system_DIR
+boost_system_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_thread_DIR
+boost_thread_DIR-ADVANCED:INTERNAL=1
 

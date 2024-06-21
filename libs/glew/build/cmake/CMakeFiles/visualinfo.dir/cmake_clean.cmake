@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/visualinfo.dir/Users/adriannenu/Desktop/engine/glew/src/visualinfo.c.o"
-  "CMakeFiles/visualinfo.dir/Users/adriannenu/Desktop/engine/glew/src/visualinfo.c.o.d"
-  "bin/visualinfo"
-  "bin/visualinfo.pdb"
+  "../../../../bin/visualinfo"
+  "../../../../bin/visualinfo.pdb"
+  "CMakeFiles/visualinfo.dir/__/__/src/visualinfo.c.o"
+  "CMakeFiles/visualinfo.dir/__/__/src/visualinfo.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

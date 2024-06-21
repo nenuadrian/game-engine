@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/adriannenu/Desktop/engine/glew/src/glew.c" "CMakeFiles/glew_s.dir/Users/adriannenu/Desktop/engine/glew/src/glew.c.o" "gcc" "CMakeFiles/glew_s.dir/Users/adriannenu/Desktop/engine/glew/src/glew.c.o.d"
+  "/home/nenuadrian/game-engine/libs/glew/src/glew.c" "libs/glew/build/cmake/CMakeFiles/glew_s.dir/__/__/src/glew.c.o" "gcc" "libs/glew/build/cmake/CMakeFiles/glew_s.dir/__/__/src/glew.c.o.d"
   )
 
 # Targets to which this target links.

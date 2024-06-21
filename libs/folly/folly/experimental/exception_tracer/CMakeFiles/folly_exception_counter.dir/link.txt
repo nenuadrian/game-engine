@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfolly_exception_counter.a CMakeFiles/folly_exception_counter.dir/ExceptionCounterLib.cpp.o
+/usr/bin/ranlib libfolly_exception_counter.a

@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/adriannenu/Desktop/engine/glew/src/glewinfo.c" "CMakeFiles/glewinfo.dir/Users/adriannenu/Desktop/engine/glew/src/glewinfo.c.o" "gcc" "CMakeFiles/glewinfo.dir/Users/adriannenu/Desktop/engine/glew/src/glewinfo.c.o.d"
+  "/home/nenuadrian/game-engine/libs/glew/src/glewinfo.c" "libs/glew/build/cmake/CMakeFiles/glewinfo.dir/__/__/src/glewinfo.c.o" "gcc" "libs/glew/build/cmake/CMakeFiles/glewinfo.dir/__/__/src/glewinfo.c.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/Users/adriannenu/Desktop/engine/glew/build/cmake/CMakeFiles/glew.dir/DependInfo.cmake"
+  "/home/nenuadrian/game-engine/libs/glew/build/cmake/CMakeFiles/glew.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

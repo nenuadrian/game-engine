@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/glewinfo.dir/Users/adriannenu/Desktop/engine/glew/src/glewinfo.c.o"
-  "CMakeFiles/glewinfo.dir/Users/adriannenu/Desktop/engine/glew/src/glewinfo.c.o.d"
-  "bin/glewinfo"
-  "bin/glewinfo.pdb"
+  "../../../../bin/glewinfo"
+  "../../../../bin/glewinfo.pdb"
+  "CMakeFiles/glewinfo.dir/__/__/src/glewinfo.c.o"
+  "CMakeFiles/glewinfo.dir/__/__/src/glewinfo.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.
