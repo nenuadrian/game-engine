@@ -28,22 +28,7 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      # Build your program with the given configuration
-      run: apt-get --assume-yes install libgl1-mesa-dev
-      run: apt-get --assume-yes install libxrandr
-      run: apt-get --assume-yes install libxrandr-dev
-      run: apt-get --assume-yes install libxinerama-dev
-      run: apt-get --assume-yes install libxcursor-dev
-      run: apt-get --assume-yes install libxi-dev
-      run: apt-get --assume-yes install libboost-all-dev
-      run: apt-get --assume-yes install libghc-double-conversion-dev
-      run: apt-get --assume-yes install libssl-dev
-      run: apt-get --assume-yes install libgoogle-glog-dev
-      run: apt-get --assume-yes install libfmt-dev `
-      run: git clone https://github.com/libsdl-org/SDL.git -b SDL2
-      run: cd SDL &&  mkdir build && cd build && ../configure && make && make install
-      run: cd ${{github.workspace}}
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: scripts/run_ci.sh
 
     - name: Test
       working-directory: ${{github.workspace}}/build
