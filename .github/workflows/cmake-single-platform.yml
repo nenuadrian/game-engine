@@ -29,6 +29,15 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
+      run: apt-get install libgl1-mesa-dev
+      run: apt-get install libxrandr
+      run: apt-get install libxrandr-dev
+      run: apt-get install libxinerama-dev
+      run: apt-get install libxcursor-dev
+      run: apt-get install libxi-dev
+      run: git clone https://github.com/libsdl-org/SDL.git -b SDL2
+      run: cd SDL &&  mkdir build && cd build && ../configure && make && make install
+      run: cd ${{github.workspace}}
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
