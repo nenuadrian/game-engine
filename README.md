@@ -37,7 +37,18 @@ A compact game engine written in C++, which has the ability to handle 3D graphic
 
 ![Screen](docs/screen.jpg)
 
-## docs 
+## tests 
 
-https://github.com/nenuadrian/game-engine/wiki
+```
+mkdir build
+cd build
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
+make
+./tests
+```
+
+```
+brew install gcovr
+```
+
 
