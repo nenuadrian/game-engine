@@ -9,7 +9,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include <GL/gl.h>
+#include <GL/gl3.h>
 
 #include <stdio.h>
 #include <stdlib.h>
