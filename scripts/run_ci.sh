@@ -16,6 +16,8 @@ sudo apt-get --assume-yes install libghc-double-conversion-dev
 
 sudo apt-get --assume-yes install libssl-dev
 
+sudo apt-get --assume-yes install libunwind-dev
+
 sudo apt-get --assume-yes install libgoogle-glog-dev
 
 sudo apt-get --assume-yes install libfmt-dev `
