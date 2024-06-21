@@ -5,7 +5,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include "nfd.h"
+//#include "nfd.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -23,7 +23,7 @@ namespace Hades
 
     if (ImGui::Button("Import Asset"))
     {
-      nfdchar_t *outPath = NULL;
+     /* nfdchar_t *outPath = NULL;
       nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
       if (result == NFD_OKAY)
       {
@@ -38,7 +38,7 @@ namespace Hades
       else
       {
         printf("Error: %s\n", NFD_GetError());
-      }
+      }*/
     }
 
     RenderAssetsUI(assetDirectory);
