@@ -109,6 +109,8 @@ add_subdirectory(libs/Catch2)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/glew/build/cmake)
 add_subdirectory(libs/assimp)
+add_subdirectory(libs/abseil-cpp)
+add_subdirectory(libs/folly)
 
 file(
   GLOB
@@ -142,8 +144,11 @@ link_libraries(
   soloud
   glfw
   assimp
+  absl
+  folly
   ${GLFW_LIBRARIES}
   ${GLEW_LIBRARIES})
+
 add_executable(ENGINE ${ENGINE-LIBS} ${ENGINE-SRC} src/main.cpp)
 
 add_executable(GAME ${ENGINE-LIBS} ${ENGINE-SRC} src/game.cpp)
