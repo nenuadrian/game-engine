@@ -20,7 +20,7 @@ sudo apt-get --assume-yes install libunwind-dev
 
 sudo apt-get --assume-yes install libgoogle-glog-dev
 
-sudo apt-get --assume-yes install libfmt-dev `
+sudo apt-get --assume-yes install libfmt-dev
 
 sudo apt install -y liblz4-dev
 
