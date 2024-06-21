@@ -407,7 +407,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //ASM compiler
-CMAKE_ASM_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_ASM_COMPILER:STRING=/usr/bin/cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -440,7 +440,7 @@ CMAKE_BUILD_TYPE:STRING=Debug
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
 //CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+CMAKE_CXX_COMPILER:STRING=/usr/bin/c++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -466,7 +466,7 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_C_COMPILER:STRING=/usr/bin/cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -2168,7 +2168,7 @@ PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: RT_LIBRARY
 RT_LIBRARY-ADVANCED:INTERNAL=1
-SDL2_LIBRARY_TEMP:INTERNAL=/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so
+SDL2_LIBRARY_TEMP:INTERNAL=/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2main.a;/usr/local/lib/libSDL2.so
 //ADVANCED property for variable: SNAPPY_INCLUDE_DIR
 SNAPPY_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SNAPPY_LIBRARY_DEBUG
