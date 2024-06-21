@@ -33,9 +33,11 @@ A compact game engine written in C++, which has the ability to handle 3D graphic
  * json
  * entt
 
-## screennshots
+## tests
 
-![Screen](docs/screen.jpg)
+```
+./scripts/tests
+```
 
 ## docs 
 
