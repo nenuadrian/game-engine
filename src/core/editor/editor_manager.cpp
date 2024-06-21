@@ -6,7 +6,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "misc/cpp/imgui_stdlib.h"
-#include "nfd.h"
+//#include "nfd.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -47,7 +47,7 @@ namespace Hades
 
   void EditorManager::NewProject()
   {
-    nfdchar_t *output_path = NULL;
+   /* nfdchar_t *output_path = NULL;
     nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
@@ -69,12 +69,12 @@ namespace Hades
     else
     {
       printf("Error: %s\n", NFD_GetError());
-    }
+    }*/
   }
 
   void EditorManager::Open()
   {
-    nfdchar_t *output_path = NULL;
+   /* nfdchar_t *output_path = NULL;
     nfdresult_t result = NFD_PickFolder(NULL, &output_path);
     if (result == NFD_OKAY)
     {
@@ -88,6 +88,7 @@ namespace Hades
     {
       printf("Error: %s\n", NFD_GetError());
     }
+*/
   }
 
   void EditorManager::load(Project &newProject)
