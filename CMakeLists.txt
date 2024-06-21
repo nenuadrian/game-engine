@@ -62,8 +62,6 @@ include_directories(
   "libs/soloud"
   "libs/soloud/include"
   "libs/Catch2/src"
-  "libs/nativefiledialog/src"
-  "libs/nativefiledialog/src/include"
   "libs/glm"
   "libs/glfw/include"
   "libs/glew/include"
@@ -115,10 +113,6 @@ add_subdirectory(libs/folly)
 file(
   GLOB
   ENGINE-LIBS
-  libs/nativefiledialog/src/include/nfd.h
-  libs/nativefiledialog/src/nfd_common.c
-  libs/nativefiledialog/src/nfd_common.h
-  libs/nativefiledialog/src/nfd_cocoa.m
   libs/imgui/imgui.h
   libs/imgui/misc/cpp/imgui_stdlib.h
   libs/imgui/misc/cpp/imgui_stdlib.cpp
