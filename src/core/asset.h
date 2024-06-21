@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include "engine.h"
-#include <filesystem>
 #include <dlfcn.h>
 
 namespace Hades
@@ -24,7 +23,7 @@ namespace Hades
     std::string engine_identifier;
     std::string id = "untitled";
     std::string filename;
-    std::__fs::filesystem::path relative_path;
+    std::string relative_path;
     std::string parent_id;
     void *build_handle;
 
