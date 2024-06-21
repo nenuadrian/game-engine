@@ -44,6 +44,6 @@ sudo apt-get install -y libsodium-dev
 
 git clone https://github.com/libsdl-org/SDL.git -b SDL2
 
-cd SDL &&  mkdir build && cd build && ../configure && make && make install
+cd SDL &&  mkdir build && cd build && ../configure && make && sudo make install
 
 cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
